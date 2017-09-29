@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:local="clr-namespace:Servofocus" 
+    x:Class="Servofocus.ServofocusPage">
+    <StackLayout Orientation="Vertical" x:Name="MainStackLayout">
+        <StackLayout Orientation="Horizontal" Padding="15">
+            <Entry Placeholder="Enter URL" Keyboard="Url" WidthRequest="450" x:Name="UrlField"/>
+            <!--                <Button Text="Go"/>-->
+        </StackLayout>
+        <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
+    </StackLayout>
+</ContentPage>
