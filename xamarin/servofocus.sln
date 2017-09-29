@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Servofocus", "Servofocus\Servofocus.shproj", "{7A10CBDC-9250-4166-BCE9-EA91B3F60245}"
 EndProject
@@ -14,9 +14,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servofocus.UWP", "Servofocu
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Servofocus\FormsExperiment.projitems*{2791cd1e-ec46-4f18-b149-acffc3d29f19}*SharedItemsImports = 4
-		Servofocus\FormsExperiment.projitems*{627e8585-341c-41b7-9546-e1cf7597690f}*SharedItemsImports = 4
-		Servofocus\FormsExperiment.projitems*{7a10cbdc-9250-4166-bce9-ea91b3f60245}*SharedItemsImports = 13
+		Servofocus\Servofocus.projitems*{2791cd1e-ec46-4f18-b149-acffc3d29f19}*SharedItemsImports = 4
+		Servofocus\Servofocus.projitems*{3f8d861e-3904-46ba-9717-2fb1f8105b41}*SharedItemsImports = 4
+		Servofocus\Servofocus.projitems*{7a10cbdc-9250-4166-bce9-ea91b3f60245}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,7 +34,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3F8D861E-3904-46BA-9717-2FB1F8105B41}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
-		{3F8D861E-3904-46BA-9717-2FB1F8105B41}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{3F8D861E-3904-46BA-9717-2FB1F8105B41}.Debug|ARM.ActiveCfg = Debug|iPhone
 		{3F8D861E-3904-46BA-9717-2FB1F8105B41}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{3F8D861E-3904-46BA-9717-2FB1F8105B41}.Debug|iPhone.Build.0 = Debug|iPhone
@@ -53,6 +52,7 @@ Global
 		{3F8D861E-3904-46BA-9717-2FB1F8105B41}.Release|x86.ActiveCfg = Release|iPhoneSimulator
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|ARM.Build.0 = Debug|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|ARM.Deploy.0 = Debug|Any CPU
@@ -68,6 +68,7 @@ Global
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Debug|x86.Deploy.0 = Debug|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|ARM.Build.0 = Release|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|ARM.Deploy.0 = Release|Any CPU
@@ -82,7 +83,6 @@ Global
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|x86.Build.0 = Release|Any CPU
 		{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}.Release|x86.Deploy.0 = Release|Any CPU
 		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
-		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Debug|ARM.ActiveCfg = Debug|iPhoneSimulator
 		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Debug|iPhone.ActiveCfg = Debug|iPhoneSimulator
 		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Debug|iPhone.Build.0 = Debug|iPhoneSimulator
@@ -100,8 +100,6 @@ Global
 		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Release|x64.ActiveCfg = Release|iPhoneSimulator
 		{9E4D2D92-BF68-48D4-A75C-3B9167658D62}.Release|x86.ActiveCfg = Release|iPhoneSimulator
 		{627E8585-341C-41B7-9546-E1CF7597690F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{627E8585-341C-41B7-9546-E1CF7597690F}.Debug|Any CPU.Build.0 = Debug|x86
-		{627E8585-341C-41B7-9546-E1CF7597690F}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{627E8585-341C-41B7-9546-E1CF7597690F}.Debug|ARM.ActiveCfg = Debug|ARM
 		{627E8585-341C-41B7-9546-E1CF7597690F}.Debug|ARM.Build.0 = Debug|ARM
 		{627E8585-341C-41B7-9546-E1CF7597690F}.Debug|ARM.Deploy.0 = Debug|ARM
