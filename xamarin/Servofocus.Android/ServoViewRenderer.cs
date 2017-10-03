@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.Opengl;
+using Javax.Microedition.Khronos.Opengles;
 using Servofocus;
 using Servofocus.Android;
 using Xamarin.Forms;
@@ -10,26 +11,61 @@ namespace Servofocus.Android
 {
     public class ServoViewRenderer : ViewRenderer<ServoView, GLSurfaceView>
     {
+        bool _disposed;
+
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
             base.OnElementChanged(e);
 
-            if(Control == null)
+            if (e.NewElement != null)
             {
-                var glSurfaceView = new GLSurfaceView(Context);
-                glSurfaceView.SetRenderer(new GlRenderer());
-                SetNativeControl(glSurfaceView);
-                Subscribe();
+                GLSurfaceView surfaceView = Control;
+                if (surfaceView == null)
+                {
+                    surfaceView = new GLSurfaceView(Context);
+                    surfaceView.SetEGLContextClientVersion(3);
+                    surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
+                    var renderer = new Renderer(Element);
+                    surfaceView.SetRenderer(renderer);
+                    SetNativeControl(surfaceView);
+                }
+
+                Control.RenderMode = Rendermode.Continuously;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed && disposing)
+            {
+                _disposed = true;
+            }
+            base.Dispose(disposing);
+        }
+
+        class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
+        {
+            readonly ServoView _model;
+            Rectangle _rect;
+
+            public Renderer(ServoView model)
+            {
+                _model = model;
             }
 
-            if(e.OldElement != null)
+            public void OnDrawFrame(IGL10 gl)
             {
-                Unsubscribe();
+                Action<Rectangle> onDisplay = _model.OnDisplay;
+                onDisplay?.Invoke(_rect);
             }
 
-            if(e.NewElement != null)
+            public void OnSurfaceChanged(IGL10 gl, int width, int height)
             {
-                Subscribe();
+                _rect = new Rectangle(0.0, 0.0, width, height);
+            }
+
+            public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
+            {
             }
         }
 

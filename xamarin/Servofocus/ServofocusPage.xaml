@@ -7,7 +7,7 @@
         <StackLayout Orientation="Horizontal" Padding="15">
             <Entry Placeholder="Enter URL" Keyboard="Url" WidthRequest="450" x:Name="UrlField"/>
         </StackLayout>
-        <OpenGLView x:Name="OpenGlView" VerticalOptions="FillAndExpand"></OpenGLView>
-        <!--<local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>-->
+        <!--<OpenGLView x:Name="OpenGlView" VerticalOptions="FillAndExpand"></OpenGLView>-->
+        <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
     </StackLayout>
 </ContentPage>

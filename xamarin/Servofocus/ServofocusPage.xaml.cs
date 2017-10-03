@@ -19,9 +19,9 @@ namespace Servofocus
             base.OnAppearing();
 
             UrlField.Text = Marshal.PtrToStringAnsi(Interop.ServoVersion());
-            
-            OpenGlView.HasRenderLoop = true;
-            OpenGlView.OnDisplay += OnDisplay;
+
+            //OpenGlView.HasRenderLoop = true;
+            ServoView.OnDisplay += OnDisplay;
 
             Debug.WriteLine("OnAppearing");
         }
