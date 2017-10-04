@@ -45,8 +45,10 @@ export OPENSSL_STATIC="TRUE"
 cargo build --release --target $RUST_TARGET
 
 LIB_NAME="libsimpleservo.so"
+HEADER_NAME="libsimpleservo.h"
 TARGET="./target/$RUST_TARGET/release/$LIB_NAME"
 echo "Stripping $TARGET"
 $NDK_BIN_PATH/aarch64-linux-android-strip $TARGET
 echo "Copying $TARGET to Android project"
 cp $TARGET ../xamarin/Servofocus.Android/lib/arm64/$LIB_NAME
+cp ./target/$RUST_TARGET/release/$HEADER_NAME ../xamarin/
