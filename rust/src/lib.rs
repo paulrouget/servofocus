@@ -1,101 +1,141 @@
+#[macro_use]
+extern crate log;
+extern crate libc;
 extern crate servo;
-extern crate core_foundation;
-
-use std::ffi::CString;
-use servo::gl;
 
 use servo::BrowserId;
 use servo::Servo;
-use servo::servo_config::resource_files::set_resources_path;
-use servo::servo_config::opts;
 use servo::compositing::compositor_thread::EventLoopWaker;
 use servo::compositing::windowing::{WindowEvent, WindowMethods};
 use servo::euclid::{Point2D, ScaleFactor, Size2D, TypedPoint2D, TypedRect, TypedSize2D};
+use servo::gl;
 use servo::ipc_channel::ipc;
+use servo::msg::constellation_msg::{Key, KeyModifiers};
 use servo::net_traits::net_error_list::NetError;
 use servo::script_traits::LoadData;
+use servo::servo_config::opts;
+use servo::servo_config::resource_files::set_resources_path;
 use servo::servo_geometry::DeviceIndependentPixel;
 use servo::servo_url::ServoUrl;
 use servo::style_traits::DevicePixel;
 use servo::style_traits::cursor::Cursor;
-use servo::msg::constellation_msg::{Key, KeyModifiers};use std::rc::Rc;
-
-use core_foundation::base::TCFType;
-use core_foundation::string::CFString;
-use core_foundation::bundle::{CFBundleGetBundleWithIdentifier, CFBundleGetFunctionPointerForName};
-
-use std::os::raw::c_char;
-use std::os::raw::c_void;
-use std::str;
-
 use std::cell::RefCell;
+use std::ffi::{CStr, CString};
+use std::mem;
+use std::os::raw::{c_char, c_void};
+use std::rc::Rc;
+
+#[allow(non_camel_case_types)]
+mod egl {
+    use super::libc;
+    pub type khronos_utime_nanoseconds_t = libc::uint64_t;
+    pub type khronos_uint64_t = libc::uint64_t;
+    pub type khronos_ssize_t = libc::c_long;
+    pub type EGLNativeDisplayType = *const libc::c_void;
+    pub type EGLNativePixmapType = *const libc::c_void;
+    pub type EGLint = libc::int32_t;
+    pub type NativeDisplayType = *const libc::c_void;
+    pub type NativePixmapType = *const libc::c_void;
+    #[cfg(target_os = "android")]
+    pub type NativeWindowType = *const libc::c_void;
+    #[cfg(target_os = "android")]
+    pub type EGLNativeWindowType = *const libc::c_void;
+    include!(concat!(env!("OUT_DIR"), "/egl_bindings.rs"));
+}
 
 thread_local! {
-    static SERVO: RefCell<Option<Servo<Callbacks>>> = RefCell::new(None);
+    static SERVO: RefCell<Option<(Servo<Callbacks>,BrowserId,Vec<WindowEvent>)>> = RefCell::new(None);
 }
 
 #[no_mangle]
 pub extern "C" fn servo_version() -> *const c_char {
-    let version = CString::new(servo::config::servo_version()).unwrap();
-    let ptr = version.as_ptr();
-    std::mem::forget(version);
+    let servo_version = servo::config::servo_version();
+    let text = CString::new(servo_version).unwrap();
+    let ptr = text.as_ptr();
+    std::mem::forget(text);
     ptr
 }
 
 #[no_mangle]
-pub extern "C" fn init(flush_cb: extern fn(), wakeup: extern fn(), width: u32, height: u32) {
+pub extern "C" fn init_with_egl(
+    wakeup: extern fn(),
+    log_external: extern fn(*const c_char),
+    width: u32,
+    height: u32) {
+
+    Logger::init(log_external);
+
+    debug!("init_with_egl");
 
     let gl = unsafe {
-        gl::GlFns::load_with(|addr| {
-            let symbol_name: CFString = str::FromStr::from_str(addr).unwrap();
-            let framework_name: CFString = str::FromStr::from_str("com.apple.opengl").unwrap();
-            let framework = CFBundleGetBundleWithIdentifier(framework_name.as_concrete_TypeRef());
-            let symbol = CFBundleGetFunctionPointerForName(framework, symbol_name.as_concrete_TypeRef());
-            symbol as *const c_void
+        gl::GlesFns::load_with(|addr| {
+            let addr = CString::new(addr.as_bytes()).unwrap();
+            let addr = addr.as_ptr();
+            let egl = egl::Egl;
+            egl.GetProcAddress(addr) as *const c_void
         })
     };
 
-    gl.clear_color(0.0, 1.0, 0.0, 1.0);
-    gl.clear(gl::COLOR_BUFFER_BIT);
-    gl.finish();
+    init(gl, wakeup, width, height);
+}
 
-    // Maybe we run from an app bundle
-    let p = std::env::current_exe().unwrap();
-    let p = p.parent().unwrap();
-    let p = p.parent().unwrap().join("Resources");
-    if !p.exists() {
-        panic!("Can't file resources directory: {}", p.to_str().unwrap());
-    }
-    let path = p.to_str().unwrap().to_string();
-    set_resources_path(Some(path));
+fn init(
+    gl: Rc<gl::Gl>,
+    wakeup: extern fn(),
+    width: u32,
+    height: u32) {
+
+    set_resources_path(Some("/sdcard/servo/resources/".to_owned()));
 
     let opts = opts::default_opts();
     opts::set_defaults(opts);
 
+    gl.clear_color(1.0, 0.0, 0.0, 1.0);
+    gl.clear(gl::COLOR_BUFFER_BIT);
+    gl.finish();
+
     let callbacks = Rc::new(Callbacks {
         waker: Box::new(SimpleEventLoopWaker(wakeup)),
         gl: gl.clone(),
-        flush_cb,
         size: (width, height),
     });
 
     let mut servo = servo::Servo::new(callbacks.clone());
 
-    let url = ServoUrl::parse("http://www.justinaguilar.com/animations/").unwrap();
+    let url = ServoUrl::parse("http://example.com").unwrap();
     let (sender, receiver) = ipc::channel().unwrap();
     servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
     let browser_id = receiver.recv().unwrap();
     servo.handle_events(vec![WindowEvent::SelectBrowser(browser_id)]);
 
     SERVO.with(|s| {
-        *s.borrow_mut() = Some(servo);
+        *s.borrow_mut() = Some((servo, browser_id, vec![]));
     });
 }
 
 #[no_mangle]
-pub extern "C" fn ping() {
+pub extern "C" fn on_event_loop_awaken_by_servo() {
+    debug!("on_event_loop_awaken_by_servo");
     SERVO.with(|s| {
-        s.borrow_mut().as_mut().map(|servo| servo.handle_events(vec![]));
+        s.borrow_mut().as_mut().map(|&mut (ref mut s, _, ref mut events)| {
+            let events = mem::replace(&mut *events, Vec::new());
+            s.handle_events(events);
+        });
+    });
+}
+
+#[no_mangle]
+pub extern "C" fn load_url(url: *const c_char) {
+    debug!("load_url");
+    SERVO.with(|s| {
+        let url = unsafe { CStr::from_ptr(url) };
+        if let Ok(url) = url.to_str() {
+            if let Ok(url) = ServoUrl::parse(url) {
+                s.borrow_mut().as_mut().map(|&mut (_, id, ref mut events)| {
+                    events.push(WindowEvent::LoadUrl(id, url));
+                });
+            }
+        }
     });
 }
 
@@ -113,7 +153,7 @@ impl EventLoopWaker for SimpleEventLoopWaker {
 struct Callbacks {
     waker: Box<EventLoopWaker>,
     gl: Rc<gl::Gl>,
-    flush_cb: extern fn(),
+    // flush_cb: extern fn(),
     size: (u32, u32),
 }
 
@@ -123,7 +163,12 @@ impl WindowMethods for Callbacks {
     }
 
     fn present(&self) {
-        (self.flush_cb)();
+        // let e = egl::Egl;
+        // unsafe {
+        //     let display = e.GetCurrentDisplay();
+        //     let surface = e.GetCurrentSurface(egl::DRAW as EGLint);
+        //     e.SwapBuffers(display, surface);
+        // }
     }
 
     fn supports_clipboard(&self) -> bool {
@@ -174,4 +219,34 @@ impl WindowMethods for Callbacks {
     fn set_cursor(&self, _cursor: Cursor) { }
     fn set_favicon(&self, _id: BrowserId, _url: ServoUrl) {}
     fn handle_key(&self, _id: Option<BrowserId>, _ch: Option<char>, _key: Key, _mods: KeyModifiers) { }
+}
+
+
+
+use log::{set_logger, Log, LogRecord, LogMetadata, LogLevelFilter, LogLevel};
+
+struct Logger(extern fn(*const c_char));
+
+impl Logger {
+    pub fn init(callback: extern fn(*const c_char)) {
+        set_logger(|max_log_level| {
+            max_log_level.set(LogLevelFilter::Info);
+            Box::new(Logger(callback))
+        }).expect("set_logger failed");
+    }
+}
+
+impl Log for Logger {
+    fn enabled(&self, metadata: &LogMetadata) -> bool {
+        metadata.level() <= LogLevel::Info
+    }
+
+    fn log(&self, record: &LogRecord) {
+        if self.enabled(record.metadata()) {
+            let msg = format!("LOG: [{}] [{}] [{}]", record.level(), record.args(), record.target());
+            let text = CString::new(msg.to_owned()).unwrap();
+            let ptr = text.as_ptr();
+            self.0(ptr);
+        }
+    }
 }
