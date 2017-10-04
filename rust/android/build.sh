@@ -1,10 +1,15 @@
 #!/bin/sh
 
+BASEDIR=$(dirname "$0")
+echo $BASEDIR
+cd $BASEDIR/..
+
+[ -z "$ANDROID_SDK" ] && echo "Need to set ANDROID_SDK" && exit 1;
+[ -z "$ANDROID_NDK" ] && echo "Need to set ANDROID_NDK" && exit 1;
+
 #### Feel free to change:
 
 export RUST_TARGET="aarch64-linux-android"
-export ANDROID_SDK="/Users/paul/Library/Android/sdk/"
-export ANDROID_NDK="/Users/paul/Desktop/android-ndk-r12b/"
 export ANDROID_ARCH="arch-arm64"
 export ANDROID_PLATFORM="android-21"
 # used by toolchains.cmake
