@@ -5,6 +5,7 @@ using Servofocus;
 using Servofocus.Android;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using System.Runtime.InteropServices;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Android
@@ -25,12 +26,13 @@ namespace Servofocus.Android
                     surfaceView = new GLSurfaceView(Context);
                     surfaceView.SetEGLContextClientVersion(3);
                     surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
+
                     var renderer = new Renderer(Element);
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
                 }
 
-                Control.RenderMode = Rendermode.Continuously;
+				Control.RenderMode = Rendermode.Continuously;
             }
         }
 
@@ -50,23 +52,29 @@ namespace Servofocus.Android
 
             public Renderer(ServoView model)
             {
-                _model = model;
+                //_model = model;
             }
 
             public void OnDrawFrame(IGL10 gl)
             {
-                Action<Rectangle> onDisplay = _model.OnDisplay;
-                onDisplay?.Invoke(_rect);
+                //Action<Rectangle> onDisplay = _model.OnDisplay;
+                //onDisplay?.Invoke(_rect);
+                Interop.OnEventLoopAwakenByServo();
             }
 
             public void OnSurfaceChanged(IGL10 gl, int width, int height)
             {
-                _rect = new Rectangle(0.0, 0.0, width, height);
-            }
+                //_rect = new Rectangle(0.0, 0.0, width, height);
+			}
 
             public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
-            }
+                Interop.InitWithEgl(
+                    () => { },
+                    (str) => System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
+					600, 750);
+
+			}
         }
 
         void ScrollChanged(object sender, ScrollChangeEventArgs e)

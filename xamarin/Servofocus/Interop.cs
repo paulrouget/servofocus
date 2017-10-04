@@ -8,17 +8,20 @@ namespace Servofocus
         [DllImport(Import.Servo, EntryPoint = "servo_version")]
         public static extern IntPtr ServoVersion();
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void MyCallback();
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate void InitCallback();
 
-        [DllImport(Import.Servo, EntryPoint = "init")]
-        public static extern void Init([MarshalAs(UnmanagedType.FunctionPtr)]MyCallback flush, 
-                                       [MarshalAs(UnmanagedType.FunctionPtr)]MyCallback wakeUp,
-                                       uint width, 
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate void LogCallback(IntPtr str);
+
+        [DllImport(Import.Servo, EntryPoint = "init_with_egl")]
+        public static extern void InitWithEgl([MarshalAs(UnmanagedType.FunctionPtr)]InitCallback init,
+                                       [MarshalAs(UnmanagedType.FunctionPtr)]LogCallback log,
+                                       uint width,
                                        uint height);  
 
-        [DllImport(Import.Servo, EntryPoint = "ping")]
-        public static extern void Ping();  
+        [DllImport(Import.Servo, EntryPoint = "on_event_loop_awaken_by_servo")]
+        public static extern void OnEventLoopAwakenByServo();  
     }
 
     internal static class Import
