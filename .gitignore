@@ -48,6 +48,4 @@ Thumbs.db
 /rust/target/
 **/*.rs.bk
 /rust/Cargo.lock
-/rust//target/
-**/*.rs.bk
-/rust/Cargo.lock
+/rust/target/
