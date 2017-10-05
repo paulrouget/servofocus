@@ -55,4 +55,4 @@ echo "Stripping $TARGET"
 $NDK_BIN_PATH/aarch64-linux-android-strip $TARGET
 echo "Copying $TARGET to Android project"
 cp $TARGET ../xamarin/Servofocus.Android/lib/arm64/$LIB_NAME
-cp ./target/$RUST_TARGET/release/$HEADER_NAME ../xamarin/
+cp ./target/$HEADER_NAME ../xamarin/
