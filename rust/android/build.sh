@@ -1,7 +1,6 @@
 #!/bin/sh
 
 BASEDIR=$(dirname "$0")
-echo $BASEDIR
 cd $BASEDIR/..
 
 [ -z "$ANDROID_SDK" ] && echo "Need to set ANDROID_SDK" && exit 1;
