@@ -35,7 +35,7 @@ namespace Servofocus.Android
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
 
-                    Subscribe();
+                  //  Subscribe();
                 }
 
                 Control.RenderMode = Rendermode.WhenDirty;
