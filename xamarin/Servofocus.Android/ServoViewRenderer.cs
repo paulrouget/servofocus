@@ -20,6 +20,9 @@ namespace Servofocus.Android
 
             if (e.NewElement != null)
             {
+                
+                e.NewElement.ScrollRequested += OnScrollRequested;
+
                 GLSurfaceView surfaceView = Control;
                 if (surfaceView == null)
                 {
@@ -40,6 +43,15 @@ namespace Servofocus.Android
 
                 Control.RenderMode = Rendermode.WhenDirty;
             }
+        }
+
+        private void OnScrollRequested(object sender, EventArgs args)
+        {
+            var e = (ScrollArgs)args;
+            Control.QueueEvent(() =>
+            {
+                Interop.Scroll(e.dx, e.dy, e.x, e.y, e.state);
+            });
         }
 
         protected override void Dispose(bool disposing)

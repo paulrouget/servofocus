@@ -64,6 +64,7 @@ namespace Servofocus
         {
             Debug.WriteLine(e.TotalX);
             Debug.WriteLine(e.TotalY);
+            ServoView.Scroll(e.TotalX, e.TotalY);
         }
     }
 }

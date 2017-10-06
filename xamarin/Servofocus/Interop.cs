@@ -23,11 +23,14 @@ namespace Servofocus
                                        [MarshalAs(UnmanagedType.FunctionPtr)]LogCallback log,
                                        uint width,
                                        uint height);
-
+        
 		[DllImport(Import.Servo, EntryPoint = "on_resize")]
 		public static extern void OnResize(
 							   uint width,
 							   uint height);
+        
+		[DllImport(Import.Servo, EntryPoint = "scroll")]
+        public static extern void Scroll(int dx, int dy, uint x, uint y, int state);
 
 		[DllImport(Import.Servo, EntryPoint = "on_event_loop_awaken_by_servo")]
         public static extern void OnEventLoopAwakenByServo();  
