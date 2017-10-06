@@ -14,7 +14,7 @@ extern "C" {
 
 c_char const* servo_version(void);
 
-void init_with_egl(void (*wakeup)(void), void (*log_external)(c_char const* ), uint32_t width, uint32_t height);
+void init_with_egl(void (*wakeup)(void), void (*flush_cb)(void), void (*log_external)(c_char const* ), uint32_t width, uint32_t height);
 
 void on_event_loop_awaken_by_servo(void);
 

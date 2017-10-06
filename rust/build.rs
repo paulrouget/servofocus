@@ -16,6 +16,7 @@ use std::fs::File;
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=src/lib.rs");
 
     // build.rs is not platform-specific, so we have to check the target here.
     let target = env::var("TARGET").unwrap();
