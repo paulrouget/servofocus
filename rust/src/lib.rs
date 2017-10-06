@@ -43,8 +43,14 @@ mod egl {
     include!(concat!(env!("OUT_DIR"), "/egl_bindings.rs"));
 }
 
+struct State {
+    servo: Servo<Callbacks>,
+    browser_id: BrowserId,
+    events: Vec<WindowEvent>,
+}
+
 thread_local! {
-    static SERVO: RefCell<Option<(Servo<Callbacks>,BrowserId,Vec<WindowEvent>)>> = RefCell::new(None);
+    static SERVO: RefCell<Option<State>> = RefCell::new(None);
 }
 
 #[no_mangle]
@@ -59,13 +65,14 @@ pub extern "C" fn servo_version() -> *const c_char {
 #[no_mangle]
 pub extern "C" fn init_with_egl(
     wakeup: extern fn(),
+    flush_cb: extern fn(),
     log_external: extern fn(*const c_char),
     width: u32,
     height: u32) {
 
-    Logger::init(log_external);
+    let _ = Logger::init(log_external);
 
-    debug!("init_with_egl");
+    info!("init_with_egl");
 
     let gl = unsafe {
         gl::GlesFns::load_with(|addr| {
@@ -76,12 +83,13 @@ pub extern "C" fn init_with_egl(
         })
     };
 
-    init(gl, wakeup, width, height);
+    init(gl, wakeup, flush_cb, width, height);
 }
 
 fn init(
     gl: Rc<gl::Gl>,
     wakeup: extern fn(),
+    flush_cb: extern fn(),
     width: u32,
     height: u32) {
 
@@ -97,42 +105,47 @@ fn init(
     let callbacks = Rc::new(Callbacks {
         waker: Box::new(SimpleEventLoopWaker(wakeup)),
         gl: gl.clone(),
+        flush_cb: flush_cb,
         size: (width, height),
     });
 
     let mut servo = servo::Servo::new(callbacks.clone());
 
-    let url = ServoUrl::parse("http://example.com").unwrap();
+    let url = ServoUrl::parse("http://paulrouget.com").unwrap();
     let (sender, receiver) = ipc::channel().unwrap();
     servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
     let browser_id = receiver.recv().unwrap();
     servo.handle_events(vec![WindowEvent::SelectBrowser(browser_id)]);
 
     SERVO.with(|s| {
-        *s.borrow_mut() = Some((servo, browser_id, vec![]));
+        *s.borrow_mut() = Some(State {
+            servo,
+            browser_id,
+            events: vec![],
+        });
     });
 }
 
 #[no_mangle]
 pub extern "C" fn on_event_loop_awaken_by_servo() {
-    debug!("on_event_loop_awaken_by_servo");
+    info!("on_event_loop_awaken_by_servo");
     SERVO.with(|s| {
-        s.borrow_mut().as_mut().map(|&mut (ref mut s, _, ref mut events)| {
-            let events = mem::replace(&mut *events, Vec::new());
-            s.handle_events(events);
+        s.borrow_mut().as_mut().map(|ref mut s| {
+            let events = mem::replace(&mut s.events, Vec::new());
+            s.servo.handle_events(events);
         });
     });
 }
 
 #[no_mangle]
 pub extern "C" fn load_url(url: *const c_char) {
-    debug!("load_url");
+    info!("load_url");
     SERVO.with(|s| {
         let url = unsafe { CStr::from_ptr(url) };
         if let Ok(url) = url.to_str() {
             if let Ok(url) = ServoUrl::parse(url) {
-                s.borrow_mut().as_mut().map(|&mut (_, id, ref mut events)| {
-                    events.push(WindowEvent::LoadUrl(id, url));
+                s.borrow_mut().as_mut().map(|ref mut s| {
+                    s.events.push(WindowEvent::LoadUrl(s.browser_id, url));
                 });
             }
         }
@@ -153,7 +166,7 @@ impl EventLoopWaker for SimpleEventLoopWaker {
 struct Callbacks {
     waker: Box<EventLoopWaker>,
     gl: Rc<gl::Gl>,
-    // flush_cb: extern fn(),
+    flush_cb: extern fn(),
     size: (u32, u32),
 }
 
@@ -163,12 +176,7 @@ impl WindowMethods for Callbacks {
     }
 
     fn present(&self) {
-        // let e = egl::Egl;
-        // unsafe {
-        //     let display = e.GetCurrentDisplay();
-        //     let surface = e.GetCurrentSurface(egl::DRAW as EGLint);
-        //     e.SwapBuffers(display, surface);
-        // }
+        (self.flush_cb)();
     }
 
     fn supports_clipboard(&self) -> bool {
@@ -238,7 +246,7 @@ impl Logger {
 
 impl Log for Logger {
     fn enabled(&self, metadata: &LogMetadata) -> bool {
-        metadata.level() <= LogLevel::Info
+        metadata.level() <= LogLevel::Debug
     }
 
     fn log(&self, record: &LogRecord) {
