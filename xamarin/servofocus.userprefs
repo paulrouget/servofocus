@@ -1,8 +1,8 @@
 ﻿<Properties StartupConfiguration="{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Servofocus/ServofocusPage.xaml.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Servofocus/Interop.cs">
     <Files>
-      <File FileName="Servofocus/Interop.cs" Line="18" Column="46" />
-      <File FileName="Servofocus.Android/ServoViewRenderer.cs" Line="77" Column="5" />
+      <File FileName="Servofocus/Interop.cs" Line="13" Column="9" />
+      <File FileName="Servofocus.Android/ServoViewRenderer.cs" Line="94" Column="59" />
       <File FileName="Servofocus/ServofocusPage.xaml.cs" Line="20" Column="1" />
       <File FileName="Servofocus/ServoView.cs" Line="8" Column="52" />
       <File FileName="Servofocus.Android/Properties/AndroidManifest.xml" Line="8" Column="75" />

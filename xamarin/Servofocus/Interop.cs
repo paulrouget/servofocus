@@ -12,15 +12,24 @@ namespace Servofocus
 		public delegate void InitCallback();
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate void FlushCallback();
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void LogCallback(IntPtr str);
 
         [DllImport(Import.Servo, EntryPoint = "init_with_egl")]
         public static extern void InitWithEgl([MarshalAs(UnmanagedType.FunctionPtr)]InitCallback init,
+                                              [MarshalAs(UnmanagedType.FunctionPtr)]FlushCallback flush,
                                        [MarshalAs(UnmanagedType.FunctionPtr)]LogCallback log,
                                        uint width,
-                                       uint height);  
+                                       uint height);
 
-        [DllImport(Import.Servo, EntryPoint = "on_event_loop_awaken_by_servo")]
+		[DllImport(Import.Servo, EntryPoint = "on_resize")]
+		public static extern void OnResize(
+							   uint width,
+							   uint height);
+
+		[DllImport(Import.Servo, EntryPoint = "on_event_loop_awaken_by_servo")]
         public static extern void OnEventLoopAwakenByServo();  
     }
 

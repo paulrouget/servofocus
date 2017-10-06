@@ -27,12 +27,18 @@ namespace Servofocus.Android
                     surfaceView.SetEGLContextClientVersion(3);
                     surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
 
-                    var renderer = new Renderer(Element);
+                    var renderer = new Renderer(
+                        () => surfaceView.RequestRender(),
+                        () => surfaceView.QueueEvent(() => Interop.OnEventLoopAwakenByServo() )
+                    );
+
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
+
+                    Subscribe();
                 }
 
-				Control.RenderMode = Rendermode.Continuously;
+                Control.RenderMode = Rendermode.WhenDirty;
             }
         }
 
@@ -47,32 +53,33 @@ namespace Servofocus.Android
 
         class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
         {
-            readonly ServoView _model;
-            Rectangle _rect;
+            Action _flush;
+            Action _wakeup;
 
-            public Renderer(ServoView model)
-            {
-                //_model = model;
-            }
-
-            public void OnDrawFrame(IGL10 gl)
-            {
-                //Action<Rectangle> onDisplay = _model.OnDisplay;
-                //onDisplay?.Invoke(_rect);
-                Interop.OnEventLoopAwakenByServo();
-            }
-
-            public void OnSurfaceChanged(IGL10 gl, int width, int height)
-            {
-                //_rect = new Rectangle(0.0, 0.0, width, height);
+			public Renderer(Action interopCallback, Action wakeup)
+			{
+                _flush = interopCallback;
+                _wakeup = wakeup;
 			}
 
-            public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
+			public void OnDrawFrame(IGL10 gl)
+			{
+			}
+
+			public void OnSurfaceChanged(IGL10 gl, int width, int height)
+			{
+                System.Diagnostics.Debug.WriteLine("Resize:" + width + "x" + height);
+			}
+
+
+			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
+                
                 Interop.InitWithEgl(
-                    () => { },
+                    () => _wakeup(),
+                    () => _flush(),
                     (str) => System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
-					600, 750);
+                    540, 740);
 
 			}
         }
