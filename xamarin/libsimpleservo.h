@@ -20,6 +20,8 @@ void on_event_loop_awaken_by_servo(void);
 
 void load_url(c_char const* url);
 
+void scroll(int32_t dx, int32_t dy, uint32_t x, uint32_t y, int32_t state);
+
 
 
 #ifdef __cplusplus

@@ -9,8 +9,7 @@ name = "simpleservo"
 crate-type = ["cdylib"]
 
 [dependencies]
-libservo = { git = "https://github.com/servo/servo", rev = "3f07cfec7c" }
-# libservo = { path = "../../servo/components/servo" }
+libservo = { git = "https://github.com/servo/servo", rev = "2a179cec2b" }
 libc = "0.2.23"
 log = "0.3.8"
 
@@ -18,5 +17,7 @@ log = "0.3.8"
 gl_generator = "0.5.0"
 moz-cheddar = "0.4.0"
 
-# [replace]
+[replace]
 # "openssl:0.9.12" = { path = "../../rust-openssl/openssl/" }
+# "https://github.com/servo/webrender#0.52.0" = { path = '../../webrender/webrender/' }
+# "https://github.com/servo/webrender#webrender_api:0.52.0" = { path = '../../webrender/webrender_api/' }

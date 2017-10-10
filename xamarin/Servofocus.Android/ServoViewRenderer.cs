@@ -20,6 +20,9 @@ namespace Servofocus.Android
 
             if (e.NewElement != null)
             {
+                
+                e.NewElement.ScrollRequested += OnScrollRequested;
+
                 GLSurfaceView surfaceView = Control;
                 if (surfaceView == null)
                 {
@@ -35,11 +38,25 @@ namespace Servofocus.Android
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
 
-                  //  Subscribe();
                 }
 
                 Control.RenderMode = Rendermode.WhenDirty;
             }
+        }
+
+        private void OnScrollRequested(object sender, EventArgs args)
+        {
+            var e = (ScrollArgs)args;
+            Control.QueueEvent(() =>
+            {
+                if (e.status == GestureStatus.Started) {
+                    Interop.Scroll(e.dx, e.dy, e.x, e.y, 0);
+                } else if (e.status == GestureStatus.Running) {
+                    Interop.Scroll(e.dx, e.dy, e.x, e.y, 1);
+                } else {
+                    Interop.Scroll(0, 0, 0, 0, 2);
+                }
+            });
         }
 
         protected override void Dispose(bool disposing)
@@ -78,32 +95,10 @@ namespace Servofocus.Android
                 Interop.InitWithEgl(
                     () => _wakeup(),
                     () => _flush(),
-                    (str) => System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
+                    (str) => {}, // System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
                     540, 740);
-
 			}
         }
 
-        void ScrollChanged(object sender, ScrollChangeEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("I scroll!");
-        }
-
-        void Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("I click!");
-        }
-
-        void Subscribe()
-        {
-            Control.ScrollChange += ScrollChanged;
-            Control.Click += Click;
-        }
-
-        void Unsubscribe()
-        {
-            Control.ScrollChange -= ScrollChanged;
-            Control.Click -= Click;
-        }
     }
 }

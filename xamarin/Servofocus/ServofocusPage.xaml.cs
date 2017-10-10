@@ -62,8 +62,7 @@ namespace Servofocus
 
         void PanGesture(object sender, PanUpdatedEventArgs e)
         {
-            Debug.WriteLine(e.TotalX);
-            Debug.WriteLine(e.TotalY);
+            ServoView.Scroll(e);
         }
     }
 }

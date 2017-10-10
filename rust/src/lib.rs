@@ -7,18 +7,19 @@ use servo::BrowserId;
 use servo::Servo;
 use servo::compositing::compositor_thread::EventLoopWaker;
 use servo::compositing::windowing::{WindowEvent, WindowMethods};
-use servo::euclid::{Point2D, ScaleFactor, Size2D, TypedPoint2D, TypedRect, TypedSize2D};
+use servo::euclid::{Point2D, ScaleFactor, Size2D, TypedPoint2D, TypedRect, TypedSize2D, TypedVector2D};
 use servo::gl;
 use servo::ipc_channel::ipc;
 use servo::msg::constellation_msg::{Key, KeyModifiers};
 use servo::net_traits::net_error_list::NetError;
-use servo::script_traits::LoadData;
+use servo::script_traits::{LoadData, TouchEventType};
 use servo::servo_config::opts;
 use servo::servo_config::resource_files::set_resources_path;
 use servo::servo_geometry::DeviceIndependentPixel;
 use servo::servo_url::ServoUrl;
 use servo::style_traits::DevicePixel;
 use servo::style_traits::cursor::Cursor;
+use servo::webrender_api;
 use std::cell::RefCell;
 use std::ffi::{CStr, CString};
 use std::mem;
@@ -45,6 +46,7 @@ mod egl {
 
 struct State {
     servo: Servo<Callbacks>,
+    callbacks: Rc<Callbacks>,
     browser_id: BrowserId,
     events: Vec<WindowEvent>,
 }
@@ -120,6 +122,7 @@ fn init(
     SERVO.with(|s| {
         *s.borrow_mut() = Some(State {
             servo,
+            callbacks,
             browser_id,
             events: vec![],
         });
@@ -149,6 +152,31 @@ pub extern "C" fn load_url(url: *const c_char) {
                 });
             }
         }
+    });
+}
+
+#[no_mangle]
+pub extern "C" fn scroll(dx: i32, dy: i32, x: u32, y: u32, state: i32) {
+    SERVO.with(|s| {
+        s.borrow_mut().as_mut().map(|ref mut s| {
+            let factor = s.callbacks.hidpi_factor().get();
+            let dx = dx as f32 * factor;
+            let dy = dy as f32 * factor;
+            let x = x as f32 * factor;
+            let y = y as f32 * factor;
+            let delta = TypedVector2D::new(dx as f32, dy as f32);
+            let scroll_location = webrender_api::ScrollLocation::Delta(delta);
+            let phase = if state == 0 {
+                TouchEventType::Down
+            } else if state == 1 {
+                TouchEventType::Move
+            } else {
+                TouchEventType::Up
+            };
+            let event = WindowEvent::Scroll(scroll_location, TypedPoint2D::new(x as i32, y as i32), phase);
+            info!("SCROLL: {:?} {:?} {:?}", scroll_location, (x, y), phase);
+            s.servo.handle_events(vec![event]);
+        })
     });
 }
 
