@@ -9,6 +9,7 @@ namespace Servofocus
 		public event EventHandler ScrollRequested;
 		public Action<Rectangle> OnDisplay { get; set; }
         public double _lastScrollY { get; private set; }
+        private Action<Action> _runOnGlThread;
 
         public void Display()
         {
@@ -28,6 +29,39 @@ namespace Servofocus
             args.y = 0;
             args.status = e.StatusType;
             handler?.Invoke(this, args);
+        }
+
+        internal void OnTap(float x, float y)
+        {
+            _runOnGlThread(() =>
+            {
+                // Interop calls to servo
+            });
+        }
+
+        internal void OnScroll(GestureStatus status, float delta)
+        {
+            _runOnGlThread(() =>
+            {
+                // Interop calls to servo
+                if (status == GestureStatus.Started)
+                {
+                    //Interop.Scroll(e.dx, e.dy, e.x, e.y, 0);
+                }
+                else if (status == GestureStatus.Running)
+                {
+                    //Interop.Scroll(e.dx, e.dy, e.x, e.y, 1);
+                }
+                else
+                {
+                    //Interop.Scroll(0, 0, 0, 0, 2);
+                }
+            });
+        }
+
+        public void RegisterGLCallback(Action<Action> runOnGlThread)
+        {
+            _runOnGlThread = runOnGlThread;
         }
     }
 }

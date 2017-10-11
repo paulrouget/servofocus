@@ -6,6 +6,8 @@ using Servofocus.Android;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using System.Runtime.InteropServices;
+using Android.Graphics;
+using Android.Views;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Android
@@ -13,6 +15,7 @@ namespace Servofocus.Android
     public class ServoViewRenderer : ViewRenderer<ServoView, GLSurfaceView>
     {
         bool _disposed;
+        private float _lastY;
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
@@ -20,8 +23,7 @@ namespace Servofocus.Android
 
             if (e.NewElement != null)
             {
-                
-                e.NewElement.ScrollRequested += OnScrollRequested;
+                //e.NewElement.ScrollRequested += OnScrollRequested;
 
                 GLSurfaceView surfaceView = Control;
                 if (surfaceView == null)
@@ -38,9 +40,30 @@ namespace Servofocus.Android
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
 
+                    Touch += OnTouch;
+                    Element.RegisterGLCallback(callback => Control.QueueEvent(callback));
                 }
-
                 Control.RenderMode = Rendermode.WhenDirty;
+            }
+        }
+        
+        private void OnTouch(object sender, TouchEventArgs touchEventArgs)
+        {
+            var x = touchEventArgs.Event.RawX;
+            var y = touchEventArgs.Event.RawY;
+            var delta = y - _lastY;
+            _lastY = touchEventArgs.Event.RawY;
+
+            // https://developer.android.com/reference/android/view/MotionEvent.html
+            System.Diagnostics.Debug.WriteLine(touchEventArgs.Event);
+
+            if(touchEventArgs.Event.Action == MotionEventActions.Up)
+                Element.OnTap(x, y);
+            else if (touchEventArgs.Event.Action == MotionEventActions.Move)
+            {
+                // need to find gesture status
+                // https://github.com/mozilla-mobile/focus-android/blob/a61745794f28f4ac924fed5d9b62d1a03fea3613/app/src/gecko/java/org/mozilla/focus/web/NestedGeckoView.java
+                Element.OnScroll(GestureStatus.Started, delta);
             }
         }
 
