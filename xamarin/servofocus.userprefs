@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{2791CD1E-EC46-4F18-B149-ACFFC3D29F19}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Servofocus.Android/ServoViewRenderer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Servofocus/Interop.cs">
     <Files>
-      <File FileName="Servofocus.Android/ServoViewRenderer.cs" Line="106" Column="37" />
+      <File FileName="Servofocus.Android/ServoViewRenderer.cs" Line="1" Column="1" />
+      <File FileName="Servofocus/Interop.cs" Line="35" Column="71" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Servofocus.Android PreferredExecutionTarget="Android.CB5A2AS54G" />
+  <MonoDevelop.Ide.ItemProperties.Servofocus.Android PreferredExecutionTarget="Android.Android_Accelerated_x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

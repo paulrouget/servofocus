@@ -16,7 +16,7 @@ use std::fs::File;
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=src/lib.rs");
+    println!("cargo:rerun-if-changed=src/api.rs");
 
     // build.rs is not platform-specific, so we have to check the target here.
     let target = env::var("TARGET").unwrap();
@@ -25,6 +25,7 @@ fn main() {
     }
 
     cheddar::Cheddar::new().expect("could not read manifest")
+        .module("api").expect("malformed module path")
         .run_build("target/libsimpleservo.h");
 }
 
