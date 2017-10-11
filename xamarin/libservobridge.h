@@ -1,6 +1,6 @@
 
-#ifndef cheddar_generated_libsimpleservo_h
-#define cheddar_generated_libsimpleservo_h
+#ifndef cheddar_generated_libservobridge_h
+#define cheddar_generated_libservobridge_h
 
 
 #ifdef __cplusplus

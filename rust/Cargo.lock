@@ -1,5 +1,5 @@
 [root]
-name = "libsimpleservo"
+name = "servobridge"
 version = "0.1.0"
 dependencies = [
  "gl_generator 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",

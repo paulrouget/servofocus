@@ -1,11 +1,11 @@
 [package]
-name = "libsimpleservo"
+name = "servobridge"
 version = "0.1.0"
 authors = ["Paul Rouget <me@paulrouget.com>"]
 build = "build.rs"
 
 [lib]
-name = "simpleservo"
+name = "servobridge"
 crate-type = ["cdylib"]
 
 [dependencies]

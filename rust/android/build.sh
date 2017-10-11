@@ -48,8 +48,8 @@ export OPENSSL_STATIC="TRUE"
 
 cargo build --release --target $RUST_TARGET
 
-LIB_NAME="libsimpleservo.so"
-HEADER_NAME="libsimpleservo.h"
+LIB_NAME="libservobridge.so"
+HEADER_NAME="libservobridge.h"
 TARGET="./target/$RUST_TARGET/release/$LIB_NAME"
 echo "Stripping $TARGET"
 $NDK_BIN_PATH/aarch64-linux-android-strip $TARGET

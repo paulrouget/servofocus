@@ -26,7 +26,7 @@ fn main() {
 
     cheddar::Cheddar::new().expect("could not read manifest")
         .module("api").expect("malformed module path")
-        .run_build("target/libsimpleservo.h");
+        .run_build("target/libservobridge.h");
 }
 
 fn android_main() {
