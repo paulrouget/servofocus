@@ -91,7 +91,6 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServoViewRenderer.cs" />
-    <Compile Include="GlRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidNativeLibrary Include="lib\arm64\libsimpleservo.so">
