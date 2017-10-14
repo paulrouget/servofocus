@@ -16,10 +16,20 @@ namespace Servofocus.Android
     {
         bool _disposed;
         private float _lastY;
+        delegate void interopDelegate();
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
             base.OnElementChanged(e);
+
+
+            var hostCallbackInstance = ServoSharp.HostCallbacks.__CreateInstance(new ServoSharp.HostCallbacks.__Internal
+            {
+                wakeup = Marshal.GetFunctionPointerForDelegate( new interopDelegate(() => 
+                    Control.QueueEvent(() => ServoSharp.libservobridge.PerformUpdates()))),
+                flush = Marshal.GetFunctionPointerForDelegate(new interopDelegate(() => Control.RequestRender())),
+                log = IntPtr.Zero
+            });
 
             if (e.NewElement != null)
             {
@@ -114,7 +124,6 @@ namespace Servofocus.Android
 
 			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
-                
                 //Interop.InitWithEgl(
                     //() => _wakeup(),
                     //() => _flush(),
