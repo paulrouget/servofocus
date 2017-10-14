@@ -17,9 +17,13 @@ namespace Servofocus
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            UrlField.Text = Marshal.PtrToStringAnsi(Interop.ServoVersion());
+            //UrlField.Text = Marshal.PtrToStringAnsi(Interop.ServoVersion());
 
+            unsafe {
+                UrlField.Text = Marshal.PtrToStringAnsi((System.IntPtr)ServoSharp.libservobridge.ServoVersion());
            
+            }
+
             Subscribe();
            
             Debug.WriteLine("OnAppearing");

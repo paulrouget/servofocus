@@ -28,6 +28,7 @@
     <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
     <PlatformTarget>x64</PlatformTarget>
     <AndroidSupportedAbis>arm64-v8a</AndroidSupportedAbis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +40,7 @@
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidSupportedAbis>armeabi;armeabi-v7a</AndroidSupportedAbis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK-1.0" />
@@ -94,7 +96,7 @@
     <Compile Include="GlRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidNativeLibrary Include="lib\arm64\libsimpleservo.so">
+    <AndroidNativeLibrary Include="lib\arm64\libservobridge.so">
       <Abi>arm64-v8a</Abi>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidNativeLibrary>

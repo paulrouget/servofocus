@@ -148,7 +148,7 @@
     <BundleResource Include="resources\user-agent-js\00.example.js" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\libsimpleservo.dylib">
+    <NativeReference Include="..\libservobridge.dylib">
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>

@@ -51,10 +51,11 @@ namespace Servofocus.Android
             {
                 if (e.status == GestureStatus.Started) {
                     Interop.Scroll(e.dx, e.dy, e.x, e.y, 0);
+                    ServoSharp.libservobridge.Scroll(e.dx, e.dy, e.x, e.y, ServoSharp.ScrollState.ScrollStateStart);
                 } else if (e.status == GestureStatus.Running) {
-                    Interop.Scroll(e.dx, e.dy, e.x, e.y, 1);
+                    ServoSharp.libservobridge.Scroll(e.dx, e.dy, e.x, e.y, ServoSharp.ScrollState.ScrollStateMove);
                 } else {
-                    Interop.Scroll(0, 0, 0, 0, 2);
+                    ServoSharp.libservobridge.Scroll(e.dx, e.dy, e.x, e.y, ServoSharp.ScrollState.ScrollStateEnd);
                 }
             });
         }
@@ -92,11 +93,11 @@ namespace Servofocus.Android
 			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
                 
-                Interop.InitWithEgl(
-                    () => _wakeup(),
-                    () => _flush(),
-                    (str) => {}, // System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
-                    540, 740);
+                //Interop.InitWithEgl(
+                    //() => _wakeup(),
+                    //() => _flush(),
+                    //(str) => {}, // System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
+                    //540, 740);
 			}
         }
 

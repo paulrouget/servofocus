@@ -21,5 +21,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Interop.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServoView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServoSharp.cs" />
   </ItemGroup>
 </Project>
