@@ -34,7 +34,7 @@ namespace Servofocus.Android
 
                     var renderer = new Renderer(
                         () => surfaceView.RequestRender(),
-                        () => surfaceView.QueueEvent(() => Interop.OnEventLoopAwakenByServo() )
+                        () => surfaceView.QueueEvent(() => ServoSharp.libservobridge.PerformUpdates() )
                     );
 
                     surfaceView.SetRenderer(renderer);
@@ -73,7 +73,6 @@ namespace Servofocus.Android
             Control.QueueEvent(() =>
             {
                 if (e.status == GestureStatus.Started) {
-                    Interop.Scroll(e.dx, e.dy, e.x, e.y, 0);
                     ServoSharp.libservobridge.Scroll(e.dx, e.dy, e.x, e.y, ServoSharp.ScrollState.ScrollStateStart);
                 } else if (e.status == GestureStatus.Running) {
                     ServoSharp.libservobridge.Scroll(e.dx, e.dy, e.x, e.y, ServoSharp.ScrollState.ScrollStateMove);
