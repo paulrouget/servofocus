@@ -32,6 +32,7 @@ xamarin/packages/
 *.log
 *.sql
 *.sqlite
+*.user*
 
 # OS generated files #
 ######################
