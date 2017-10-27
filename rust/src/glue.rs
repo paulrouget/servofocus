@@ -85,8 +85,6 @@ pub fn init(
 
     let mut servo = servo::Servo::new(callbacks.clone());
 
-    info!("glue::init 5");
-
     let url = ServoUrl::parse("about:not-found").unwrap();
     let (sender, receiver) = ipc::channel().unwrap();
     servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
