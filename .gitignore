@@ -46,7 +46,6 @@ Thumbs.db
 
 # Rust stuff #
 ##############
-/rust/target/
 **/*.rs.bk
 /rust/Cargo.lock
 /rust/target/
