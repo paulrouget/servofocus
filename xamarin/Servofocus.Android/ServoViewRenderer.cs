@@ -16,20 +16,17 @@ namespace Servofocus.Android
     {
         bool _disposed;
         private float _lastY;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         delegate void interopDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        delegate void logDelegate(string log);
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
             base.OnElementChanged(e);
 
 
-            var hostCallbackInstance = ServoSharp.HostCallbacks.__CreateInstance(new ServoSharp.HostCallbacks.__Internal
-            {
-                wakeup = Marshal.GetFunctionPointerForDelegate( new interopDelegate(() => 
-                    Control.QueueEvent(() => ServoSharp.libservobridge.PerformUpdates()))),
-                flush = Marshal.GetFunctionPointerForDelegate(new interopDelegate(() => Control.RequestRender())),
-                log = IntPtr.Zero
-            });
 
             if (e.NewElement != null)
             {
@@ -42,9 +39,22 @@ namespace Servofocus.Android
                     surfaceView.SetEGLContextClientVersion(3);
                     surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
 
+
+                    var hostCallbackInstance = ServoSharp.HostCallbacks.__CreateInstance(new ServoSharp.HostCallbacks.__Internal
+                    {
+                        wakeup = Marshal.GetFunctionPointerForDelegate( new interopDelegate(() => 
+                                                                                            Control.QueueEvent(() => {
+                            System.Diagnostics.Debug.WriteLine("FOO");
+                            var x = ServoSharp.libservobridge.PerformUpdates();
+                            System.Diagnostics.Debug.WriteLine("BAR");
+                        }))),
+                        flush = Marshal.GetFunctionPointerForDelegate(new interopDelegate(() => Control.RequestRender())),
+                                    
+                        log = Marshal.GetFunctionPointerForDelegate(new logDelegate(str => System.Diagnostics.Debug.WriteLine(str)))
+                    });
+
                     var renderer = new Renderer(
-                        () => surfaceView.RequestRender(),
-                        () => surfaceView.QueueEvent(() => ServoSharp.libservobridge.PerformUpdates() )
+                        hostCallbackInstance
                     );
 
                     surfaceView.SetRenderer(renderer);
@@ -103,13 +113,11 @@ namespace Servofocus.Android
 
         class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
         {
-            Action _flush;
-            Action _wakeup;
+            ServoSharp.HostCallbacks _callbacks;
 
-			public Renderer(Action interopCallback, Action wakeup)
+            public Renderer(ServoSharp.HostCallbacks callbacks)
 			{
-                _flush = interopCallback;
-                _wakeup = wakeup;
+                _callbacks = callbacks;
 			}
 
 			public void OnDrawFrame(IGL10 gl)
@@ -129,6 +137,18 @@ namespace Servofocus.Android
                     //() => _flush(),
                     //(str) => {}, // System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
                     //540, 740);
+
+
+                var viewLayout = ServoSharp.ViewLayout.__CreateInstance(new ServoSharp.ViewLayout.__Internal
+                {
+                    hidpi_factor = 1f,
+                    margins = new ServoSharp.Margins.__Internal(),
+                    position = new ServoSharp.Position.__Internal(),
+                    view_size = new ServoSharp.Size.__Internal()
+                });
+
+
+                ServoSharp.libservobridge.InitWithEgl(_callbacks, viewLayout);
 			}
         }
 

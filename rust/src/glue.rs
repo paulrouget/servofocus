@@ -51,14 +51,28 @@ pub fn init(
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
 
+    // FIXME: for now, don't rely on layout
+    let layout = ViewLayout {
+        view_size: Size { width: 50, height: 50 },
+        margins: Margins { top: 0, right: 0, bottom: 0, left: 0},
+        position: Position { x: 0, y: 0 },
+        hidpi_factor: 2.0,
+    };
+
+    info!("glue::init 1");
+
     set_resources_path(Some("/sdcard/servo/resources/".to_owned()));
 
     let opts = opts::default_opts();
     opts::set_defaults(opts);
 
+    info!("glue::init 2");
+
     gl.clear_color(1.0, 1.0, 1.0, 1.0);
     gl.clear(gl::COLOR_BUFFER_BIT);
     gl.finish();
+
+    info!("glue::init 3");
 
     let callbacks = Rc::new(ServoCallbacks {
         waker: Box::new(RemoteEventLoopWaker(callbacks.wakeup)),
@@ -67,9 +81,13 @@ pub fn init(
         layout,
     });
 
+    info!("glue::init 4");
+
     let mut servo = servo::Servo::new(callbacks.clone());
 
-    let url = ServoUrl::parse("http://paulrouget.com").unwrap();
+    info!("glue::init 5");
+
+    let url = ServoUrl::parse("http://paulrouget.com/test.html").unwrap();
     let (sender, receiver) = ipc::channel().unwrap();
     servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
     let browser_id = receiver.recv().unwrap();
@@ -83,6 +101,8 @@ pub fn init(
             events: vec![],
         });
     });
+
+    info!("glue::init::finished");
 
     ServoResult::Ok
 }
@@ -151,7 +171,8 @@ impl WindowMethods for ServoCallbacks {
     }
 
     fn present(&self) {
-        (self.flush)();
+        // FIXME
+        // (self.flush)();
     }
 
     fn supports_clipboard(&self) -> bool {
