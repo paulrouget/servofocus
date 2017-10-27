@@ -87,7 +87,7 @@ pub fn init(
 
     info!("glue::init 5");
 
-    let url = ServoUrl::parse("http://paulrouget.com/test.html").unwrap();
+    let url = ServoUrl::parse("about:not-found").unwrap();
     let (sender, receiver) = ipc::channel().unwrap();
     servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
     let browser_id = receiver.recv().unwrap();
@@ -171,8 +171,7 @@ impl WindowMethods for ServoCallbacks {
     }
 
     fn present(&self) {
-        // FIXME
-        // (self.flush)();
+        (self.flush)();
     }
 
     fn supports_clipboard(&self) -> bool {
