@@ -10,6 +10,12 @@ namespace Servofocus
 		public Action<Rectangle> OnDisplay { get; set; }
         public double _lastScrollY { get; private set; }
         private Action<Action> _runOnGlThread;
+        public ServoSharp ServoSharp;
+
+        public ServoView()
+        {
+            ServoSharp = new ServoSharp();
+        }
 
         public void Display()
         {
