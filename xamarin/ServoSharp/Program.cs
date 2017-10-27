@@ -18,9 +18,9 @@ namespace ServoSharp
         static void Main(string[] args)
         {
             ConsoleDriver.Run(new ServoLib());
-            var source = Path.Combine(RootPath, "ServoSharp.cs");
-            var dest = Path.Combine(Directory.GetParent(RootPath).FullName, "Servofocus\\ServoSharp.cs");
-            File.Copy(source, dest, overwrite: true);
+            //var source = Path.Combine(RootPath, "ServoSharp.cs");
+            //var dest = Path.Combine(Directory.GetParent(RootPath).FullName, "Servofocus\\ServoSharp.cs");
+            //File.Copy(source, dest, overwrite: true);
             Console.ReadKey();
         }
 
@@ -34,12 +34,12 @@ namespace ServoSharp
             {
                 var libNamespace = ctx.FindClass("Size").Single().Namespace;
 
-                
-                //ctx.SetClassAsValueType("HostCallbacks");
-                //ctx.SetClassAsValueType("Size");
-                //ctx.SetClassAsValueType("Margins");
-                //ctx.SetClassAsValueType("Position");
-                //ctx.SetClassAsValueType("ViewLayout");
+
+                ctx.SetClassAsValueType("HostCallbacks");
+                ctx.SetClassAsValueType("Size");
+                ctx.SetClassAsValueType("Margins");
+                ctx.SetClassAsValueType("Position");
+                ctx.SetClassAsValueType("ViewLayout");
 
                 var initWithEgl = ctx.FindFunction("InitWithEgl").Single();
                 initWithEgl.GenerationKind = GenerationKind.None;

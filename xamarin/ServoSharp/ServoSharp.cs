@@ -30,7 +30,7 @@ namespace Servofocus
     }
 
     /// <summary>Callback used by Servo internals</summary>
-    public unsafe partial class HostCallbacks : IDisposable
+    public unsafe partial struct HostCallbacks
     {
         [StructLayout(LayoutKind.Explicit, Size = 24)]
         public partial struct __Internal
@@ -50,13 +50,8 @@ namespace Servofocus
             internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
-        public global::System.IntPtr __Instance { get; protected set; }
-
-        protected int __PointerAdjustment;
-        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.HostCallbacks> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.HostCallbacks>();
-        protected void*[] __OriginalVTables;
-
-        protected bool __ownsNativeInstance;
+        private HostCallbacks.__Internal __instance;
+        internal HostCallbacks.__Internal __Instance { get { return __instance; } }
 
         internal static global::Servofocus.HostCallbacks __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
@@ -68,60 +63,30 @@ namespace Servofocus
             return new global::Servofocus.HostCallbacks(native, skipVTables);
         }
 
-        private static void* __CopyValue(global::Servofocus.HostCallbacks.__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(global::Servofocus.HostCallbacks.__Internal));
-            *(global::Servofocus.HostCallbacks.__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
         private HostCallbacks(global::Servofocus.HostCallbacks.__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
+            : this()
         {
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = native;
         }
 
-        protected HostCallbacks(void* native, bool skipVTables = false)
+        private HostCallbacks(void* native, bool skipVTables = false) : this()
         {
-            if (native == null)
-                return;
-            __Instance = new global::System.IntPtr(native);
-        }
-
-        public HostCallbacks()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.HostCallbacks.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = *(global::Servofocus.HostCallbacks.__Internal*) native;
         }
 
         public HostCallbacks(global::Servofocus.HostCallbacks _0)
+            : this()
         {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.HostCallbacks.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
-            *((global::Servofocus.HostCallbacks.__Internal*) __Instance) = *((global::Servofocus.HostCallbacks.__Internal*) _0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            global::Servofocus.HostCallbacks __dummy;
-            NativeToManagedMap.TryRemove(__Instance, out __dummy);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
+            var ____arg0 = _0.__Instance;
+            var __arg0 = new global::System.IntPtr(&____arg0);
+            fixed (__Internal* __instancePtr = &__instance)
+            {
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+            }
         }
     }
 
-    public unsafe partial class Size : IDisposable
+    public unsafe partial struct Size
     {
         [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
@@ -138,13 +103,8 @@ namespace Servofocus
             internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
-        public global::System.IntPtr __Instance { get; protected set; }
-
-        protected int __PointerAdjustment;
-        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.Size> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.Size>();
-        protected void*[] __OriginalVTables;
-
-        protected bool __ownsNativeInstance;
+        private Size.__Internal __instance;
+        internal Size.__Internal __Instance { get { return __instance; } }
 
         internal static global::Servofocus.Size __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
@@ -156,68 +116,38 @@ namespace Servofocus
             return new global::Servofocus.Size(native, skipVTables);
         }
 
-        private static void* __CopyValue(global::Servofocus.Size.__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(global::Servofocus.Size.__Internal));
-            *(global::Servofocus.Size.__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
         private Size(global::Servofocus.Size.__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
+            : this()
         {
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = native;
         }
 
-        protected Size(void* native, bool skipVTables = false)
+        private Size(void* native, bool skipVTables = false) : this()
         {
-            if (native == null)
-                return;
-            __Instance = new global::System.IntPtr(native);
-        }
-
-        public Size()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.Size.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = *(global::Servofocus.Size.__Internal*) native;
         }
 
         public Size(global::Servofocus.Size _0)
+            : this()
         {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.Size.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
-            *((global::Servofocus.Size.__Internal*) __Instance) = *((global::Servofocus.Size.__Internal*) _0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            global::Servofocus.Size __dummy;
-            NativeToManagedMap.TryRemove(__Instance, out __dummy);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
+            var ____arg0 = _0.__Instance;
+            var __arg0 = new global::System.IntPtr(&____arg0);
+            fixed (__Internal* __instancePtr = &__instance)
+            {
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+            }
         }
 
         public uint Width
         {
             get
             {
-                return ((global::Servofocus.Size.__Internal*) __Instance)->width;
+                return __instance.width;
             }
 
             set
             {
-                ((global::Servofocus.Size.__Internal*) __Instance)->width = value;
+                __instance.width = value;
             }
         }
 
@@ -225,17 +155,17 @@ namespace Servofocus
         {
             get
             {
-                return ((global::Servofocus.Size.__Internal*) __Instance)->height;
+                return __instance.height;
             }
 
             set
             {
-                ((global::Servofocus.Size.__Internal*) __Instance)->height = value;
+                __instance.height = value;
             }
         }
     }
 
-    public unsafe partial class Margins : IDisposable
+    public unsafe partial struct Margins
     {
         [StructLayout(LayoutKind.Explicit, Size = 16)]
         public partial struct __Internal
@@ -258,13 +188,8 @@ namespace Servofocus
             internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
-        public global::System.IntPtr __Instance { get; protected set; }
-
-        protected int __PointerAdjustment;
-        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.Margins> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.Margins>();
-        protected void*[] __OriginalVTables;
-
-        protected bool __ownsNativeInstance;
+        private Margins.__Internal __instance;
+        internal Margins.__Internal __Instance { get { return __instance; } }
 
         internal static global::Servofocus.Margins __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
@@ -276,68 +201,38 @@ namespace Servofocus
             return new global::Servofocus.Margins(native, skipVTables);
         }
 
-        private static void* __CopyValue(global::Servofocus.Margins.__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(global::Servofocus.Margins.__Internal));
-            *(global::Servofocus.Margins.__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
         private Margins(global::Servofocus.Margins.__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
+            : this()
         {
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = native;
         }
 
-        protected Margins(void* native, bool skipVTables = false)
+        private Margins(void* native, bool skipVTables = false) : this()
         {
-            if (native == null)
-                return;
-            __Instance = new global::System.IntPtr(native);
-        }
-
-        public Margins()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.Margins.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = *(global::Servofocus.Margins.__Internal*) native;
         }
 
         public Margins(global::Servofocus.Margins _0)
+            : this()
         {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.Margins.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
-            *((global::Servofocus.Margins.__Internal*) __Instance) = *((global::Servofocus.Margins.__Internal*) _0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            global::Servofocus.Margins __dummy;
-            NativeToManagedMap.TryRemove(__Instance, out __dummy);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
+            var ____arg0 = _0.__Instance;
+            var __arg0 = new global::System.IntPtr(&____arg0);
+            fixed (__Internal* __instancePtr = &__instance)
+            {
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+            }
         }
 
         public uint Top
         {
             get
             {
-                return ((global::Servofocus.Margins.__Internal*) __Instance)->top;
+                return __instance.top;
             }
 
             set
             {
-                ((global::Servofocus.Margins.__Internal*) __Instance)->top = value;
+                __instance.top = value;
             }
         }
 
@@ -345,12 +240,12 @@ namespace Servofocus
         {
             get
             {
-                return ((global::Servofocus.Margins.__Internal*) __Instance)->right;
+                return __instance.right;
             }
 
             set
             {
-                ((global::Servofocus.Margins.__Internal*) __Instance)->right = value;
+                __instance.right = value;
             }
         }
 
@@ -358,12 +253,12 @@ namespace Servofocus
         {
             get
             {
-                return ((global::Servofocus.Margins.__Internal*) __Instance)->bottom;
+                return __instance.bottom;
             }
 
             set
             {
-                ((global::Servofocus.Margins.__Internal*) __Instance)->bottom = value;
+                __instance.bottom = value;
             }
         }
 
@@ -371,17 +266,17 @@ namespace Servofocus
         {
             get
             {
-                return ((global::Servofocus.Margins.__Internal*) __Instance)->left;
+                return __instance.left;
             }
 
             set
             {
-                ((global::Servofocus.Margins.__Internal*) __Instance)->left = value;
+                __instance.left = value;
             }
         }
     }
 
-    public unsafe partial class Position : IDisposable
+    public unsafe partial struct Position
     {
         [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
@@ -398,13 +293,8 @@ namespace Servofocus
             internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
-        public global::System.IntPtr __Instance { get; protected set; }
-
-        protected int __PointerAdjustment;
-        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.Position> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.Position>();
-        protected void*[] __OriginalVTables;
-
-        protected bool __ownsNativeInstance;
+        private Position.__Internal __instance;
+        internal Position.__Internal __Instance { get { return __instance; } }
 
         internal static global::Servofocus.Position __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
@@ -416,68 +306,38 @@ namespace Servofocus
             return new global::Servofocus.Position(native, skipVTables);
         }
 
-        private static void* __CopyValue(global::Servofocus.Position.__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(global::Servofocus.Position.__Internal));
-            *(global::Servofocus.Position.__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
         private Position(global::Servofocus.Position.__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
+            : this()
         {
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = native;
         }
 
-        protected Position(void* native, bool skipVTables = false)
+        private Position(void* native, bool skipVTables = false) : this()
         {
-            if (native == null)
-                return;
-            __Instance = new global::System.IntPtr(native);
-        }
-
-        public Position()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.Position.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = *(global::Servofocus.Position.__Internal*) native;
         }
 
         public Position(global::Servofocus.Position _0)
+            : this()
         {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.Position.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
-            *((global::Servofocus.Position.__Internal*) __Instance) = *((global::Servofocus.Position.__Internal*) _0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            global::Servofocus.Position __dummy;
-            NativeToManagedMap.TryRemove(__Instance, out __dummy);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
+            var ____arg0 = _0.__Instance;
+            var __arg0 = new global::System.IntPtr(&____arg0);
+            fixed (__Internal* __instancePtr = &__instance)
+            {
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+            }
         }
 
         public int X
         {
             get
             {
-                return ((global::Servofocus.Position.__Internal*) __Instance)->x;
+                return __instance.x;
             }
 
             set
             {
-                ((global::Servofocus.Position.__Internal*) __Instance)->x = value;
+                __instance.x = value;
             }
         }
 
@@ -485,17 +345,17 @@ namespace Servofocus
         {
             get
             {
-                return ((global::Servofocus.Position.__Internal*) __Instance)->y;
+                return __instance.y;
             }
 
             set
             {
-                ((global::Servofocus.Position.__Internal*) __Instance)->y = value;
+                __instance.y = value;
             }
         }
     }
 
-    public unsafe partial class ViewLayout : IDisposable
+    public unsafe partial struct ViewLayout
     {
         [StructLayout(LayoutKind.Explicit, Size = 36)]
         public partial struct __Internal
@@ -518,13 +378,8 @@ namespace Servofocus
             internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
-        public global::System.IntPtr __Instance { get; protected set; }
-
-        protected int __PointerAdjustment;
-        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.ViewLayout> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.ViewLayout>();
-        protected void*[] __OriginalVTables;
-
-        protected bool __ownsNativeInstance;
+        private ViewLayout.__Internal __instance;
+        internal ViewLayout.__Internal __Instance { get { return __instance; } }
 
         internal static global::Servofocus.ViewLayout __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
@@ -536,107 +391,52 @@ namespace Servofocus
             return new global::Servofocus.ViewLayout(native, skipVTables);
         }
 
-        private static void* __CopyValue(global::Servofocus.ViewLayout.__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(global::Servofocus.ViewLayout.__Internal));
-            *(global::Servofocus.ViewLayout.__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
         private ViewLayout(global::Servofocus.ViewLayout.__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
+            : this()
         {
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = native;
         }
 
-        protected ViewLayout(void* native, bool skipVTables = false)
+        private ViewLayout(void* native, bool skipVTables = false) : this()
         {
-            if (native == null)
-                return;
-            __Instance = new global::System.IntPtr(native);
-        }
-
-        public ViewLayout()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.ViewLayout.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
+            __instance = *(global::Servofocus.ViewLayout.__Internal*) native;
         }
 
         public ViewLayout(global::Servofocus.ViewLayout _0)
+            : this()
         {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.ViewLayout.__Internal));
-            __ownsNativeInstance = true;
-            NativeToManagedMap[__Instance] = this;
-            *((global::Servofocus.ViewLayout.__Internal*) __Instance) = *((global::Servofocus.ViewLayout.__Internal*) _0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            global::Servofocus.ViewLayout __dummy;
-            NativeToManagedMap.TryRemove(__Instance, out __dummy);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        public global::Servofocus.Size ViewSize
-        {
-            get
+            var ____arg0 = _0.__Instance;
+            var __arg0 = new global::System.IntPtr(&____arg0);
+            fixed (__Internal* __instancePtr = &__instance)
             {
-                return global::Servofocus.Size.__CreateInstance(((global::Servofocus.ViewLayout.__Internal*) __Instance)->view_size);
-            }
-
-            set
-            {
-                ((global::Servofocus.ViewLayout.__Internal*) __Instance)->view_size = ReferenceEquals(value, null) ? new global::Servofocus.Size.__Internal() : *(global::Servofocus.Size.__Internal*) value.__Instance;
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
             }
         }
 
-        public global::Servofocus.Margins Margins
-        {
-            get
-            {
-                return global::Servofocus.Margins.__CreateInstance(((global::Servofocus.ViewLayout.__Internal*) __Instance)->margins);
-            }
+        /// <summary>Size of the view. Hardware pixels.</summary>
+        public global::Servofocus.Size __view_size;
 
-            set
-            {
-                ((global::Servofocus.ViewLayout.__Internal*) __Instance)->margins = ReferenceEquals(value, null) ? new global::Servofocus.Margins.__Internal() : *(global::Servofocus.Margins.__Internal*) value.__Instance;
-            }
-        }
+        /// <summary>
+        /// <para>Margins of the view. Hardware pixels.</para>
+        /// <para>Pages are painted all over the surface,</para>
+        /// <para>but if margins are not zero, the layout</para>
+        /// <para>coordinates are bounds byt these margins.</para>
+        /// </summary>
+        public global::Servofocus.Margins __margins;
 
-        public global::Servofocus.Position Position
-        {
-            get
-            {
-                return global::Servofocus.Position.__CreateInstance(((global::Servofocus.ViewLayout.__Internal*) __Instance)->position);
-            }
-
-            set
-            {
-                ((global::Servofocus.ViewLayout.__Internal*) __Instance)->position = ReferenceEquals(value, null) ? new global::Servofocus.Position.__Internal() : *(global::Servofocus.Position.__Internal*) value.__Instance;
-            }
-        }
+        /// <summary>Position of the window.</summary>
+        public global::Servofocus.Position __position;
 
         public float HidpiFactor
         {
             get
             {
-                return ((global::Servofocus.ViewLayout.__Internal*) __Instance)->hidpi_factor;
+                return __instance.hidpi_factor;
             }
 
             set
             {
-                ((global::Servofocus.ViewLayout.__Internal*) __Instance)->hidpi_factor = value;
+                __instance.hidpi_factor = value;
             }
         }
     }
@@ -649,27 +449,27 @@ namespace Servofocus
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="init_with_egl")]
-            internal static extern global::Servofocus.ServoResult InitWithEgl(global::System.IntPtr instance, global::Servofocus.HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
+            internal static extern global::Servofocus.ServoResult InitWithEgl(HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="perform_updates")]
-            internal static extern global::Servofocus.ServoResult PerformUpdates(global::System.IntPtr instance);
+            internal static extern global::Servofocus.ServoResult PerformUpdates();
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="load_url")]
-            internal static extern global::Servofocus.ServoResult LoadUrl(global::System.IntPtr instance, byte* url);
+            internal static extern global::Servofocus.ServoResult LoadUrl(byte* url);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="scroll")]
-            internal static extern global::Servofocus.ServoResult Scroll(global::System.IntPtr instance, int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state);
+            internal static extern global::Servofocus.ServoResult Scroll(int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="servo_version")]
-            internal static extern byte* ServoVersion(global::System.IntPtr instance);
+            internal static extern byte* ServoVersion();
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
@@ -737,9 +537,9 @@ namespace Servofocus
         /// <summary>Needs to be called from the EGL thread</summary>
         public global::Servofocus.ServoResult InitWithEgl(global::Servofocus.HostCallbacks callbacks, global::Servofocus.ViewLayout layout)
         {
-            var __arg0 = ReferenceEquals(callbacks, null) ? new global::Servofocus.HostCallbacks.__Internal() : *(global::Servofocus.HostCallbacks.__Internal*) callbacks.__Instance;
-            var __arg1 = ReferenceEquals(layout, null) ? new global::Servofocus.ViewLayout.__Internal() : *(global::Servofocus.ViewLayout.__Internal*) layout.__Instance;
-            var __ret = __Internal.InitWithEgl((__Instance + __PointerAdjustment), __arg0, __arg1);
+            var __arg0 = callbacks.__Instance;
+            var __arg1 = layout.__Instance;
+            var __ret = __Internal.InitWithEgl(__arg0, __arg1);
             return __ret;
         }
 
@@ -749,26 +549,26 @@ namespace Servofocus
         /// </summary>
         public global::Servofocus.ServoResult PerformUpdates()
         {
-            var __ret = __Internal.PerformUpdates((__Instance + __PointerAdjustment));
+            var __ret = __Internal.PerformUpdates();
             return __ret;
         }
 
         /// <summary>Load an URL. This needs to be a valid url.</summary>
         public global::Servofocus.ServoResult LoadUrl(byte* url)
         {
-            var __ret = __Internal.LoadUrl((__Instance + __PointerAdjustment), url);
+            var __ret = __Internal.LoadUrl(url);
             return __ret;
         }
 
         public global::Servofocus.ServoResult Scroll(int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state)
         {
-            var __ret = __Internal.Scroll((__Instance + __PointerAdjustment), dx, dy, x, y, state);
+            var __ret = __Internal.Scroll(dx, dy, x, y, state);
             return __ret;
         }
 
         public byte* ServoVersion()
         {
-            var __ret = __Internal.ServoVersion((__Instance + __PointerAdjustment));
+            var __ret = __Internal.ServoVersion();
             return __ret;
         }
     }

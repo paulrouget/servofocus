@@ -24,6 +24,7 @@ namespace Servofocus.Android
         private GCHandle _wakeupHandle;
         private GCHandle _flushHandle;
         private GCHandle _logHandle;
+        private GCHandle _cbStructHandle;
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
@@ -42,9 +43,6 @@ namespace Servofocus.Android
                     surfaceView.SetEGLContextClientVersion(3);
                     surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
 
-
-                    //_flushHandle = GCHandle.Alloc(flush, GCHandleType.Pinned);
-                    //_logHandle = GCHandle.Alloc(log, GCHandleType.Pinned);
                     var wakeUpCb = new SimpleCallbackDelegate(() =>
                     {
                         Control.QueueEvent(() =>
@@ -73,7 +71,8 @@ namespace Servofocus.Android
                         flush = flushPtr,
                         log = logPtr
                     });
-                    
+
+                    //_cbStructHandle = GCHandle.Alloc(hostCallbackInstance, GCHandleType.Pinned);
                     var renderer = new Renderer(
                         hostCallbackInstance, Element
                     );
@@ -136,6 +135,10 @@ namespace Servofocus.Android
         {
             readonly HostCallbacks _callbacks;
             readonly ServoView _servoView;
+            private GCHandle _viewLayoutHandle;
+            private GCHandle _marginsHandle;
+            private GCHandle _positionsHandle;
+            private GCHandle _viewSizeHandle;
 
             public Renderer(HostCallbacks callbacks, ServoView servoView)
 			{
@@ -161,17 +164,26 @@ namespace Servofocus.Android
                     //(str) => {}, // System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
                     //540, 740);
 
+                var margins = new Margins();
+                //_marginsHandle = GCHandle.Alloc(margins, GCHandleType.Pinned);
 
-                var viewLayout = ViewLayout.__CreateInstance(new ViewLayout.__Internal
+                var position = new Position();
+                //_positionsHandle = GCHandle.Alloc(position, GCHandleType.Pinned);
+
+                var viewSize = new Size();
+                //_viewSizeHandle = GCHandle.Alloc(viewSize, GCHandleType.Pinned);
+
+                var viewLayout = new ViewLayout
                 {
-                    hidpi_factor = 1f,
-                    margins = new Margins.__Internal(),
-                    position = new Position.__Internal(),
-                    view_size = new Size.__Internal()
-                });
+                    __margins = margins,
+                    __position = position,
+                    __view_size = viewSize,
+                    HidpiFactor = 1f
+                };
 
 
-               _servoView.ServoSharp.InitWithEgl(_callbacks, viewLayout);
+                //_viewLayoutHandle = GCHandle.Alloc(viewLayout, GCHandleType.Pinned);
+                _servoView.ServoSharp.InitWithEgl(_callbacks, viewLayout);
 			}
         }
 
