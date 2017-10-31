@@ -1,0 +1,856 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Servo, the parallel browser engine</title>
+  </head>
+
+  <body>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-sm-12'>
+          <h1 id='page-title' class='page-header'>
+            Servo, the Parallel Browser Engine Project
+          </h1>
+        </div>
+        <div class='col-sm-12'>
+          <h3 class='description'>
+            <b>Servo</b> is a modern, high-performance
+            browser engine designed for both application and embedded use.
+          </h3>
+        </div>
+      </div>
+
+      <br>  
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          <div id='community'>
+
+            <p>
+              Created by Mozilla Research, the Servo project is being built by a global
+              community, from individual contributors to companies such as Mozilla and
+              Samsung.
+            </p>
+
+            <p>
+              Servo currently supports Linux, macOS, Windows, and Android.
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+      <div class='row'>
+        <div class='col-sm-12'>
+          <h2 class='header'>Getting Started</h2>
+          <h3>Prerequisites</h3>
+          <p>
+            You can find what you need to install on your particular system
+            <a href="https://github.com/servo/servo#setting-up-your-environment"> on our GitHub page</a>.
+          </p>
+
+          <h3>Building</h3>
+          <p>
+            Servo is built with Cargo, the Rust package manager. We also use Mozilla's
+            Mach tools to orchestrate the build and other tasks.
+          </p>
+
+          <h4>Normal build</h4>
+          <p>
+            To build Servo in development mode. This is useful for development, but the
+            resulting binary is very slow.
+          </p>
+
+          <pre><code>git clone https://github.com/servo/servo
+cd servo
+./mach build --dev
+./mach run tests/html/about-mozilla.html</code></pre>
+
+          <p>
+            For benchmarking, performance testing, or real-world use, add the
+            <code>--release</code> flag to create an optimized build:
+          </p>
+
+          <pre><code>./mach build --release
+./mach run --release tests/html/about-mozilla.html</code></pre>
+
+          <h3>Running</h3>
+          <p>
+            Use <code>./mach run [url]</code> to run Servo.
+          </p>
+
+          <h4>Commandline Arguments</h4>
+
+          <ul>
+            <li>
+              <code>-p INTERVAL</code> turns on the profiler and dumps
+              info to the console every INTERVAL seconds
+            </li>
+            <li>
+              <code>-s SIZE</code> sets the tile size for painting;
+              defaults to 512
+            </li>
+            <li>
+              <code>-z</code> disables all graphical output; useful for
+              running JS / layout tests
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          <h2 class='header'>Contributing</h2>
+
+          <p id='contributing'>
+            The Servo Project encourages contributions from
+            experienced and new developers alike.
+
+            Look at the links at the bottom of the page to learn more and join
+            hundreds of contributors worldwide working to help make Servo even better.
+          </p>
+
+          <p>
+            Contributions to Servo or its dependencies should be made in the form of
+            GitHub pull requests. Each pull request will be reviewed by a core contributor
+            (someone with permission to land patches) and either landed in the main tree
+            or given feedback for changes that would be required. All contributions should
+            follow this format, even those from core contributors.
+          </p>
+
+          <p>
+            Should you wish to work on an issue, please claim it first by commenting on
+            the GitHub issue that you want to work on it. This is to prevent duplicated
+            efforts from contributors on the same issue.
+          </p>
+
+          <p>
+            If you're looking for easy bugs, have a look at the <a
+              href="https://github.com/servo/servo/labels/E-easy">E-Easy issue tag</a> on
+            GitHub.
+          </p>
+
+          <p>
+            See
+            <a href="https://github.com/servo/servo/blob/master/docs/HACKING_QUICKSTART.md">HACKING_QUICKSTART.md</a>
+            for more information on how to start working on Servo.
+          </p>
+
+          <h3>Pull Request Checklist</h3>
+
+          <ul>
+            <li>
+              Branch from the master branch and, if needed, rebase to the current master
+              branch before submitting your pull request. If it doesn't merge cleanly with
+              master you may be asked to rebase your changes.
+            </li>
+
+            <li>
+              Don't put submodule updates in your pull request unless they are to landed
+              commits.
+            </li>
+
+            <li>
+              If your patch is not getting reviewed or you need a specific person to
+              review it, you can @-reply a reviewer asking for a review in the pull request
+              or a comment, or you can ask for a review in #servo on irc.mozilla.org.
+            </li>
+
+            <li>
+              Add tests relevant to the fixed bug or new feature. For a DOM change this
+              will usually be a web platform test; for layout, a reftest. See our
+              <a href="https://github.com/servo/servo/wiki/Testing"> testing guide </a>
+              for more information.
+            </li>
+
+            <li>
+              For specific git instructions, see <a
+                href="https://github.com/servo/servo/wiki/Github-workflow">GitHub workflow
+                101.</a>
+            </li>
+          </ul>
+
+          <a class='btn btn-primary btn-large' role='button'
+            href='https://starters.servo.org/'>Start Contributing</a>
+
+        </div>
+      </div>
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          <h2 class='header'>Communication</h2>
+
+          <p>
+            Servo contributors frequent the #servo channel on
+            <a href="https://wiki.mozilla.org/IRC">irc.mozilla.org.</a>
+            You can also join the
+            <a href="https://lists.mozilla.org/listinfo/dev-servo">dev-servo mailing list.</a>
+          </p>
+
+        </div>
+      </div>
+
+      <div class='row'>
+        <div class='col-sm-12'>
+          <h2 class='header'>Conduct</h2>
+
+          <p>
+            We follow the
+            <a href="https://www.rust-lang.org/conduct.html">Rust Code of Conduct.</a>
+          </p>
+
+        </div>
+      </div>
+
+      <div class='row' id='languages'>
+        <div class='col-sm-12'>
+
+          <p>Our site in other languages:
+            <a href="/zh-CN/index.html">简体中文</a>
+          </p>
+
+        </div>
+      </div>
+
+      <footer>
+        <div class='row text-center'>
+          <div class='col-md-3'>
+            <a href="https://www.github.com/servo">Contribute</a>
+          </div>
+          <div class='col-md-3'>
+            <a href='https://github.com/servo/servo/wiki/Roadmap'>Follow Servo's Roadmap</a>
+          </div>
+          <div class='col-md-3'>
+            <a href="https://blog.servo.org/">Read the Servo blog</a>
+          </div>
+          <div class='col-md-3'>
+            <p class='text-muted'>#servo on irc.mozilla.org</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <style>
+      /*!
+       * Bootstrap v3.3.7 (http://getbootstrap.com)
+       * Copyright 2011-2016 Twitter, Inc.
+       * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+       */
+
+/*!
+ * Generated using the Bootstrap Customizer (https://getbootstrap.com/customize/?id=64236737961a9a073d2fd40a59a94331)
+ * Config saved to config.json and https://gist.github.com/64236737961a9a073d2fd40a59a94331
+ */
+/*!
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a {
+  background-color: transparent;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+  img {
+    max-width: 100% !important;
+  }
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  .navbar {
+    display: none;
+  }
+  .btn > .caret,
+  .dropup > .btn > .caret {
+    border-top-color: #000 !important;
+  }
+  .label {
+    border: 1px solid #000;
+  }
+  .table {
+    border-collapse: collapse !important;
+  }
+  .table td,
+  .table th {
+    background-color: #fff !important;
+  }
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #ddd !important;
+  }
+}
+.clearfix:before,
+.clearfix:after,
+.dl-horizontal dd:before,
+.dl-horizontal dd:after,
+.container:before,
+.container:after,
+.container-fluid:before,
+.container-fluid:after,
+.row:before,
+.row:after,
+.form-horizontal .form-group:before,
+.form-horizontal .form-group:after,
+.btn-toolbar:before,
+.btn-toolbar:after,
+.btn-group-vertical > .btn-group:before,
+.btn-group-vertical > .btn-group:after,
+.nav:before,
+.nav:after,
+.navbar:before,
+.navbar:after,
+.navbar-header:before,
+.navbar-header:after,
+.navbar-collapse:before,
+.navbar-collapse:after,
+.pager:before,
+.pager:after,
+.panel-body:before,
+.panel-body:after,
+.modal-header:before,
+.modal-header:after,
+.modal-footer:before,
+.modal-footer:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after,
+.dl-horizontal dd:after,
+.container:after,
+.container-fluid:after,
+.row:after,
+.form-horizontal .form-group:after,
+.btn-toolbar:after,
+.btn-group-vertical > .btn-group:after,
+.nav:after,
+.navbar:after,
+.navbar-header:after,
+.navbar-collapse:after,
+.pager:after,
+.panel-body:after,
+.modal-header:after,
+.modal-footer:after {
+  clear: both;
+}
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
+.invisible {
+  visibility: hidden;
+}
+.text-hide {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+.hidden {
+  display: none !important;
+}
+.affix {
+  position: fixed;
+}
+@-ms-viewport {
+  width: device-width;
+}
+.visible-xs,
+.visible-sm,
+.visible-md,
+.visible-lg {
+  display: none !important;
+}
+.visible-xs-block,
+.visible-xs-inline,
+.visible-xs-inline-block,
+.visible-sm-block,
+.visible-sm-inline,
+.visible-sm-inline-block,
+.visible-md-block,
+.visible-md-inline,
+.visible-md-inline-block,
+.visible-lg-block,
+.visible-lg-inline,
+.visible-lg-inline-block {
+  display: none !important;
+}
+@media (max-width: 767px) {
+  .visible-xs {
+    display: block !important;
+  }
+  table.visible-xs {
+    display: table !important;
+  }
+  tr.visible-xs {
+    display: table-row !important;
+  }
+  th.visible-xs,
+  td.visible-xs {
+    display: table-cell !important;
+  }
+}
+@media (max-width: 767px) {
+  .visible-xs-block {
+    display: block !important;
+  }
+}
+@media (max-width: 767px) {
+  .visible-xs-inline {
+    display: inline !important;
+  }
+}
+@media (max-width: 767px) {
+  .visible-xs-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .visible-sm {
+    display: block !important;
+  }
+  table.visible-sm {
+    display: table !important;
+  }
+  tr.visible-sm {
+    display: table-row !important;
+  }
+  th.visible-sm,
+  td.visible-sm {
+    display: table-cell !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .visible-sm-block {
+    display: block !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .visible-sm-inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .visible-sm-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .visible-md {
+    display: block !important;
+  }
+  table.visible-md {
+    display: table !important;
+  }
+  tr.visible-md {
+    display: table-row !important;
+  }
+  th.visible-md,
+  td.visible-md {
+    display: table-cell !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .visible-md-block {
+    display: block !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .visible-md-inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .visible-md-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 1200px) {
+  .visible-lg {
+    display: block !important;
+  }
+  table.visible-lg {
+    display: table !important;
+  }
+  tr.visible-lg {
+    display: table-row !important;
+  }
+  th.visible-lg,
+  td.visible-lg {
+    display: table-cell !important;
+  }
+}
+@media (min-width: 1200px) {
+  .visible-lg-block {
+    display: block !important;
+  }
+}
+@media (min-width: 1200px) {
+  .visible-lg-inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 1200px) {
+  .visible-lg-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (max-width: 767px) {
+  .hidden-xs {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .hidden-sm {
+    display: none !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .hidden-md {
+    display: none !important;
+  }
+}
+@media (min-width: 1200px) {
+  .hidden-lg {
+    display: none !important;
+  }
+}
+.visible-print {
+  display: none !important;
+}
+@media print {
+  .visible-print {
+    display: block !important;
+  }
+  table.visible-print {
+    display: table !important;
+  }
+  tr.visible-print {
+    display: table-row !important;
+  }
+  th.visible-print,
+  td.visible-print {
+    display: table-cell !important;
+  }
+}
+.visible-print-block {
+  display: none !important;
+}
+@media print {
+  .visible-print-block {
+    display: block !important;
+  }
+}
+.visible-print-inline {
+  display: none !important;
+}
+@media print {
+  .visible-print-inline {
+    display: inline !important;
+  }
+}
+.visible-print-inline-block {
+  display: none !important;
+}
+@media print {
+  .visible-print-inline-block {
+    display: inline-block !important;
+  }
+}
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+}
+
+footer {
+  border-top: 1px solid #efefef;
+  padding-top: 5px;
+}
+
+.header {
+  border-bottom: 1px solid #efefef;
+}
+
+.info {
+  font-size: 1.5em;
+  color: gray;
+}
+
+#page-title {
+  font-size: 3em;
+  margin-bottom: 0em;
+}
+
+#community {
+  margin-top: 1em;
+  padding: 1em;
+  font-size: 1.3em;
+  border-top: 2px solid #efefef;
+  border-bottom: 2px solid #efefef;
+}
+
+#contributing {
+  font-size: 1.3em;
+}
+
+#languages {
+  margin-top: 5em;
+}
+
+.btn {
+  margin-top: 1em;
+}
+
+h2 {
+  font-size: 2.3em;
+}
+
+h3 {
+  font-size: 1.7em;
+}
+
+    </style>
+
+  </body>
+</html>
+
