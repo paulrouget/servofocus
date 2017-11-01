@@ -27,6 +27,32 @@
     <WarningLevel>4</WarningLevel>
     <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
     <PlatformTarget>x64</PlatformTarget>
+    <AndroidSupportedAbis>x86;arm64-v8a</AndroidSupportedAbis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;__ANDROID__</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <PlatformTarget>x86</PlatformTarget>
+    <AndroidSupportedAbis>x86</AndroidSupportedAbis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;__ANDROID__</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <PlatformTarget>x64</PlatformTarget>
     <AndroidSupportedAbis>arm64-v8a</AndroidSupportedAbis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -39,7 +65,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidSupportedAbis>armeabi;armeabi-v7a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi;armeabi-v7a;x86</AndroidSupportedAbis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -95,12 +121,18 @@
     <Compile Include="ServoViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidNativeLibrary Include="lib\arm64\libservobridge.so">
+    <AndroidNativeLibrary Include="lib\arm64\libservobridge.so" Condition="'$(Platform)' == 'ARM' ">
       <Abi>arm64-v8a</Abi>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="lib\arm64\libc++_shared.so">
+    <AndroidNativeLibrary Include="lib\arm64\libc++_shared.so" Condition="'$(Platform)' == 'ARM' ">
       <Abi>arm64-v8a</Abi>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="lib\x86\libc++_shared.so" Condition="'$(Platform)' == 'x86' ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="lib\x86\libservobridge.so" Condition="'$(Platform)' == 'x86' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidNativeLibrary>
     <None Include="Resources\AboutResources.txt" />
