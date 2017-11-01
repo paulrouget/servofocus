@@ -25,16 +25,17 @@ namespace Servofocus
 
         internal void Scroll(PanUpdatedEventArgs e)
         {
-            var deltaY = e.TotalY - _lastScrollY;
-            _lastScrollY = e.TotalY;
-			var handler = ScrollRequested;
-            var args = new ScrollArgs();
-            args.dx = 0;
-            args.dy = (Int32) deltaY;
-            args.x = 0;
-            args.y = 0;
-            args.status = e.StatusType;
-            handler?.Invoke(this, args);
+            
+   //         var deltaY = e.TotalY - _lastScrollY;
+   //         _lastScrollY = e.TotalY;
+			//var handler = ScrollRequested;
+            //var args = new ScrollArgs();
+            //args.dx = 0;
+            //args.dy = (Int32) deltaY;
+            //args.x = 0;
+            //args.y = 0;
+            //args.status = e.StatusType;
+            //handler?.Invoke(this, args);
         }
 
         internal void OnTap(float x, float y)

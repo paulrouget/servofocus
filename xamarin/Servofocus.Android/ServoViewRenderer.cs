@@ -16,7 +16,9 @@ namespace Servofocus.Android
     public class ServoViewRenderer : ViewRenderer<ServoView, GLSurfaceView>
     {
         bool _disposed;
-        private float _lastY;
+        private int _lastY;
+
+        GestureStatus _gStatus;
 
         delegate void SimpleCallbackDelegate();
         delegate void LogCallbackDelegate(string log);
@@ -47,14 +49,12 @@ namespace Servofocus.Android
                     {
                         Control.QueueEvent(() =>
                         {
-                            WriteLine("FOO");
                             var x = Element.ServoSharp.PerformUpdates();
-                            WriteLine("BAR");
                         });
                     });
 
                     var flushCb = new SimpleCallbackDelegate(() => Control.RequestRender());
-                    var logCb = new LogCallbackDelegate(log => WriteLine(log));
+                    var logCb = new LogCallbackDelegate(log => {/*WriteLine(log);*/});
 
                     var wakeUpPtr = Marshal.GetFunctionPointerForDelegate(wakeUpCb);
                     //_wakeupHandle = GCHandle.Alloc(wakeUpPtr, GCHandleType.Pinned);
@@ -89,22 +89,25 @@ namespace Servofocus.Android
         
         private void OnTouch(object sender, TouchEventArgs touchEventArgs)
         {
-            var x = touchEventArgs.Event.RawX;
-            var y = touchEventArgs.Event.RawY;
-            var delta = y - _lastY;
-            _lastY = touchEventArgs.Event.RawY;
+            int x = (int)touchEventArgs.Event.RawX;
+            int y = (int)touchEventArgs.Event.RawY;
+            int delta = y - _lastY;
+            _lastY = (int)touchEventArgs.Event.RawY;
 
             // https://developer.android.com/reference/android/view/MotionEvent.html
             System.Diagnostics.Debug.WriteLine(touchEventArgs.Event);
 
-            if(touchEventArgs.Event.Action == MotionEventActions.Up)
-                Element.OnTap(x, y);
-            else if (touchEventArgs.Event.Action == MotionEventActions.Move)
+            Control.QueueEvent(() =>
             {
-                // need to find gesture status
-                // https://github.com/mozilla-mobile/focus-android/blob/a61745794f28f4ac924fed5d9b62d1a03fea3613/app/src/gecko/java/org/mozilla/focus/web/NestedGeckoView.java
-                Element.OnScroll(GestureStatus.Started, delta);
-            }
+                if(touchEventArgs.Event.Action == MotionEventActions.Down)
+                    Element.ServoSharp.Scroll(0, 0, 0, 0, ScrollState.Start);
+                if(touchEventArgs.Event.Action == MotionEventActions.Move)
+                    Element.ServoSharp.Scroll(0, delta, 0, 0, ScrollState.Move);
+                if(touchEventArgs.Event.Action == MotionEventActions.Up)
+                    Element.ServoSharp.Scroll(0, delta, 0, 0, ScrollState.End);
+                
+            });
+
         }
 
         private void OnScrollRequested(object sender, EventArgs args)
