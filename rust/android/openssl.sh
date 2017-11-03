@@ -35,6 +35,7 @@ case $RUST_TARGET in
       _OPENSSL_MACHINE="armv7"
       _OPENSSL_ARCH="arm"
       _OPENSSL_CONFIG="android-armv7"
+      _ANDROID_EABI="$_ANDROID_TARGET-4.9"
       ;;
     arm*)
       _ANDROID_TARGET=$RUST_TARGET
@@ -42,6 +43,7 @@ case $RUST_TARGET in
       _OPENSSL_MACHINE="arm"
       _OPENSSL_ARCH="arm"
       _OPENSSL_CONFIG="android-armv7"
+      _ANDROID_EABI="$_ANDROID_TARGET-4.9"
       ;;
     aarch64*)
       _ANDROID_TARGET=$RUST_TARGET
@@ -49,6 +51,15 @@ case $RUST_TARGET in
       _OPENSSL_MACHINE="armv7"
       _OPENSSL_ARCH="arm64"
       _OPENSSL_CONFIG="linux-generic64 -DB_ENDIAN"
+      _ANDROID_EABI="$_ANDROID_TARGET-4.9"
+      ;;
+    i686-linux-android)
+      _ANDROID_TARGET="i686-linux-android"
+      _ANDROID_ARCH="arch-x86"
+      _OPENSSL_MACHINE="x86"
+      _OPENSSL_ARCH="x86"
+      _OPENSSL_CONFIG="android-x86"
+      _ANDROID_EABI="x86-4.9"
       ;;
     x86*)
       _ANDROID_TARGET=$RUST_TARGET
@@ -56,13 +67,13 @@ case $RUST_TARGET in
       _OPENSSL_MACHINE="x86"
       _OPENSSL_ARCH="arm"
       _OPENSSL_CONFIG="android-x86"
+      _ANDROID_EABI="$_ANDROID_TARGET-4.9"
       ;;
     *)
       echo "Error: Invalid TARGET platform: $RUST_TARGET"
       ;;
 esac
 
-_ANDROID_EABI="$_ANDROID_TARGET-4.9"
 
 
 # Set _ANDROID_API to the API you want to use. You should set it

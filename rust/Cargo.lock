@@ -24,7 +24,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "android_injected_glue"
 version = "0.2.2"
+
+[[package]]
+name = "android_injected_glue"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+replace = "android_injected_glue 0.2.2"
 
 [[package]]
 name = "angle"
@@ -197,7 +202,12 @@ dependencies = [
 [[package]]
 name = "blurdroid"
 version = "0.1.4"
+
+[[package]]
+name = "blurdroid"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+replace = "blurdroid 0.1.4"
 
 [[package]]
 name = "blurmac"

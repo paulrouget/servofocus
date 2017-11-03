@@ -16,6 +16,7 @@ call_gcc()
   export _ANDROID_EABI=$2
   export _ANDROID_PLATFORM=$3
   export ANDROID_SYSROOT="${ANDROID_NDK}/platforms/${_ANDROID_PLATFORM}/${_ANDROID_ARCH}"
+  export TTT=$5
   ANDROID_TOOLCHAIN=""
   for host in "linux-x86_64" "linux-x86" "darwin-x86_64" "darwin-x86"; do
     if [[ -d "${ANDROID_NDK}/toolchains/${_ANDROID_EABI}-4.9/prebuilt/${host}/bin" ]]; then
@@ -32,7 +33,7 @@ call_gcc()
   echo "sysroot: ${ANDROID_SYSROOT}"
   echo "targetdir: ${ANDROID_CXX_LIBS}"
 
-  "${ANDROID_TOOLCHAIN}/${_ANDROID_EABI}-gcc" \
+  "${ANDROID_TOOLCHAIN}/${TTT}-gcc" \
     --sysroot="${ANDROID_SYSROOT}" -L "${ANDROID_CXX_LIBS}" ${_GCC_PARAMS} -lc++ \
     -o "${TARGET_DIR}/libservobridge.so" -shared && touch "${TARGET_DIR}/libservobridge"
 }

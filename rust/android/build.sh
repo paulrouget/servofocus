@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
 BASEDIR=$(dirname "$0")
 cd $BASEDIR/..
 
@@ -8,13 +12,25 @@ cd $BASEDIR/..
 
 #### Feel free to change:
 
-export RUST_TARGET="aarch64-linux-android"
-export ANDROID_ARCH="arch-arm64"
+### Phone
+# export RUST_TARGET="aarch64-linux-android"
+# export ANDROID_ARCH="arch-arm64"
+# export ANDROID_PLATFORM="android-21"
+# # used by toolchains.cmake
+# export CMAKE_ANDROID_ARCH_ABI="arm64-v8a"
+# export NDK_ANDROID_VERSION="21"
+# NDK_BIN_PATH="$ANDROID_NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64/bin"
+# export PATH="$NDK_BIN_PATH:$PATH"
+
+### Emulator
+export RUST_TARGET="i686-linux-android"
+export ANDROID_ARCH="arch-x86"
 export ANDROID_PLATFORM="android-21"
 # used by toolchains.cmake
-export CMAKE_ANDROID_ARCH_ABI="arm64-v8a"
+export CMAKE_ANDROID_ARCH_ABI="x86"
 export NDK_ANDROID_VERSION="21"
-NDK_BIN_PATH="$ANDROID_NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64/bin"
+NDK_BIN_PATH="$ANDROID_NDK/toolchains/x86-4.9/prebuilt/darwin-x86_64/bin"
+echo $NDK_BIN_PATH
 export PATH="$NDK_BIN_PATH:$PATH"
 
 #### You probably don't want to change that
@@ -52,7 +68,7 @@ LIB_NAME="libservobridge.so"
 HEADER_NAME="libservobridge.h"
 TARGET="./target/$RUST_TARGET/release/$LIB_NAME"
 echo "Stripping $TARGET"
-$NDK_BIN_PATH/aarch64-linux-android-strip $TARGET
+$NDK_BIN_PATH/i686-linux-android-strip $TARGET
 echo "Copying $TARGET to Android project"
-cp $TARGET ../xamarin/Servofocus.Android/lib/arm64/$LIB_NAME
+cp $TARGET ../xamarin/Servofocus.Android/lib/x86/$LIB_NAME
 cp ./target/$HEADER_NAME ../xamarin/

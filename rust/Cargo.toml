@@ -21,3 +21,5 @@ moz-cheddar = "0.4.0"
 # "openssl:0.9.12" = { path = "../../rust-openssl/openssl/" }
 # "https://github.com/servo/webrender#0.52.0" = { path = '../../webrender/webrender/' }
 # "https://github.com/servo/webrender#webrender_api:0.52.0" = { path = '../../webrender/webrender_api/' }
+"android_injected_glue:0.2.2" = { path = "../../android-rs-injected-glue/" }
+"blurdroid:0.1.4" = { path = "../../blurdroid/" }

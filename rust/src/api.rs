@@ -36,14 +36,15 @@ pub struct HostCallbacks {
     /// are available, and that perform_updates need to be called
     pub wakeup: extern fn(),
 
+    /// Will be call from any thread.
+    /// Used to report logging.
+    /// Warning: this might be called a lot.
+    pub log: extern fn(*const i8),
+
     /// Will be called from the thread used for the init call
     /// Will be called when the GL buffer has been updated.
     pub flush: extern fn(),
 
-    /// Will be call from any thread.
-    /// Used to report logging.
-    /// Warning: this might be called a lot.
-    pub log: extern fn(*const u8),
 
 }
 
@@ -83,7 +84,7 @@ pub struct ViewLayout {
 }
 
 #[no_mangle]
-pub extern "C" fn servo_version() -> *const u8 {
+pub extern "C" fn servo_version() -> *const i8 {
     glue::servo_version()
 }
 
@@ -109,7 +110,7 @@ pub extern "C" fn perform_updates() -> ServoResult {
 
 /// Load an URL. This needs to be a valid url.
 #[no_mangle]
-pub extern "C" fn load_url(url: *const u8) -> ServoResult {
+pub extern "C" fn load_url(url: *const i8) -> ServoResult {
     let mut res = ServoResult::UnexpectedError;
     SERVO.with(|s| {
         res = s.borrow_mut().as_mut().map(|ref mut s| {
