@@ -28,10 +28,10 @@ use std::os::raw::c_char;
 use std::rc::Rc;
 
 thread_local! {
-    pub static SERVO: RefCell<Option<State>> = RefCell::new(None);
+    pub static SERVO: RefCell<Option<ServoGlue>> = RefCell::new(None);
 }
 
-pub struct State {
+pub struct ServoGlue {
     servo: Servo<ServoCallbacks>,
     callbacks: Rc<ServoCallbacks>,
     browser_id: BrowserId,
@@ -48,18 +48,24 @@ pub fn servo_version() -> *const c_char {
 
 pub fn init(
     gl: Rc<gl::Gl>,
+    url: *const c_char,
+    resources_path: *const c_char,
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
 
-    // FIXME: for now, don't rely on layout
-    let layout = ViewLayout {
-        view_size: Size { width: 540 * 2, height: 740 * 2},
-        margins: Margins { top: 0, right: 0, bottom: 0, left: 0},
-        position: Position { x: 0, y: 0 },
-        hidpi_factor: 2.0,
+    let resources_path = unsafe { CStr::from_ptr(resources_path) };
+    let resources_path = match resources_path.to_str() {
+        Ok(path) => path,
+        Err(_) => return ServoResult::CantReadStr,
     };
 
-    set_resources_path(Some("/sdcard/servo/resources/".to_owned()));
+    let url = unsafe { CStr::from_ptr(url) };
+    let url = match url.to_str() {
+        Ok(url) => url,
+        Err(_) => return ServoResult::CantReadStr,
+    };
+
+    set_resources_path(Some(resources_path.to_owned()));
 
     let opts = opts::default_opts();
     opts::set_defaults(opts);
@@ -71,20 +77,20 @@ pub fn init(
     let callbacks = Rc::new(ServoCallbacks {
         waker: Box::new(RemoteEventLoopWaker(callbacks.wakeup)),
         gl: gl.clone(),
-        flush: callbacks.flush,
+        host_callbacks: callbacks,
         layout,
     });
 
     let mut servo = servo::Servo::new(callbacks.clone());
 
-    let url = ServoUrl::parse("file:///sdcard/servo/newpage.html").unwrap();
+    let url = ServoUrl::parse(url).unwrap();
     let (sender, receiver) = ipc::channel().unwrap();
     servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
     let browser_id = receiver.recv().unwrap();
     servo.handle_events(vec![WindowEvent::SelectBrowser(browser_id)]);
 
     SERVO.with(|s| {
-        *s.borrow_mut() = Some(State {
+        *s.borrow_mut() = Some(ServoGlue {
             servo,
             callbacks,
             browser_id,
@@ -97,7 +103,8 @@ pub fn init(
     ServoResult::Ok
 }
 
-impl State {
+impl ServoGlue {
+
     pub fn perform_updates(&mut self) -> ServoResult {
         info!("perform_updates");
         let events = mem::replace(&mut self.events, Vec::new());
@@ -114,6 +121,12 @@ impl State {
            .map(|url| self.events.push(WindowEvent::LoadUrl(self.browser_id, url)))
            .map(|_| ServoResult::Ok)
            .unwrap_or_else(|err| err)
+    }
+    
+    pub fn reload(&mut self) -> ServoResult {
+        info!("reload");
+        self.events.push(WindowEvent::Reload(self.browser_id));
+        ServoResult::Ok
     }
 
     pub fn scroll(&mut self, dx: i32, dy: i32, x: u32, y: u32, state: ScrollState) -> ServoResult {
@@ -151,7 +164,7 @@ impl EventLoopWaker for RemoteEventLoopWaker {
 struct ServoCallbacks {
     waker: Box<EventLoopWaker>,
     gl: Rc<gl::Gl>,
-    flush: extern fn(),
+    host_callbacks: HostCallbacks,
     layout: ViewLayout,
 }
 
@@ -161,7 +174,7 @@ impl WindowMethods for ServoCallbacks {
     }
 
     fn present(&self) {
-        (self.flush)();
+        (self.host_callbacks.flush)();
     }
 
     fn supports_clipboard(&self) -> bool {
@@ -202,17 +215,34 @@ impl WindowMethods for ServoCallbacks {
         (Size2D::new(width, height), Point2D::new(0, 0))
     }
 
+    fn load_start(&self, _id: BrowserId) {
+        (self.host_callbacks.on_load_started)();
+    }
+
+    fn load_end(&self, _id: BrowserId) {
+        (self.host_callbacks.on_load_ended)();
+    }
+
+    fn history_changed(&self, _id: BrowserId, entries: Vec<LoadData>, current: usize) {
+        let can_go_back = current > 0;
+        let can_go_forward = current < entries.len() - 1;
+        (self.host_callbacks.on_history_changed)(can_go_back, can_go_forward);
+        let url = entries[current].url.to_string();
+        let url = CString::new(url).unwrap();
+        let url_ptr = url.as_ptr();
+        mem::forget(url);
+        // FIXME: when to free url_ptr?
+        (self.host_callbacks.on_url_changed)(url_ptr);
+    }
+
     fn allow_navigation(&self, _id: BrowserId, _url: ServoUrl, chan: ipc::IpcSender<bool>) { chan.send(true).ok(); }
     fn set_inner_size(&self, _id: BrowserId, _size: Size2D<u32>) {}
     fn set_position(&self, _id: BrowserId, _point: Point2D<i32>) {}
     fn set_fullscreen_state(&self, _id: BrowserId, _state: bool) {}
     fn set_page_title(&self, _id: BrowserId, _title: Option<String>) {}
     fn status(&self, _id: BrowserId, _status: Option<String>) {}
-    fn load_start(&self, _id: BrowserId) {}
-    fn load_end(&self, _id: BrowserId) {}
     fn load_error(&self, _id: BrowserId, _: NetError, _url: String) {}
     fn head_parsed(&self, _id: BrowserId) {}
-    fn history_changed(&self, _id: BrowserId, _entries: Vec<LoadData>, _current: usize) {}
     fn set_cursor(&self, _cursor: Cursor) { }
     fn set_favicon(&self, _id: BrowserId, _url: ServoUrl) {}
     fn handle_key(&self, _id: Option<BrowserId>, _ch: Option<char>, _key: Key, _mods: KeyModifiers) { }

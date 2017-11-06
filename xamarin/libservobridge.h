@@ -19,6 +19,7 @@ typedef enum ServoResult {
 	ServoResult_WrongThread,
 	ServoResult_CantReadStr,
 	ServoResult_CantParseUrl,
+	ServoResult_NotImplemented,
 } ServoResult;
 
 /// Scroll state
@@ -28,6 +29,12 @@ typedef enum ScrollState {
 	ScrollState_End,
 	ScrollState_Canceled,
 } ScrollState;
+
+/// Touch state
+typedef enum TouchState {
+	TouchState_Down,
+	TouchState_Up,
+} TouchState;
 
 /// Callback used by Servo internals
 typedef struct HostCallbacks {
@@ -41,7 +48,22 @@ typedef struct HostCallbacks {
 	/// Will be call from any thread.
 	/// Used to report logging.
 	/// Warning: this might be called a lot.
-	void (*log)(uint8_t const* );
+	void (*log)(uint8_t const* log);
+	/// Page starts loading.
+	/// "Reload button" becomes "Stop button".
+	/// Throbber starts spinning.
+	void (*on_load_started)(void);
+	/// Page has loaded.
+	/// "Stop button" becomes "Reload button".
+	/// Throbber stops spinning.
+	void (*on_load_ended)(void);
+	/// Title changed.
+	void (*on_title_changed)(uint8_t const* title);
+	/// URL changed.
+	void (*on_url_changed)(uint8_t const* url);
+	/// Back/forward state changed.
+	/// Back/forward buttons need to be disabled/enabled.
+	void (*on_history_changed)(bool can_go_back, bool can_go_forward);
 } HostCallbacks;
 
 typedef struct Size {
@@ -67,7 +89,7 @@ typedef struct ViewLayout {
 	/// Margins of the view. Hardware pixels.
 	/// Pages are painted all over the surface,
 	/// but if margins are not zero, the layout
-	/// coordinates are bounds byt these margins.
+	/// coordinates are bounds by these margins.
 	Margins margins;
 	/// Position of the window.
 	Position position;
@@ -78,16 +100,28 @@ typedef struct ViewLayout {
 uint8_t const* servo_version(void);
 
 /// Needs to be called from the EGL thread
-ServoResult init_with_egl(HostCallbacks callbacks, ViewLayout layout);
+ServoResult init_with_egl(uint8_t const* url, uint8_t const* resources_path, HostCallbacks callbacks, ViewLayout layout);
 
 /// This is the Servo heartbeat. This needs to be called
 /// everytime wakeup is called.
 ServoResult perform_updates(void);
 
+ServoResult scroll(int32_t dx, int32_t dy, uint32_t x, uint32_t y, ScrollState state);
+
+ServoResult touch(uint32_t _x, uint32_t _y, TouchState _state);
+
 /// Load an URL. This needs to be a valid url.
 ServoResult load_url(uint8_t const* url);
 
-ServoResult scroll(int32_t dx, int32_t dy, uint32_t x, uint32_t y, ScrollState state);
+/// Reload page.
+ServoResult reload(void);
+
+/// Stop page loading.
+ServoResult stop(void);
+
+ServoResult go_back(void);
+
+ServoResult go_forward(void);
 
 
 

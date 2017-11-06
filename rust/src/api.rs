@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-//! Generic result codes
-
 use logs::Logger;
 use gl_glue;
 use glue::{self, SERVO};
@@ -16,6 +14,7 @@ pub enum ServoResult {
     WrongThread,
     CantReadStr,
     CantParseUrl,    
+    NotImplemented,
 }
 
 /// Scroll state
@@ -25,6 +24,13 @@ pub enum ScrollState {
     Move,
     End,
     Canceled,
+}
+
+/// Touch state
+#[repr(C)]
+pub enum TouchState {
+    Down,
+    Up,
 }
 
 /// Callback used by Servo internals
@@ -43,8 +49,27 @@ pub struct HostCallbacks {
     /// Will be call from any thread.
     /// Used to report logging.
     /// Warning: this might be called a lot.
-    pub log: extern fn(*const u8),
+    pub log: extern fn(log: *const u8),
 
+    /// Page starts loading.
+    /// "Reload button" becomes "Stop button".
+    /// Throbber starts spinning.
+    pub on_load_started: extern fn(),
+
+    /// Page has loaded.
+    /// "Stop button" becomes "Reload button".
+    /// Throbber stops spinning.
+    pub on_load_ended: extern fn(),
+
+    /// Title changed.
+    pub on_title_changed: extern fn(title: *const u8),
+
+    /// URL changed.
+    pub on_url_changed: extern fn(url: *const u8),
+
+    /// Back/forward state changed.
+    /// Back/forward buttons need to be disabled/enabled.
+    pub on_history_changed: extern fn(can_go_back: bool, can_go_forward: bool),
 }
 
 #[repr(C)]
@@ -74,7 +99,7 @@ pub struct ViewLayout {
     /// Margins of the view. Hardware pixels.
     /// Pages are painted all over the surface,
     /// but if margins are not zero, the layout
-    /// coordinates are bounds byt these margins.
+    /// coordinates are bounds by these margins.
     pub margins: Margins,
     /// Position of the window.
     pub position: Position,
@@ -89,9 +114,14 @@ pub extern "C" fn servo_version() -> *const u8 {
 
 /// Needs to be called from the EGL thread
 #[no_mangle]
-pub extern "C" fn init_with_egl(callbacks: HostCallbacks, layout: ViewLayout) -> ServoResult {
+pub extern "C" fn init_with_egl(
+    url: *const u8,
+    resources_path: *const u8,
+    callbacks: HostCallbacks,
+    layout: ViewLayout) -> ServoResult {
     let _ = Logger::init(callbacks.log);
-    gl_glue::init_with_egl(callbacks, layout)
+    let gl = gl_glue::init_egl();
+    glue::init(gl, url, resources_path, callbacks, layout)
 }
 
 /// This is the Servo heartbeat. This needs to be called
@@ -102,18 +132,6 @@ pub extern "C" fn perform_updates() -> ServoResult {
     SERVO.with(|s| {
         res = s.borrow_mut().as_mut().map(|ref mut s| {
             s.perform_updates()
-        }).unwrap_or(ServoResult::WrongThread)
-    });
-    res
-}
-
-/// Load an URL. This needs to be a valid url.
-#[no_mangle]
-pub extern "C" fn load_url(url: *const u8) -> ServoResult {
-    let mut res = ServoResult::UnexpectedError;
-    SERVO.with(|s| {
-        res = s.borrow_mut().as_mut().map(|ref mut s| {
-            s.load_url(url)
         }).unwrap_or(ServoResult::WrongThread)
     });
     res
@@ -130,3 +148,51 @@ pub extern "C" fn scroll(dx: i32, dy: i32, x: u32, y: u32, state: ScrollState) -
     res
 }
 
+#[no_mangle]
+pub extern "C" fn touch(_x: u32, _y: u32, _state: TouchState) -> ServoResult {
+    // FIXME
+    ServoResult::NotImplemented
+}
+
+/// Load an URL. This needs to be a valid url.
+#[no_mangle]
+pub extern "C" fn load_url(url: *const u8) -> ServoResult {
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.load_url(url)
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
+}
+
+/// Reload page.
+#[no_mangle]
+pub extern "C" fn reload() -> ServoResult {
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.reload()
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
+}
+
+/// Stop page loading.
+#[no_mangle]
+pub extern "C" fn stop() -> ServoResult {
+    // FIXME
+    ServoResult::NotImplemented
+}
+
+#[no_mangle]
+pub extern "C" fn go_back() -> ServoResult {
+    // FIXME
+    ServoResult::NotImplemented
+}
+
+#[no_mangle]
+pub extern "C" fn go_forward() -> ServoResult {
+    // FIXME
+    ServoResult::NotImplemented
+}

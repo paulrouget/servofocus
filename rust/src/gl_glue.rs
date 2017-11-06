@@ -2,11 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-use api::*;
-use glue;
 use servo::gl;
 use std::ffi::CString;
 use std::os::raw::c_void;
+use std::rc::Rc;
 
 #[allow(non_camel_case_types)]
 mod egl {
@@ -26,20 +25,16 @@ mod egl {
     include!(concat!(env!("OUT_DIR"), "/egl_bindings.rs"));
 }
 
-pub fn init_with_egl(callbacks: HostCallbacks, layout: ViewLayout) -> ServoResult {
-
-    info!("init_with_egl");
-
-    let gl = unsafe {
+pub fn init_egl() -> Rc<gl::Gl> {
+    info!("init_egl");
+    unsafe {
         gl::GlesFns::load_with(|addr| {
             let addr = CString::new(addr.as_bytes()).unwrap();
             let addr = addr.as_ptr();
             let egl = egl::Egl;
             egl.GetProcAddress(addr) as *const c_void
         })
-    };
-
-    glue::init(gl, callbacks, layout)
+    }
 }
 
 
