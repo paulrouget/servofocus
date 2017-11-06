@@ -17,7 +17,8 @@ namespace Servofocus
         UnexpectedError = 1,
         WrongThread = 2,
         CantReadStr = 3,
-        CantParseUrl = 4
+        CantParseUrl = 4,
+        NotImplemented = 5
     }
 
     /// <summary>Scroll state</summary>
@@ -29,10 +30,17 @@ namespace Servofocus
         Canceled = 3
     }
 
+    /// <summary>Touch state</summary>
+    public enum TouchState
+    {
+        TouchStateDown = 0,
+        TouchStateUp = 1
+    }
+
     /// <summary>Callback used by Servo internals</summary>
     public unsafe partial struct HostCallbacks
     {
-        [StructLayout(LayoutKind.Explicit, Size = 24)]
+        [StructLayout(LayoutKind.Explicit, Size = 64)]
         public partial struct __Internal
         {
             [FieldOffset(0)]
@@ -44,10 +52,25 @@ namespace Servofocus
             [FieldOffset(16)]
             internal global::System.IntPtr log;
 
+            [FieldOffset(24)]
+            internal global::System.IntPtr on_load_started;
+
+            [FieldOffset(32)]
+            internal global::System.IntPtr on_load_ended;
+
+            [FieldOffset(40)]
+            internal global::System.IntPtr on_title_changed;
+
+            [FieldOffset(48)]
+            internal global::System.IntPtr on_url_changed;
+
+            [FieldOffset(56)]
+            internal global::System.IntPtr on_history_changed;
+
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0HostCallbacks@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
         }
 
         private HostCallbacks.__Internal __instance;
@@ -100,7 +123,7 @@ namespace Servofocus
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0Size@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
         }
 
         private Size.__Internal __instance;
@@ -185,7 +208,7 @@ namespace Servofocus
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0Margins@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
         }
 
         private Margins.__Internal __instance;
@@ -290,7 +313,7 @@ namespace Servofocus
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0Position@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
         }
 
         private Position.__Internal __instance;
@@ -375,7 +398,7 @@ namespace Servofocus
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0ViewLayout@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
         }
 
         private ViewLayout.__Internal __instance;
@@ -420,7 +443,7 @@ namespace Servofocus
         /// <para>Margins of the view. Hardware pixels.</para>
         /// <para>Pages are painted all over the surface,</para>
         /// <para>but if margins are not zero, the layout</para>
-        /// <para>coordinates are bounds byt these margins.</para>
+        /// <para>coordinates are bounds by these margins.</para>
         /// </summary>
         public global::Servofocus.Margins __margins;
 
@@ -449,7 +472,7 @@ namespace Servofocus
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="init_with_egl")]
-            internal static extern global::Servofocus.ServoResult InitWithEgl(HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
+            internal static extern global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -535,11 +558,11 @@ namespace Servofocus
         }
 
         /// <summary>Needs to be called from the EGL thread</summary>
-        public global::Servofocus.ServoResult InitWithEgl(global::Servofocus.HostCallbacks callbacks, global::Servofocus.ViewLayout layout)
+        public global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks callbacks, global::Servofocus.ViewLayout layout)
         {
-            var __arg0 = callbacks.__Instance;
-            var __arg1 = layout.__Instance;
-            var __ret = __Internal.InitWithEgl(__arg0, __arg1);
+            var __arg2 = callbacks.__Instance;
+            var __arg3 = layout.__Instance;
+            var __ret = __Internal.InitWithEgl((__Instance + __PointerAdjustment), url, resources_path, __arg2, __arg3);
             return __ret;
         }
 
@@ -549,26 +572,89 @@ namespace Servofocus
         /// </summary>
         public global::Servofocus.ServoResult PerformUpdates()
         {
-            var __ret = __Internal.PerformUpdates();
+            var __ret = __Internal.PerformUpdates((__Instance + __PointerAdjustment));
             return __ret;
         }
 
         /// <summary>Load an URL. This needs to be a valid url.</summary>
         public global::Servofocus.ServoResult LoadUrl(byte* url)
         {
-            var __ret = __Internal.LoadUrl(url);
+            var __ret = __Internal.LoadUrl((__Instance + __PointerAdjustment), url);
             return __ret;
         }
 
         public global::Servofocus.ServoResult Scroll(int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state)
         {
-            var __ret = __Internal.Scroll(dx, dy, x, y, state);
+            var __ret = __Internal.Scroll((__Instance + __PointerAdjustment), dx, dy, x, y, state);
             return __ret;
         }
 
         public byte* ServoVersion()
         {
-            var __ret = __Internal.ServoVersion();
+            var __ret = __Internal.ServoVersion((__Instance + __PointerAdjustment));
+            return __ret;
+        }
+    }
+
+    public unsafe partial class libservobridge
+    {
+        public partial struct __Internal
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="touch")]
+            internal static extern global::Servofocus.ServoResult Touch(uint _x, uint _y, global::Servofocus.TouchState _state);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="reload")]
+            internal static extern global::Servofocus.ServoResult Reload();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="stop")]
+            internal static extern global::Servofocus.ServoResult Stop();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="go_back")]
+            internal static extern global::Servofocus.ServoResult GoBack();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="go_forward")]
+            internal static extern global::Servofocus.ServoResult GoForward();
+        }
+
+        public static global::Servofocus.ServoResult Touch(uint _x, uint _y, global::Servofocus.TouchState _state)
+        {
+            var __ret = __Internal.Touch(_x, _y, _state);
+            return __ret;
+        }
+
+        /// <summary>Reload page.</summary>
+        public static global::Servofocus.ServoResult Reload()
+        {
+            var __ret = __Internal.Reload();
+            return __ret;
+        }
+
+        /// <summary>Stop page loading.</summary>
+        public static global::Servofocus.ServoResult Stop()
+        {
+            var __ret = __Internal.Stop();
+            return __ret;
+        }
+
+        public static global::Servofocus.ServoResult GoBack()
+        {
+            var __ret = __Internal.GoBack();
+            return __ret;
+        }
+
+        public static global::Servofocus.ServoResult GoForward()
+        {
+            var __ret = __Internal.GoForward();
             return __ret;
         }
     }
