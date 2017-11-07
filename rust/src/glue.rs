@@ -80,7 +80,7 @@ pub fn init(
         waker: Box::new(RemoteEventLoopWaker(callbacks.wakeup)),
         gl: gl.clone(),
         host_callbacks: callbacks,
-        layout,
+        layout: RefCell::new(layout),
     });
 
     let mut servo = servo::Servo::new(callbacks.clone());
@@ -131,6 +131,14 @@ impl ServoGlue {
         ServoResult::Ok
     }
 
+    pub fn resize(&mut self, layout: ViewLayout) -> ServoResult {
+        info!("resize");
+        *self.callbacks.layout.borrow_mut() = layout;
+        let size = self.callbacks.framebuffer_size();
+        self.events.push(WindowEvent::Resize(size));
+        ServoResult::Ok
+    }
+
     pub fn scroll(&mut self, dx: i32, dy: i32, x: u32, y: u32, state: ScrollState) -> ServoResult {
         let factor = self.callbacks.hidpi_factor().get();
         let dx = dx as f32 * factor;
@@ -167,7 +175,7 @@ struct ServoCallbacks {
     waker: Box<EventLoopWaker>,
     gl: Rc<gl::Gl>,
     host_callbacks: HostCallbacks,
-    layout: ViewLayout,
+    layout: RefCell<ViewLayout>,
 }
 
 impl WindowMethods for ServoCallbacks {
@@ -198,12 +206,12 @@ impl WindowMethods for ServoCallbacks {
 
     fn hidpi_factor(&self) -> ScaleFactor<f32, DeviceIndependentPixel, DevicePixel> {
         info!("WindowMethods::hidpi_factor");
-        ScaleFactor::new(self.layout.hidpi_factor)
+        ScaleFactor::new(self.layout.borrow().hidpi_factor)
     }
 
     fn framebuffer_size(&self) -> TypedSize2D<u32, DevicePixel> {
         info!("WindowMethods::framebuffer_size");
-        TypedSize2D::new(self.layout.view_size.width, self.layout.view_size.height)
+        TypedSize2D::new(self.layout.borrow().view_size.width, self.layout.borrow().view_size.height)
     }
 
     fn window_rect(&self) -> TypedRect<u32, DevicePixel> {
@@ -213,17 +221,19 @@ impl WindowMethods for ServoCallbacks {
 
     fn size(&self) -> TypedSize2D<f32, DeviceIndependentPixel> {
         info!("WindowMethods::size");
-        let width = self.layout.view_size.width as f32;
-        let height = self.layout.view_size.height as f32;
-        let factor = self.layout.hidpi_factor;
+        let l = self.layout.borrow();
+        let width = l.view_size.width as f32;
+        let height = l.view_size.height as f32;
+        let factor = l.hidpi_factor;
         TypedSize2D::new(width / factor, height / factor)
     }
 
     fn client_window(&self, _id: BrowserId) -> (Size2D<u32>, Point2D<i32>) {
         info!("WindowMethods::client_window");
-        let factor = self.layout.hidpi_factor;
-        let width: u32 = (self.layout.view_size.width as f32 / factor) as u32;
-        let height: u32 = (self.layout.view_size.height as f32 / factor) as u32;
+        let l = self.layout.borrow();
+        let factor = l.hidpi_factor;
+        let width: u32 = (l.view_size.width as f32 / factor) as u32;
+        let height: u32 = (l.view_size.height as f32 / factor) as u32;
         (Size2D::new(width, height), Point2D::new(0, 0))
     }
 

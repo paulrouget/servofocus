@@ -182,6 +182,18 @@ pub extern "C" fn reload() -> ServoResult {
     res
 }
 
+/// Reload page.
+#[no_mangle]
+pub extern "C" fn resize(layout: ViewLayout) -> ServoResult {
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.resize(layout)
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
+}
+
 /// Stop page loading.
 #[no_mangle]
 pub extern "C" fn stop() -> ServoResult {
