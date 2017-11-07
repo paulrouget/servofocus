@@ -5,6 +5,7 @@
 // </auto-generated>
 // ----------------------------------------------------------------------------
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -384,10 +385,10 @@ namespace Servofocus
         public partial struct __Internal
         {
             [FieldOffset(0)]
-            internal global::Servofocus.Size.__Internal view_size;
+            internal global::Servofocus.Size view_size;
 
             [FieldOffset(8)]
-            internal global::Servofocus.Margins.__Internal margins;
+            internal global::Servofocus.Margins margins;
 
             [FieldOffset(24)]
             internal global::Servofocus.Position.__Internal position;
@@ -437,7 +438,11 @@ namespace Servofocus
         }
 
         /// <summary>Size of the view. Hardware pixels.</summary>
-        public global::Servofocus.Size __view_size;
+        public global::Servofocus.Size ViewSize
+        {
+            get { return __instance.view_size; }
+            set { __instance.view_size = value; }
+        }
 
         /// <summary>
         /// <para>Margins of the view. Hardware pixels.</para>

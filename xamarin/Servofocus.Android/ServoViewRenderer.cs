@@ -155,10 +155,6 @@ namespace Servofocus.Android
         {
             readonly HostCallbacks _callbacks;
             readonly ServoView _servoView;
-            private GCHandle _viewLayoutHandle;
-            private GCHandle _marginsHandle;
-            private GCHandle _positionsHandle;
-            private GCHandle _viewSizeHandle;
 
             public Renderer(HostCallbacks callbacks, ServoView servoView)
 			{
@@ -180,28 +176,32 @@ namespace Servofocus.Android
             {
                 var margins = new Margins();
                 var position = new Position();
-
+                
                 var viewSize = new Size
                 {
-                    Height = (uint) _servoView.Height,
+                    Height = (uint)_servoView.Height,
                     Width = (uint)_servoView.Width
                 };
+
+                WriteLine($"viewSize.Heigh: {viewSize.Height}");
+                WriteLine($"viewSize.Width: {viewSize.Width}");
 
                 var viewLayout = new ViewLayout
                 {
                     __margins = margins,
                     __position = position,
-                    __view_size = viewSize,
+                    ViewSize = viewSize,
                     HidpiFactor = 1f
                 };
 
                 //var url = "http://paulrouget.com/";
-                var url = "file:///sdcard/servo/home.html";
+                var url = "file:///sdcard/servo/newpage.html";
                 var resourcePath = "/sdcard/servo/resources";
 
                 var urlPtr = (byte*)Marshal.StringToCoTaskMemAnsi(url);
                 var resourcePathPtr = (byte*)Marshal.StringToCoTaskMemAnsi(resourcePath);
 
+                
                 _servoView.ServoSharp.InitWithEgl(urlPtr, resourcePathPtr, _callbacks, viewLayout );
             }
         }
