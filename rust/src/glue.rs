@@ -127,7 +127,7 @@ impl ServoGlue {
     
     pub fn reload(&mut self) -> ServoResult {
         info!("reload");
-        self.events.push(WindowEvent::Reload(self.browser_id));
+        self.servo.handle_events(vec![WindowEvent::Reload(self.browser_id)]);
         ServoResult::Ok
     }
 
@@ -135,7 +135,7 @@ impl ServoGlue {
         info!("resize");
         *self.callbacks.layout.borrow_mut() = layout;
         let size = self.callbacks.framebuffer_size();
-        self.events.push(WindowEvent::Resize(size));
+        self.servo.handle_events(vec![WindowEvent::Resize(size)]);
         ServoResult::Ok
     }
 
