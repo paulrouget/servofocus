@@ -56,19 +56,23 @@ namespace Servofocus.Android
 
                     var logPtr = Marshal.GetFunctionPointerForDelegate(logCb);
 
-                    var loadStarted = Marshal.GetFunctionPointerForDelegate(new SimpleCallbackDelegate(() => { }));
-                    var loadEnded = Marshal.GetFunctionPointerForDelegate(new SimpleCallbackDelegate(() => { }));
+                    var loadStarted = Marshal.GetFunctionPointerForDelegate(new SimpleCallbackDelegate(() => {
+                        WriteLine($"Load started");
+                    }));
+                    var loadEnded = Marshal.GetFunctionPointerForDelegate(new SimpleCallbackDelegate(() => {
+                        WriteLine($"Load ended");
+                    }));
 
                     var titleChanged = Marshal.GetFunctionPointerForDelegate(new TitleChangedCallbackDelegate(title =>
                     {
                         // do something with title
-                        WriteLine(title);
+                        WriteLine($"New title: {title}");
                     }));
 
                     var urlChanged = Marshal.GetFunctionPointerForDelegate(new UrlChangedCallbackDelegate(url =>
                     {
                         // do something with url
-                        WriteLine(url);
+                        WriteLine($"New url: {url}");
                     }));
 
                     var historyChanged = Marshal.GetFunctionPointerForDelegate(new HistoryChangedCallbackDelegate(
@@ -169,6 +173,25 @@ namespace Servofocus.Android
 			public void OnSurfaceChanged(IGL10 gl, int width, int height)
 			{
                 System.Diagnostics.Debug.WriteLine("Resize:" + width + "x" + height);
+                var margins = new Margins();
+                var position = new Position();
+
+                var viewSize = new Size
+                {
+                    Width = (uint)width,
+                    Height = (uint)height,
+                };
+
+                var viewLayout = new ViewLayout
+                {
+                    __margins = margins,
+                    __position = position,
+                    ViewSize = viewSize,
+                    HidpiFactor = 2f,
+                };
+
+                _servoView.ServoSharp.Resize(viewLayout);
+
 			}
 
 
@@ -183,18 +206,14 @@ namespace Servofocus.Android
                     Width = (uint)_servoView.Width
                 };
 
-                WriteLine($"viewSize.Heigh: {viewSize.Height}");
-                WriteLine($"viewSize.Width: {viewSize.Width}");
-
                 var viewLayout = new ViewLayout
                 {
                     __margins = margins,
                     __position = position,
                     ViewSize = viewSize,
-                    HidpiFactor = 1f
+                    HidpiFactor = 2f,
                 };
 
-                //var url = "http://paulrouget.com/";
                 var url = "file:///sdcard/servo/newpage.html";
                 var resourcePath = "/sdcard/servo/resources";
 
