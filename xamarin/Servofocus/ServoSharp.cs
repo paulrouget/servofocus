@@ -498,6 +498,12 @@ namespace Servofocus
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="servo_version")]
             internal static extern byte* ServoVersion();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                       EntryPoint="resize")]
+            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
+
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
@@ -597,6 +603,13 @@ namespace Servofocus
         public byte* ServoVersion()
         {
             var __ret = __Internal.ServoVersion();
+            return __ret;
+        }
+
+        public global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
+        {
+            var __arg = layout.__Instance;
+            var __ret = __Internal.Resize(__arg);
             return __ret;
         }
     }
