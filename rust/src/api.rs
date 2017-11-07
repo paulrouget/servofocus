@@ -73,12 +73,14 @@ pub struct HostCallbacks {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct Size {
     pub width: u32,
     pub height: u32,
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct Margins {
     pub top: u32,
     pub right: u32,
@@ -87,12 +89,14 @@ pub struct Margins {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct Position {
     pub x: i32,
     pub y: i32,
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct ViewLayout {
     /// Size of the view. Hardware pixels.
     pub view_size: Size,

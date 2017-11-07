@@ -53,6 +53,8 @@ pub fn init(
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
 
+    info!("Init: {:?}", layout);
+
     let resources_path = unsafe { CStr::from_ptr(resources_path) };
     let resources_path = match resources_path.to_str() {
         Ok(path) => path,
@@ -170,38 +172,47 @@ struct ServoCallbacks {
 
 impl WindowMethods for ServoCallbacks {
     fn prepare_for_composite(&self, _width: usize, _height: usize) -> bool {
+        info!("WindowMethods::prepare_for_composite");
         true
     }
 
     fn present(&self) {
+        info!("WindowMethods::present");
         (self.host_callbacks.flush)();
     }
 
     fn supports_clipboard(&self) -> bool {
+        info!("WindowMethods::supports_clipboard");
         false
     }
 
     fn create_event_loop_waker(&self) -> Box<EventLoopWaker> {
+        info!("WindowMethods::create_event_loop_waker");
         self.waker.clone()
     }
 
     fn gl(&self) -> Rc<gl::Gl> {
+        info!("WindowMethods::gl");
         self.gl.clone()
     }
 
     fn hidpi_factor(&self) -> ScaleFactor<f32, DeviceIndependentPixel, DevicePixel> {
+        info!("WindowMethods::hidpi_factor");
         ScaleFactor::new(self.layout.hidpi_factor)
     }
 
     fn framebuffer_size(&self) -> TypedSize2D<u32, DevicePixel> {
+        info!("WindowMethods::framebuffer_size");
         TypedSize2D::new(self.layout.view_size.width, self.layout.view_size.height)
     }
 
     fn window_rect(&self) -> TypedRect<u32, DevicePixel> {
+        info!("WindowMethods::window_rect");
         TypedRect::new(TypedPoint2D::new(0, 0), self.framebuffer_size())
     }
 
     fn size(&self) -> TypedSize2D<f32, DeviceIndependentPixel> {
+        info!("WindowMethods::size");
         let width = self.layout.view_size.width as f32;
         let height = self.layout.view_size.height as f32;
         let factor = self.layout.hidpi_factor;
@@ -209,6 +220,7 @@ impl WindowMethods for ServoCallbacks {
     }
 
     fn client_window(&self, _id: BrowserId) -> (Size2D<u32>, Point2D<i32>) {
+        info!("WindowMethods::client_window");
         let factor = self.layout.hidpi_factor;
         let width: u32 = (self.layout.view_size.width as f32 / factor) as u32;
         let height: u32 = (self.layout.view_size.height as f32 / factor) as u32;
@@ -216,14 +228,17 @@ impl WindowMethods for ServoCallbacks {
     }
 
     fn load_start(&self, _id: BrowserId) {
+        info!("WindowMethods::load_start");
         (self.host_callbacks.on_load_started)();
     }
 
     fn load_end(&self, _id: BrowserId) {
+        info!("WindowMethods::load_end");
         (self.host_callbacks.on_load_ended)();
     }
 
     fn history_changed(&self, _id: BrowserId, entries: Vec<LoadData>, current: usize) {
+        info!("WindowMethods::history_changed");
         let can_go_back = current > 0;
         let can_go_forward = current < entries.len() - 1;
         (self.host_callbacks.on_history_changed)(can_go_back, can_go_forward);
