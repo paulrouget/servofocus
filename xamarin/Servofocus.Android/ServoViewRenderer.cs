@@ -22,6 +22,9 @@ namespace Servofocus.Android
 
         delegate void SimpleCallbackDelegate();
         delegate void LogCallbackDelegate(string log);
+        delegate void TitleChangedCallbackDelegate(string title);
+        delegate void UrlChangedCallbackDelegate(string url);
+        delegate void HistoryChangedCallbackDelegate(bool canGoBack, bool canGoForward);
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
@@ -53,11 +56,38 @@ namespace Servofocus.Android
 
                     var logPtr = Marshal.GetFunctionPointerForDelegate(logCb);
 
+                    var loadStarted = Marshal.GetFunctionPointerForDelegate(new SimpleCallbackDelegate(() => { }));
+                    var loadEnded = Marshal.GetFunctionPointerForDelegate(new SimpleCallbackDelegate(() => { }));
+
+                    var titleChanged = Marshal.GetFunctionPointerForDelegate(new TitleChangedCallbackDelegate(title =>
+                    {
+                        // do something with title
+                        WriteLine(title);
+                    }));
+
+                    var urlChanged = Marshal.GetFunctionPointerForDelegate(new UrlChangedCallbackDelegate(url =>
+                    {
+                        // do something with url
+                        WriteLine(url);
+                    }));
+
+                    var historyChanged = Marshal.GetFunctionPointerForDelegate(new HistoryChangedCallbackDelegate(
+                        (back, forward) =>
+                        {
+                            WriteLine($"Can go back: {back}");
+                            WriteLine($"Can go forward: {forward}");
+                        }));
+
                     var hostCallbackInstance = HostCallbacks.__CreateInstance(new HostCallbacks.__Internal
                     {
                         wakeup = wakeUpPtr,
                         flush = flushPtr,
-                        log = logPtr
+                        log = logPtr,
+                        on_load_started = loadStarted,
+                        on_load_ended = loadEnded,
+                        on_title_changed = titleChanged,
+                        on_url_changed = urlChanged,
+                        on_history_changed = historyChanged
                     });
 
                     var renderer = new Renderer(
@@ -166,8 +196,8 @@ namespace Servofocus.Android
                 };
 
                 //var url = "http://paulrouget.com/";
-                var url = "File:///sdcard/servo/home.html";
-                var resourcePath = "File:///sdcard/servo/resources";
+                var url = "file:///sdcard/servo/home.html";
+                var resourcePath = "/sdcard/servo/resources";
 
                 var urlPtr = (byte*)Marshal.StringToCoTaskMemAnsi(url);
                 var resourcePathPtr = (byte*)Marshal.StringToCoTaskMemAnsi(resourcePath);
