@@ -121,18 +121,12 @@
     <Compile Include="ServoViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidNativeLibrary Include="lib\arm64\libservobridge.so" Condition="'$(Platform)' == 'ARM' ">
+    <AndroidNativeLibrary Include="lib\arm64\libservobridge.so">
       <Abi>arm64-v8a</Abi>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="lib\arm64\libc++_shared.so" Condition="'$(Platform)' == 'ARM' ">
+    <AndroidNativeLibrary Include="lib\arm64\libc++_shared.so">
       <Abi>arm64-v8a</Abi>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="lib\x86\libc++_shared.so" Condition="'$(Platform)' == 'x86' ">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="lib\x86\libservobridge.so" Condition="'$(Platform)' == 'x86' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AndroidNativeLibrary>
     <None Include="Resources\AboutResources.txt" />

@@ -23,21 +23,12 @@ namespace Servofocus.Android
         delegate void SimpleCallbackDelegate();
         delegate void LogCallbackDelegate(string log);
 
-        private GCHandle _wakeupHandle;
-        private GCHandle _flushHandle;
-        private GCHandle _logHandle;
-        private GCHandle _cbStructHandle;
-
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
             base.OnElementChanged(e);
 
-
-
             if (e.NewElement != null)
             {
-                //e.NewElement.ScrollRequested += OnScrollRequested;
-
                 GLSurfaceView surfaceView = Control;
                 if (surfaceView == null)
                 {
@@ -57,13 +48,10 @@ namespace Servofocus.Android
                     var logCb = new LogCallbackDelegate(log => {/*WriteLine(log);*/});
 
                     var wakeUpPtr = Marshal.GetFunctionPointerForDelegate(wakeUpCb);
-                    //_wakeupHandle = GCHandle.Alloc(wakeUpPtr, GCHandleType.Pinned);
 
                     var flushPtr = Marshal.GetFunctionPointerForDelegate(flushCb);
-                    //_flushHandle = GCHandle.Alloc(flushPtr, GCHandleType.Pinned);
 
                     var logPtr = Marshal.GetFunctionPointerForDelegate(logCb);
-                    //_logHandle = GCHandle.Alloc(logPtr, GCHandleType.Pinned);
 
                     var hostCallbackInstance = HostCallbacks.__CreateInstance(new HostCallbacks.__Internal
                     {
@@ -72,7 +60,6 @@ namespace Servofocus.Android
                         log = logPtr
                     });
 
-                    //_cbStructHandle = GCHandle.Alloc(hostCallbackInstance, GCHandleType.Pinned);
                     var renderer = new Renderer(
                         hostCallbackInstance, Element
                     );
@@ -159,22 +146,16 @@ namespace Servofocus.Android
 			}
 
 
-			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
+			public unsafe void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
-                //Interop.InitWithEgl(
-                    //() => _wakeup(),
-                    //() => _flush(),
-                    //(str) => {}, // System.Diagnostics.Debug.WriteLine("[servo] " + Marshal.PtrToStringAnsi(str)),
-                    //540, 740);
-
                 var margins = new Margins();
-                //_marginsHandle = GCHandle.Alloc(margins, GCHandleType.Pinned);
-
                 var position = new Position();
-                //_positionsHandle = GCHandle.Alloc(position, GCHandleType.Pinned);
 
-                var viewSize = new Size();
-                //_viewSizeHandle = GCHandle.Alloc(viewSize, GCHandleType.Pinned);
+                var viewSize = new Size
+                {
+                    Height = (uint) _servoView.Height,
+                    Width = (uint)_servoView.Width
+                };
 
                 var viewLayout = new ViewLayout
                 {
@@ -184,10 +165,15 @@ namespace Servofocus.Android
                     HidpiFactor = 1f
                 };
 
+                //var url = "http://paulrouget.com/";
+                var url = "File:///sdcard/servo/home.html";
+                var resourcePath = "File:///sdcard/servo/resources";
 
-                //_viewLayoutHandle = GCHandle.Alloc(viewLayout, GCHandleType.Pinned);
-                _servoView.ServoSharp.InitWithEgl(_callbacks, viewLayout);
-			}
+                var urlPtr = (byte*)Marshal.StringToCoTaskMemAnsi(url);
+                var resourcePathPtr = (byte*)Marshal.StringToCoTaskMemAnsi(resourcePath);
+
+                _servoView.ServoSharp.InitWithEgl(urlPtr, resourcePathPtr, _callbacks, viewLayout );
+            }
         }
 
     }

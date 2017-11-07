@@ -104,7 +104,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+                __Internal.cctor(__arg0);
             }
         }
     }
@@ -157,7 +157,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+                __Internal.cctor( __arg0);
             }
         }
 
@@ -242,7 +242,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+                __Internal.cctor( __arg0);
             }
         }
 
@@ -347,7 +347,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+                __Internal.cctor( __arg0);
             }
         }
 
@@ -432,7 +432,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
+                __Internal.cctor( __arg0);
             }
         }
 
@@ -562,7 +562,7 @@ namespace Servofocus
         {
             var __arg2 = callbacks.__Instance;
             var __arg3 = layout.__Instance;
-            var __ret = __Internal.InitWithEgl((__Instance + __PointerAdjustment), url, resources_path, __arg2, __arg3);
+            var __ret = __Internal.InitWithEgl(url, resources_path, __arg2, __arg3);
             return __ret;
         }
 
@@ -572,26 +572,26 @@ namespace Servofocus
         /// </summary>
         public global::Servofocus.ServoResult PerformUpdates()
         {
-            var __ret = __Internal.PerformUpdates((__Instance + __PointerAdjustment));
+            var __ret = __Internal.PerformUpdates();
             return __ret;
         }
 
         /// <summary>Load an URL. This needs to be a valid url.</summary>
         public global::Servofocus.ServoResult LoadUrl(byte* url)
         {
-            var __ret = __Internal.LoadUrl((__Instance + __PointerAdjustment), url);
+            var __ret = __Internal.LoadUrl(url);
             return __ret;
         }
 
         public global::Servofocus.ServoResult Scroll(int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state)
         {
-            var __ret = __Internal.Scroll((__Instance + __PointerAdjustment), dx, dy, x, y, state);
+            var __ret = __Internal.Scroll(dx, dy, x, y, state);
             return __ret;
         }
 
         public byte* ServoVersion()
         {
-            var __ret = __Internal.ServoVersion((__Instance + __PointerAdjustment));
+            var __ret = __Internal.ServoVersion();
             return __ret;
         }
     }
