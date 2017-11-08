@@ -8,19 +8,33 @@ cd $BASEDIR/..
 
 #### Feel free to change:
 
-export RUST_TARGET="aarch64-linux-android"
-export ANDROID_ARCH="arch-arm64"
-export ANDROID_PLATFORM="android-21"
-# used by toolchains.cmake
-export CMAKE_ANDROID_ARCH_ABI="arm64-v8a"
-export NDK_ANDROID_VERSION="21"
-NDK_BIN_PATH="$ANDROID_NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64/bin"
-export PATH="$NDK_BIN_PATH:$PATH"
+## armv7
+ABI="armeabi-v7a"
+TOOLCHAIN_PATH="arm-linux-androideabi"
+RUST_TARGET="armv7-linux-androideabi"
+export ANDROID_ARCH="arch-arm"
+export ANDROID_PLATFORM="android-18"
+export NDK_ANDROID_VERSION="18"
+
+## aarch64
+# export RUST_TARGET="aarch64-linux-android"
+# export ANDROID_ARCH="arch-arm64"
+# export ANDROID_PLATFORM="android-21"
+# # used by toolchains.cmake
+# export CMAKE_ANDROID_ARCH_ABI="arm64-v8a"
+# ANDROID_LIB_DIR="arm64"
+# export NDK_ANDROID_VERSION="21"
+# NDK_BIN_PATH="$ANDROID_NDK/toolchains/$RUST_TARGET-4.9/prebuilt/darwin-x86_64/bin"
+# export PATH="$NDK_BIN_PATH:$PATH"
 
 #### You probably don't want to change that
 
-rustup target add aarch64-linux-android
+rustup target add $RUST_TARGET
 
+export NDK_BIN_PATH="$ANDROID_NDK/toolchains/$TOOLCHAIN_PATH-4.9/prebuilt/darwin-x86_64/bin"
+export PATH="$NDK_BIN_PATH:$PATH"
+
+export CMAKE_ANDROID_ARCH_ABI="armeabi-v7a"
 export CMAKE_TOOLCHAIN_FILE="$PWD/android/toolchain.cmake"
 export CPPFLAGS="--sysroot $ANDROID_NDK/platforms/$ANDROID_PLATFORM/$ANDROID_ARCH"
 export CXXFLAGS="--sysroot $ANDROID_NDK/platforms/$ANDROID_PLATFORM/$ANDROID_ARCH \
@@ -48,11 +62,10 @@ export OPENSSL_STATIC="TRUE"
 
 cargo build --release --target $RUST_TARGET
 
-LIB_NAME="libservobridge.so"
 HEADER_NAME="libservobridge.h"
-TARGET="./target/$RUST_TARGET/release/$LIB_NAME"
-echo "Stripping $TARGET"
-$NDK_BIN_PATH/aarch64-linux-android-strip $TARGET
-echo "Copying $TARGET to Android project"
-cp $TARGET ../xamarin/Servofocus.Android/lib/arm64/$LIB_NAME
+TARGET="./target/$RUST_TARGET/release/libservobridge.so"
+$NDK_BIN_PATH/$TOOLCHAIN_PATH-strip $TARGET
+mkdir -p ../xamarin/Servofocus.Android/lib/$ABI
+cp $TARGET ../xamarin/Servofocus.Android/lib/$ABI/
+cp $ANDROID_NDK/sources/cxx-stl/llvm-libc++/libs/$ABI/libc++_shared.so ../xamarin/Servofocus.Android/lib/$ABI/
 cp ./target/$HEADER_NAME ../xamarin/ServoSharp/
