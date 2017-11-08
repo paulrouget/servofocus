@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Servofocus.Android</RootNamespace>
     <AssemblyName>Servofocus.Android</AssemblyName>
-    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -27,7 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
     <PlatformTarget>x64</PlatformTarget>
-    <AndroidSupportedAbis>x86;arm64-v8a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a</AndroidSupportedAbis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -121,18 +121,12 @@
     <Compile Include="ServoViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidNativeLibrary Include="lib\arm64\libservobridge.so">
-      <Abi>arm64-v8a</Abi>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="lib\arm64\libc++_shared.so">
-      <Abi>arm64-v8a</Abi>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AndroidNativeLibrary>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libc++_shared.so" />
+    <AndroidNativeLibrary Include="lib\armeabi-v7a\libservobridge.so" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
