@@ -5,7 +5,6 @@
 // </auto-generated>
 // ----------------------------------------------------------------------------
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -41,37 +40,28 @@ namespace Servofocus
     /// <summary>Callback used by Servo internals</summary>
     public unsafe partial struct HostCallbacks
     {
-        [StructLayout(LayoutKind.Explicit, Size = 64)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal global::System.IntPtr wakeup;
 
-            [FieldOffset(8)]
             internal global::System.IntPtr flush;
 
-            [FieldOffset(16)]
             internal global::System.IntPtr log;
 
-            [FieldOffset(24)]
             internal global::System.IntPtr on_load_started;
 
-            [FieldOffset(32)]
             internal global::System.IntPtr on_load_ended;
 
-            [FieldOffset(40)]
             internal global::System.IntPtr on_title_changed;
 
-            [FieldOffset(48)]
             internal global::System.IntPtr on_url_changed;
 
-            [FieldOffset(56)]
             internal global::System.IntPtr on_history_changed;
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0HostCallbacks@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
         private HostCallbacks.__Internal __instance;
@@ -105,26 +95,23 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor(__arg0);
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
             }
         }
     }
 
     public unsafe partial struct Size
     {
-        [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal uint width;
 
-            [FieldOffset(4)]
             internal uint height;
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0Size@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
         private Size.__Internal __instance;
@@ -158,7 +145,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor( __arg0);
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
             }
         }
 
@@ -191,25 +178,20 @@ namespace Servofocus
 
     public unsafe partial struct Margins
     {
-        [StructLayout(LayoutKind.Explicit, Size = 16)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal uint top;
 
-            [FieldOffset(4)]
             internal uint right;
 
-            [FieldOffset(8)]
             internal uint bottom;
 
-            [FieldOffset(12)]
             internal uint left;
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0Margins@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
         private Margins.__Internal __instance;
@@ -243,7 +225,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor( __arg0);
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
             }
         }
 
@@ -302,19 +284,16 @@ namespace Servofocus
 
     public unsafe partial struct Position
     {
-        [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal int x;
 
-            [FieldOffset(4)]
             internal int y;
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0Position@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
         private Position.__Internal __instance;
@@ -348,7 +327,7 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor( __arg0);
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
             }
         }
 
@@ -381,25 +360,20 @@ namespace Servofocus
 
     public unsafe partial struct ViewLayout
     {
-        [StructLayout(LayoutKind.Explicit, Size = 36)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal global::Servofocus.Size view_size;
 
-            [FieldOffset(8)]
             internal global::Servofocus.Margins margins;
 
-            [FieldOffset(24)]
-            internal global::Servofocus.Position.__Internal position;
+            internal global::Servofocus.Position  position;
 
-            [FieldOffset(32)]
             internal float hidpi_factor;
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="??0ViewLayout@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr _0);
+            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
         }
 
         private ViewLayout.__Internal __instance;
@@ -433,27 +407,29 @@ namespace Servofocus
             var __arg0 = new global::System.IntPtr(&____arg0);
             fixed (__Internal* __instancePtr = &__instance)
             {
-                __Internal.cctor( __arg0);
+                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
             }
         }
 
         /// <summary>Size of the view. Hardware pixels.</summary>
         public global::Servofocus.Size ViewSize
         {
-            get { return __instance.view_size; }
-            set { __instance.view_size = value; }
-        }
 
+            get { return __instance.view_size; }
+
+            set { __instance.view_size = value; }
+
+        }
         /// <summary>
         /// <para>Margins of the view. Hardware pixels.</para>
         /// <para>Pages are painted all over the surface,</para>
         /// <para>but if margins are not zero, the layout</para>
         /// <para>coordinates are bounds by these margins.</para>
         /// </summary>
-        public global::Servofocus.Margins __margins;
+        public global::Servofocus.Margins Margins;
 
         /// <summary>Position of the window.</summary>
-        public global::Servofocus.Position __position;
+        public global::Servofocus.Position Positions;
 
         public float HidpiFactor
         {
@@ -471,13 +447,17 @@ namespace Servofocus
 
     public unsafe partial class ServoSharp : IDisposable
     {
-        [StructLayout(LayoutKind.Explicit, Size = 0)]
         public partial struct __Internal
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="init_with_egl")]
             internal static extern global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                       EntryPoint="resize")]
+            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -498,12 +478,6 @@ namespace Servofocus
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="servo_version")]
             internal static extern byte* ServoVersion();
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                       EntryPoint="resize")]
-            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
-
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
@@ -577,6 +551,12 @@ namespace Servofocus
             return __ret;
         }
 
+        public global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
+        {
+            var __ret = __Internal.Resize(layout.__Instance);
+            return __ret;
+        }
+
         /// <summary>
         /// <para>This is the Servo heartbeat. This needs to be called</para>
         /// <para>everytime wakeup is called.</para>
@@ -605,13 +585,6 @@ namespace Servofocus
             var __ret = __Internal.ServoVersion();
             return __ret;
         }
-
-        public global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
-        {
-            var __arg = layout.__Instance;
-            var __ret = __Internal.Resize(__arg);
-            return __ret;
-        }
     }
 
     public unsafe partial class libservobridge
@@ -627,6 +600,11 @@ namespace Servofocus
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="reload")]
             internal static extern global::Servofocus.ServoResult Reload();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="resize")]
+            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -654,6 +632,14 @@ namespace Servofocus
         public static global::Servofocus.ServoResult Reload()
         {
             var __ret = __Internal.Reload();
+            return __ret;
+        }
+
+        /// <summary>Reload page.</summary>
+        public static global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
+        {
+            var __arg0 = layout.__Instance;
+            var __ret = __Internal.Resize(__arg0);
             return __ret;
         }
 

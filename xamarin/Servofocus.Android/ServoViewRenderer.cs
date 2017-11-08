@@ -184,8 +184,8 @@ namespace Servofocus.Android
 
                 var viewLayout = new ViewLayout
                 {
-                    __margins = margins,
-                    __position = position,
+                    Margins = margins,
+                    Positions = position,
                     ViewSize = viewSize,
                     HidpiFactor = 2f,
                 };
@@ -202,14 +202,14 @@ namespace Servofocus.Android
                 
                 var viewSize = new Size
                 {
-                    Height = (uint)_servoView.Height,
-                    Width = (uint)_servoView.Width
+                    Height = 1080,
+                    Width = 764
                 };
 
                 var viewLayout = new ViewLayout
                 {
-                    __margins = margins,
-                    __position = position,
+                    Margins = margins,
+                    Positions = position,
                     ViewSize = viewSize,
                     HidpiFactor = 2f,
                 };

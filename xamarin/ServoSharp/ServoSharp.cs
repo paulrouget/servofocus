@@ -17,7 +17,8 @@ namespace Servofocus
         UnexpectedError = 1,
         WrongThread = 2,
         CantReadStr = 3,
-        CantParseUrl = 4
+        CantParseUrl = 4,
+        NotImplemented = 5
     }
 
     /// <summary>Scroll state</summary>
@@ -29,20 +30,33 @@ namespace Servofocus
         Canceled = 3
     }
 
+    /// <summary>Touch state</summary>
+    public enum TouchState
+    {
+        TouchStateDown = 0,
+        TouchStateUp = 1
+    }
+
     /// <summary>Callback used by Servo internals</summary>
     public unsafe partial struct HostCallbacks
     {
-        [StructLayout(LayoutKind.Explicit, Size = 24)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal global::System.IntPtr wakeup;
 
-            [FieldOffset(8)]
             internal global::System.IntPtr flush;
 
-            [FieldOffset(16)]
             internal global::System.IntPtr log;
+
+            internal global::System.IntPtr on_load_started;
+
+            internal global::System.IntPtr on_load_ended;
+
+            internal global::System.IntPtr on_title_changed;
+
+            internal global::System.IntPtr on_url_changed;
+
+            internal global::System.IntPtr on_history_changed;
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -88,13 +102,10 @@ namespace Servofocus
 
     public unsafe partial struct Size
     {
-        [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal uint width;
 
-            [FieldOffset(4)]
             internal uint height;
 
             [SuppressUnmanagedCodeSecurity]
@@ -167,19 +178,14 @@ namespace Servofocus
 
     public unsafe partial struct Margins
     {
-        [StructLayout(LayoutKind.Explicit, Size = 16)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal uint top;
 
-            [FieldOffset(4)]
             internal uint right;
 
-            [FieldOffset(8)]
             internal uint bottom;
 
-            [FieldOffset(12)]
             internal uint left;
 
             [SuppressUnmanagedCodeSecurity]
@@ -278,13 +284,10 @@ namespace Servofocus
 
     public unsafe partial struct Position
     {
-        [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
             internal int x;
 
-            [FieldOffset(4)]
             internal int y;
 
             [SuppressUnmanagedCodeSecurity]
@@ -357,19 +360,14 @@ namespace Servofocus
 
     public unsafe partial struct ViewLayout
     {
-        [StructLayout(LayoutKind.Explicit, Size = 36)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
-            internal global::Servofocus.Size.__Internal view_size;
+            internal global::Servofocus.Size view_size;
 
-            [FieldOffset(8)]
-            internal global::Servofocus.Margins.__Internal margins;
+            internal global::Servofocus.Margins margins;
 
-            [FieldOffset(24)]
-            internal global::Servofocus.Position.__Internal position;
+            internal global::Servofocus.Position  position;
 
-            [FieldOffset(32)]
             internal float hidpi_factor;
 
             [SuppressUnmanagedCodeSecurity]
@@ -414,18 +412,24 @@ namespace Servofocus
         }
 
         /// <summary>Size of the view. Hardware pixels.</summary>
-        public global::Servofocus.Size __view_size;
+        public global::Servofocus.Size ViewSize
+        {
 
+            get { return __instance.view_size; }
+
+            set { __instance.view_size = value; }
+
+        }
         /// <summary>
         /// <para>Margins of the view. Hardware pixels.</para>
         /// <para>Pages are painted all over the surface,</para>
         /// <para>but if margins are not zero, the layout</para>
-        /// <para>coordinates are bounds byt these margins.</para>
+        /// <para>coordinates are bounds by these margins.</para>
         /// </summary>
-        public global::Servofocus.Margins __margins;
+        public global::Servofocus.Margins Margins;
 
         /// <summary>Position of the window.</summary>
-        public global::Servofocus.Position __position;
+        public global::Servofocus.Position Positions;
 
         public float HidpiFactor
         {
@@ -443,13 +447,12 @@ namespace Servofocus
 
     public unsafe partial class ServoSharp : IDisposable
     {
-        [StructLayout(LayoutKind.Explicit, Size = 0)]
         public partial struct __Internal
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="init_with_egl")]
-            internal static extern global::Servofocus.ServoResult InitWithEgl(HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
+            internal static extern global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
@@ -535,11 +538,11 @@ namespace Servofocus
         }
 
         /// <summary>Needs to be called from the EGL thread</summary>
-        public global::Servofocus.ServoResult InitWithEgl(global::Servofocus.HostCallbacks callbacks, global::Servofocus.ViewLayout layout)
+        public global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks callbacks, global::Servofocus.ViewLayout layout)
         {
-            var __arg0 = callbacks.__Instance;
-            var __arg1 = layout.__Instance;
-            var __ret = __Internal.InitWithEgl(__arg0, __arg1);
+            var __arg2 = callbacks.__Instance;
+            var __arg3 = layout.__Instance;
+            var __ret = __Internal.InitWithEgl(url, resources_path, __arg2, __arg3);
             return __ret;
         }
 
@@ -569,6 +572,82 @@ namespace Servofocus
         public byte* ServoVersion()
         {
             var __ret = __Internal.ServoVersion();
+            return __ret;
+        }
+    }
+
+    public unsafe partial class libservobridge
+    {
+        public partial struct __Internal
+        {
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="touch")]
+            internal static extern global::Servofocus.ServoResult Touch(uint _x, uint _y, global::Servofocus.TouchState _state);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="reload")]
+            internal static extern global::Servofocus.ServoResult Reload();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="resize")]
+            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="stop")]
+            internal static extern global::Servofocus.ServoResult Stop();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="go_back")]
+            internal static extern global::Servofocus.ServoResult GoBack();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                EntryPoint="go_forward")]
+            internal static extern global::Servofocus.ServoResult GoForward();
+        }
+
+        public static global::Servofocus.ServoResult Touch(uint _x, uint _y, global::Servofocus.TouchState _state)
+        {
+            var __ret = __Internal.Touch(_x, _y, _state);
+            return __ret;
+        }
+
+        /// <summary>Reload page.</summary>
+        public static global::Servofocus.ServoResult Reload()
+        {
+            var __ret = __Internal.Reload();
+            return __ret;
+        }
+
+        /// <summary>Reload page.</summary>
+        public static global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
+        {
+            var __arg0 = layout.__Instance;
+            var __ret = __Internal.Resize(__arg0);
+            return __ret;
+        }
+
+        /// <summary>Stop page loading.</summary>
+        public static global::Servofocus.ServoResult Stop()
+        {
+            var __ret = __Internal.Stop();
+            return __ret;
+        }
+
+        public static global::Servofocus.ServoResult GoBack()
+        {
+            var __ret = __Internal.GoBack();
+            return __ret;
+        }
+
+        public static global::Servofocus.ServoResult GoForward()
+        {
+            var __ret = __Internal.GoForward();
             return __ret;
         }
     }
