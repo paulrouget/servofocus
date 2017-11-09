@@ -8,7 +8,7 @@ using CppSharp.Generators;
 using CppSharp.Parser;
 using CppSharp.Passes;
 
-namespace ServoSharp
+namespace ServoSharp.AutoGen
 {
     class Program
     {
@@ -96,7 +96,7 @@ namespace ServoSharp
                 module.SharedLibraryName = "libservobridge";
                 module.IncludeDirs.AddRange(new[] { RootPath });
                 module.Headers.Add("libservobridge.h");
-                module.OutputNamespace = "Servofocus";
+                module.OutputNamespace = "ServoSharp";
             }
 
             public void SetupPasses(Driver driver)

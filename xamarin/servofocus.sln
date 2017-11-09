@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Servofocus", "Servofocus\Servofocus.shproj", "{7A10CBDC-9250-4166-BCE9-EA91B3F60245}"
 EndProject
@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servofocus.Mac", "Servofocu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servofocus.UWP", "Servofocus.UWP\Servofocus.UWP.csproj", "{627E8585-341C-41B7-9546-E1CF7597690F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServoSharp", "ServoSharp\ServoSharp.csproj", "{B5A2A505-D7CC-4024-8F5E-A117D7ABBA85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServoSharp.AutoGen", "ServoSharp.AutoGen\ServoSharp.AutoGen.csproj", "{B5A2A505-D7CC-4024-8F5E-A117D7ABBA85}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

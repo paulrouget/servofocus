@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B5A2A505-D7CC-4024-8F5E-A117D7ABBA85}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ServoSharp</RootNamespace>
-    <AssemblyName>ServoSharp</AssemblyName>
+    <RootNamespace>ServoSharp.AutoGen</RootNamespace>
+    <AssemblyName>ServoSharp.AutoGen</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -86,7 +86,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServoSharp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
