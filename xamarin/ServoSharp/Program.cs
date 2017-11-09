@@ -7,7 +7,6 @@ using CppSharp.AST;
 using CppSharp.Generators;
 using CppSharp.Parser;
 using CppSharp.Passes;
-using Type = CppSharp.AST.Type;
 
 namespace ServoSharp
 {
@@ -18,9 +17,6 @@ namespace ServoSharp
         static void Main(string[] args)
         {
             ConsoleDriver.Run(new ServoLib());
-            //var source = Path.Combine(RootPath, "ServoSharp.cs");
-            //var dest = Path.Combine(Directory.GetParent(RootPath).FullName, "Servofocus\\ServoSharp.cs");
-            //File.Copy(source, dest, overwrite: true);
             Console.ReadKey();
         }
 
@@ -94,6 +90,7 @@ namespace ServoSharp
                 options.StripLibPrefix = false;
                 options.GenerateSingleCSharpFile = true;
                 options.OutputDir = RootPath;
+                options.GenerateSequentialLayout = true;
 
                 var module = options.AddModule("ServoSharp");
                 module.SharedLibraryName = "libservobridge";
