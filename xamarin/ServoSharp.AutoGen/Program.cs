@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using CppSharp;
 using CppSharp.AST;
 using CppSharp.Generators;
@@ -73,7 +74,8 @@ namespace ServoSharp.AutoGen
                 ctx.TranslationUnits[0].Classes.Add(servoSharp);
 
                 ctx.FindEnum("ServoResult").Single().Items.ForEach(item => item.Name = item.Name.Replace("ServoResult", string.Empty)); 
-                ctx.FindEnum("ScrollState").Single().Items.ForEach(item => item.Name = item.Name.Replace("ScrollState", string.Empty));    
+                ctx.FindEnum("ScrollState").Single().Items.ForEach(item => item.Name = item.Name.Replace("ScrollState", string.Empty)); 
+                ctx.FindEnum("TouchState").Single().Items.ForEach(item => item.Name = item.Name.Replace("TouchState", string.Empty));
             }
 
             public void Setup(Driver driver)

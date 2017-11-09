@@ -33,8 +33,8 @@ namespace ServoSharp
     /// <summary>Touch state</summary>
     public enum TouchState
     {
-        TouchStateDown = 0,
-        TouchStateUp = 1
+        Down = 0,
+        Up = 1
     }
 
     /// <summary>Callback used by Servo internals</summary>
