@@ -1,14 +1,10 @@
 ﻿using Xamarin.Forms;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Servofocus
 {
     public partial class ServofocusPage : ContentPage
     {
-        PanGestureRecognizer _panGesture;
-        TapGestureRecognizer _tapGesture;
-
         public ServofocusPage()
         {
             InitializeComponent();
@@ -18,13 +14,8 @@ namespace Servofocus
         {
             base.OnAppearing();
 
-            unsafe
-            {
-                UrlField.Text = Marshal.PtrToStringAnsi((System.IntPtr)ServoView.ServoSharp.ServoVersion());
-            }
-
-            Subscribe();
-           
+            UrlField.Text = ServoView.Servo.ServoVersion;
+         
             Debug.WriteLine("OnAppearing");
         }
 
@@ -33,39 +24,6 @@ namespace Servofocus
         {
             base.OnDisappearing();
             Debug.WriteLine("OnDisappearing");
-            Unsubscribe();
-        }
-
-        void Subscribe()
-        {
-            _panGesture = new PanGestureRecognizer();
-            _panGesture.PanUpdated += PanGesture;
-
-            _tapGesture = new TapGestureRecognizer();
-            _tapGesture.Tapped += TapGesture;
-
-            ServoView.GestureRecognizers.Add(_panGesture);
-            ServoView.GestureRecognizers.Add(_tapGesture);
-        }
-
-        void Unsubscribe()
-        {
-            _panGesture.PanUpdated -= PanGesture;
-            _tapGesture.Tapped -= TapGesture;
-
-            ServoView.GestureRecognizers.Remove(_panGesture);
-            ServoView.GestureRecognizers.Remove(_tapGesture);
-        }
-
-        void TapGesture(object sender, System.EventArgs e)
-        {         
-            // no point location though, probably have to go native...
-            Debug.WriteLine("tapped");
-        }
-
-        void PanGesture(object sender, PanUpdatedEventArgs e)
-        {
-            ServoView.Scroll(e);
         }
     }
 }

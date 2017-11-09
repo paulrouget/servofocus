@@ -8,7 +8,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Servofocus
+namespace ServoSharp
 {
     /// <summary>Generic result errors</summary>
     public enum ServoResult
@@ -33,71 +33,28 @@ namespace Servofocus
     /// <summary>Touch state</summary>
     public enum TouchState
     {
-        TouchStateDown = 0,
-        TouchStateUp = 1
+        Down = 0,
+        Up = 1
     }
 
     /// <summary>Callback used by Servo internals</summary>
     public unsafe partial struct HostCallbacks
     {
-        public partial struct __Internal
-        {
-            internal global::System.IntPtr wakeup;
+        public global::System.IntPtr wakeup;
 
-            internal global::System.IntPtr flush;
+        internal global::System.IntPtr flush;
 
-            internal global::System.IntPtr log;
+        internal global::System.IntPtr log;
 
-            internal global::System.IntPtr on_load_started;
+        internal global::System.IntPtr on_load_started;
 
-            internal global::System.IntPtr on_load_ended;
+        internal global::System.IntPtr on_load_ended;
 
-            internal global::System.IntPtr on_title_changed;
+        internal global::System.IntPtr on_title_changed;
 
-            internal global::System.IntPtr on_url_changed;
+        internal global::System.IntPtr on_url_changed;
 
-            internal global::System.IntPtr on_history_changed;
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                EntryPoint="??0HostCallbacks@@QEAA@AEBU0@@Z")]
-            internal static extern global::System.IntPtr cctor(global::System.IntPtr instance, global::System.IntPtr _0);
-        }
-
-        private HostCallbacks.__Internal __instance;
-        internal HostCallbacks.__Internal __Instance { get { return __instance; } }
-
-        internal static global::Servofocus.HostCallbacks __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
-        {
-            return new global::Servofocus.HostCallbacks(native.ToPointer(), skipVTables);
-        }
-
-        internal static global::Servofocus.HostCallbacks __CreateInstance(global::Servofocus.HostCallbacks.__Internal native, bool skipVTables = false)
-        {
-            return new global::Servofocus.HostCallbacks(native, skipVTables);
-        }
-
-        private HostCallbacks(global::Servofocus.HostCallbacks.__Internal native, bool skipVTables = false)
-            : this()
-        {
-            __instance = native;
-        }
-
-        private HostCallbacks(void* native, bool skipVTables = false) : this()
-        {
-            __instance = *(global::Servofocus.HostCallbacks.__Internal*) native;
-        }
-
-        public HostCallbacks(global::Servofocus.HostCallbacks _0)
-            : this()
-        {
-            var ____arg0 = _0.__Instance;
-            var __arg0 = new global::System.IntPtr(&____arg0);
-            fixed (__Internal* __instancePtr = &__instance)
-            {
-                __Internal.cctor(new global::System.IntPtr(__instancePtr), __arg0);
-            }
-        }
+        internal global::System.IntPtr on_history_changed;
     }
 
     public unsafe partial struct Size
@@ -117,17 +74,17 @@ namespace Servofocus
         private Size.__Internal __instance;
         internal Size.__Internal __Instance { get { return __instance; } }
 
-        internal static global::Servofocus.Size __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
+        internal static global::ServoSharp.Size __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
-            return new global::Servofocus.Size(native.ToPointer(), skipVTables);
+            return new global::ServoSharp.Size(native.ToPointer(), skipVTables);
         }
 
-        internal static global::Servofocus.Size __CreateInstance(global::Servofocus.Size.__Internal native, bool skipVTables = false)
+        internal static global::ServoSharp.Size __CreateInstance(global::ServoSharp.Size.__Internal native, bool skipVTables = false)
         {
-            return new global::Servofocus.Size(native, skipVTables);
+            return new global::ServoSharp.Size(native, skipVTables);
         }
 
-        private Size(global::Servofocus.Size.__Internal native, bool skipVTables = false)
+        private Size(global::ServoSharp.Size.__Internal native, bool skipVTables = false)
             : this()
         {
             __instance = native;
@@ -135,10 +92,10 @@ namespace Servofocus
 
         private Size(void* native, bool skipVTables = false) : this()
         {
-            __instance = *(global::Servofocus.Size.__Internal*) native;
+            __instance = *(global::ServoSharp.Size.__Internal*) native;
         }
 
-        public Size(global::Servofocus.Size _0)
+        public Size(global::ServoSharp.Size _0)
             : this()
         {
             var ____arg0 = _0.__Instance;
@@ -197,17 +154,17 @@ namespace Servofocus
         private Margins.__Internal __instance;
         internal Margins.__Internal __Instance { get { return __instance; } }
 
-        internal static global::Servofocus.Margins __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
+        internal static global::ServoSharp.Margins __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
-            return new global::Servofocus.Margins(native.ToPointer(), skipVTables);
+            return new global::ServoSharp.Margins(native.ToPointer(), skipVTables);
         }
 
-        internal static global::Servofocus.Margins __CreateInstance(global::Servofocus.Margins.__Internal native, bool skipVTables = false)
+        internal static global::ServoSharp.Margins __CreateInstance(global::ServoSharp.Margins.__Internal native, bool skipVTables = false)
         {
-            return new global::Servofocus.Margins(native, skipVTables);
+            return new global::ServoSharp.Margins(native, skipVTables);
         }
 
-        private Margins(global::Servofocus.Margins.__Internal native, bool skipVTables = false)
+        private Margins(global::ServoSharp.Margins.__Internal native, bool skipVTables = false)
             : this()
         {
             __instance = native;
@@ -215,10 +172,10 @@ namespace Servofocus
 
         private Margins(void* native, bool skipVTables = false) : this()
         {
-            __instance = *(global::Servofocus.Margins.__Internal*) native;
+            __instance = *(global::ServoSharp.Margins.__Internal*) native;
         }
 
-        public Margins(global::Servofocus.Margins _0)
+        public Margins(global::ServoSharp.Margins _0)
             : this()
         {
             var ____arg0 = _0.__Instance;
@@ -299,17 +256,17 @@ namespace Servofocus
         private Position.__Internal __instance;
         internal Position.__Internal __Instance { get { return __instance; } }
 
-        internal static global::Servofocus.Position __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
+        internal static global::ServoSharp.Position __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
-            return new global::Servofocus.Position(native.ToPointer(), skipVTables);
+            return new global::ServoSharp.Position(native.ToPointer(), skipVTables);
         }
 
-        internal static global::Servofocus.Position __CreateInstance(global::Servofocus.Position.__Internal native, bool skipVTables = false)
+        internal static global::ServoSharp.Position __CreateInstance(global::ServoSharp.Position.__Internal native, bool skipVTables = false)
         {
-            return new global::Servofocus.Position(native, skipVTables);
+            return new global::ServoSharp.Position(native, skipVTables);
         }
 
-        private Position(global::Servofocus.Position.__Internal native, bool skipVTables = false)
+        private Position(global::ServoSharp.Position.__Internal native, bool skipVTables = false)
             : this()
         {
             __instance = native;
@@ -317,10 +274,10 @@ namespace Servofocus
 
         private Position(void* native, bool skipVTables = false) : this()
         {
-            __instance = *(global::Servofocus.Position.__Internal*) native;
+            __instance = *(global::ServoSharp.Position.__Internal*) native;
         }
 
-        public Position(global::Servofocus.Position _0)
+        public Position(global::ServoSharp.Position _0)
             : this()
         {
             var ____arg0 = _0.__Instance;
@@ -362,11 +319,11 @@ namespace Servofocus
     {
         public partial struct __Internal
         {
-            internal global::Servofocus.Size view_size;
+            internal global::ServoSharp.Size view_size;
 
-            internal global::Servofocus.Margins margins;
+            internal global::ServoSharp.Margins margins;
 
-            internal global::Servofocus.Position  position;
+            internal global::ServoSharp.Position position;
 
             internal float hidpi_factor;
 
@@ -379,17 +336,17 @@ namespace Servofocus
         private ViewLayout.__Internal __instance;
         internal ViewLayout.__Internal __Instance { get { return __instance; } }
 
-        internal static global::Servofocus.ViewLayout __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
+        internal static global::ServoSharp.ViewLayout __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
-            return new global::Servofocus.ViewLayout(native.ToPointer(), skipVTables);
+            return new global::ServoSharp.ViewLayout(native.ToPointer(), skipVTables);
         }
 
-        internal static global::Servofocus.ViewLayout __CreateInstance(global::Servofocus.ViewLayout.__Internal native, bool skipVTables = false)
+        internal static global::ServoSharp.ViewLayout __CreateInstance(global::ServoSharp.ViewLayout.__Internal native, bool skipVTables = false)
         {
-            return new global::Servofocus.ViewLayout(native, skipVTables);
+            return new global::ServoSharp.ViewLayout(native, skipVTables);
         }
 
-        private ViewLayout(global::Servofocus.ViewLayout.__Internal native, bool skipVTables = false)
+        private ViewLayout(global::ServoSharp.ViewLayout.__Internal native, bool skipVTables = false)
             : this()
         {
             __instance = native;
@@ -397,10 +354,10 @@ namespace Servofocus
 
         private ViewLayout(void* native, bool skipVTables = false) : this()
         {
-            __instance = *(global::Servofocus.ViewLayout.__Internal*) native;
+            __instance = *(global::ServoSharp.ViewLayout.__Internal*) native;
         }
 
-        public ViewLayout(global::Servofocus.ViewLayout _0)
+        public ViewLayout(global::ServoSharp.ViewLayout _0)
             : this()
         {
             var ____arg0 = _0.__Instance;
@@ -412,24 +369,26 @@ namespace Servofocus
         }
 
         /// <summary>Size of the view. Hardware pixels.</summary>
-        public global::Servofocus.Size ViewSize
+        public Size ViewSize
         {
-
             get { return __instance.view_size; }
-
             set { __instance.view_size = value; }
-
         }
+
         /// <summary>
         /// <para>Margins of the view. Hardware pixels.</para>
         /// <para>Pages are painted all over the surface,</para>
         /// <para>but if margins are not zero, the layout</para>
         /// <para>coordinates are bounds by these margins.</para>
         /// </summary>
-        public global::Servofocus.Margins Margins;
+        public global::ServoSharp.Margins Margins
+        {
+            get { return __instance.margins; }
+            set { __instance.margins = value; }
+        }
 
         /// <summary>Position of the window.</summary>
-        public global::Servofocus.Position Positions;
+        public global::ServoSharp.Position Positions;
 
         public float HidpiFactor
         {
@@ -445,67 +404,68 @@ namespace Servofocus
         }
     }
 
-    public unsafe partial class ServoSharp : IDisposable
+    internal unsafe partial class ServoSharp : IDisposable
     {
         public partial struct __Internal
         {
             [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="init_with_egl")]
-            internal static extern global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks.__Internal callbacks, global::Servofocus.ViewLayout.__Internal layout);
+            internal static extern ServoResult InitWithEgl(byte* url, byte* resources_path, HostCallbacks callbacks, ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                       EntryPoint="resize")]
-            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
-
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="perform_updates")]
-            internal static extern global::Servofocus.ServoResult PerformUpdates();
+            internal static extern ServoResult PerformUpdates();
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="load_url")]
-            internal static extern global::Servofocus.ServoResult LoadUrl(byte* url);
+            internal static extern ServoResult LoadUrl(byte* url);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="scroll")]
-            internal static extern global::Servofocus.ServoResult Scroll(int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state);
+            internal static extern ServoResult Scroll(int dx, int dy, uint x, uint y, ScrollState state);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="servo_version")]
             internal static extern byte* ServoVersion();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                EntryPoint = "resize")]
+            internal static extern ServoResult Resize(ViewLayout.__Internal layout);
+
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
 
         protected int __PointerAdjustment;
-        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.ServoSharp> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::Servofocus.ServoSharp>();
+        internal static readonly global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::ServoSharp.ServoSharp> NativeToManagedMap = new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::ServoSharp.ServoSharp>();
         protected void*[] __OriginalVTables;
 
         protected bool __ownsNativeInstance;
 
-        internal static global::Servofocus.ServoSharp __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
+        internal static global::ServoSharp.ServoSharp __CreateInstance(global::System.IntPtr native, bool skipVTables = false)
         {
-            return new global::Servofocus.ServoSharp(native.ToPointer(), skipVTables);
+            return new global::ServoSharp.ServoSharp(native.ToPointer(), skipVTables);
         }
 
-        internal static global::Servofocus.ServoSharp __CreateInstance(global::Servofocus.ServoSharp.__Internal native, bool skipVTables = false)
+        internal static global::ServoSharp.ServoSharp __CreateInstance(global::ServoSharp.ServoSharp.__Internal native, bool skipVTables = false)
         {
-            return new global::Servofocus.ServoSharp(native, skipVTables);
+            return new global::ServoSharp.ServoSharp(native, skipVTables);
         }
 
-        private static void* __CopyValue(global::Servofocus.ServoSharp.__Internal native)
+        private static void* __CopyValue(global::ServoSharp.ServoSharp.__Internal native)
         {
-            var ret = Marshal.AllocHGlobal(sizeof(global::Servofocus.ServoSharp.__Internal));
-            *(global::Servofocus.ServoSharp.__Internal*) ret = native;
+            var ret = Marshal.AllocHGlobal(sizeof(global::ServoSharp.ServoSharp.__Internal));
+            *(global::ServoSharp.ServoSharp.__Internal*) ret = native;
             return ret.ToPointer();
         }
 
-        private ServoSharp(global::Servofocus.ServoSharp.__Internal native, bool skipVTables = false)
+        private ServoSharp(global::ServoSharp.ServoSharp.__Internal native, bool skipVTables = false)
             : this(__CopyValue(native), skipVTables)
         {
             __ownsNativeInstance = true;
@@ -521,7 +481,7 @@ namespace Servofocus
 
         public ServoSharp()
         {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::Servofocus.ServoSharp.__Internal));
+            __Instance = Marshal.AllocHGlobal(sizeof(global::ServoSharp.ServoSharp.__Internal));
             __ownsNativeInstance = true;
             NativeToManagedMap[__Instance] = this;
         }
@@ -535,7 +495,7 @@ namespace Servofocus
         {
             if (__Instance == IntPtr.Zero)
                 return;
-            global::Servofocus.ServoSharp __dummy;
+            global::ServoSharp.ServoSharp __dummy;
             NativeToManagedMap.TryRemove(__Instance, out __dummy);
             if (__ownsNativeInstance)
                 Marshal.FreeHGlobal(__Instance);
@@ -543,17 +503,13 @@ namespace Servofocus
         }
 
         /// <summary>Needs to be called from the EGL thread</summary>
-        public global::Servofocus.ServoResult InitWithEgl(byte* url, byte* resources_path, global::Servofocus.HostCallbacks callbacks, global::Servofocus.ViewLayout layout)
+        public ServoResult InitWithEgl(string url, string resourcesPath, global::ServoSharp.HostCallbacks callbacks, global::ServoSharp.ViewLayout layout)
         {
-            var __arg2 = callbacks.__Instance;
+            var __arg2 = callbacks;
             var __arg3 = layout.__Instance;
-            var __ret = __Internal.InitWithEgl(url, resources_path, __arg2, __arg3);
-            return __ret;
-        }
-
-        public global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
-        {
-            var __ret = __Internal.Resize(layout.__Instance);
+            var urlPtr = (byte*) Marshal.StringToCoTaskMemAnsi(url);
+            var resourcesPathPtr = (byte*) Marshal.StringToCoTaskMemAnsi(resourcesPath);
+            var __ret = __Internal.InitWithEgl(urlPtr, resourcesPathPtr, __arg2, __arg3);
             return __ret;
         }
 
@@ -561,20 +517,20 @@ namespace Servofocus
         /// <para>This is the Servo heartbeat. This needs to be called</para>
         /// <para>everytime wakeup is called.</para>
         /// </summary>
-        public global::Servofocus.ServoResult PerformUpdates()
+        public ServoResult PerformUpdates()
         {
             var __ret = __Internal.PerformUpdates();
             return __ret;
         }
 
         /// <summary>Load an URL. This needs to be a valid url.</summary>
-        public global::Servofocus.ServoResult LoadUrl(byte* url)
+        public ServoResult LoadUrl(byte* url)
         {
             var __ret = __Internal.LoadUrl(url);
             return __ret;
         }
 
-        public global::Servofocus.ServoResult Scroll(int dx, int dy, uint x, uint y, global::Servofocus.ScrollState state)
+        public ServoResult Scroll(int dx, int dy, uint x, uint y, ScrollState state)
         {
             var __ret = __Internal.Scroll(dx, dy, x, y, state);
             return __ret;
@@ -585,58 +541,64 @@ namespace Servofocus
             var __ret = __Internal.ServoVersion();
             return __ret;
         }
+
+        public ServoResult Resize(ViewLayout layout)
+        {
+            var __ret = __Internal.Resize(layout.__Instance);
+            return __ret;
+        }
     }
 
-    public unsafe partial class libservobridge
+    internal unsafe partial class libservobridge
     {
         public partial struct __Internal
         {
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="touch")]
-            internal static extern global::Servofocus.ServoResult Touch(uint _x, uint _y, global::Servofocus.TouchState _state);
+            internal static extern global::ServoSharp.ServoResult Touch(uint _x, uint _y, global::ServoSharp.TouchState _state);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="reload")]
-            internal static extern global::Servofocus.ServoResult Reload();
+            internal static extern global::ServoSharp.ServoResult Reload();
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="resize")]
-            internal static extern global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout.__Internal layout);
+            internal static extern global::ServoSharp.ServoResult Resize(global::ServoSharp.ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="stop")]
-            internal static extern global::Servofocus.ServoResult Stop();
+            internal static extern global::ServoSharp.ServoResult Stop();
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="go_back")]
-            internal static extern global::Servofocus.ServoResult GoBack();
+            internal static extern global::ServoSharp.ServoResult GoBack();
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="go_forward")]
-            internal static extern global::Servofocus.ServoResult GoForward();
+            internal static extern global::ServoSharp.ServoResult GoForward();
         }
 
-        public static global::Servofocus.ServoResult Touch(uint _x, uint _y, global::Servofocus.TouchState _state)
+        public static global::ServoSharp.ServoResult Touch(uint _x, uint _y, global::ServoSharp.TouchState _state)
         {
             var __ret = __Internal.Touch(_x, _y, _state);
             return __ret;
         }
 
         /// <summary>Reload page.</summary>
-        public static global::Servofocus.ServoResult Reload()
+        public static global::ServoSharp.ServoResult Reload()
         {
             var __ret = __Internal.Reload();
             return __ret;
         }
 
         /// <summary>Reload page.</summary>
-        public static global::Servofocus.ServoResult Resize(global::Servofocus.ViewLayout layout)
+        public static global::ServoSharp.ServoResult Resize(global::ServoSharp.ViewLayout layout)
         {
             var __arg0 = layout.__Instance;
             var __ret = __Internal.Resize(__arg0);
@@ -644,19 +606,19 @@ namespace Servofocus
         }
 
         /// <summary>Stop page loading.</summary>
-        public static global::Servofocus.ServoResult Stop()
+        public static global::ServoSharp.ServoResult Stop()
         {
             var __ret = __Internal.Stop();
             return __ret;
         }
 
-        public static global::Servofocus.ServoResult GoBack()
+        public static global::ServoSharp.ServoResult GoBack()
         {
             var __ret = __Internal.GoBack();
             return __ret;
         }
 
-        public static global::Servofocus.ServoResult GoForward()
+        public static global::ServoSharp.ServoResult GoForward()
         {
             var __ret = __Internal.GoForward();
             return __ret;
