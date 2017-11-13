@@ -31,6 +31,7 @@ namespace ServoSharp
         HistoryChangedCallbackDelegate _historyChanged;
 
         public unsafe string ServoVersion => Marshal.PtrToStringAnsi((IntPtr) _servoSharp.ServoVersion());
+        public Func<uint> MeasureUrlHeight { get; set; }
 
         public void InitWithEgl()
         {

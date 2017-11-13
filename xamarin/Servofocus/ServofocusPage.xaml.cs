@@ -1,5 +1,6 @@
 ﻿using Xamarin.Forms;
 using System.Diagnostics;
+using Xamarin.Forms.Platform.Android;
 
 namespace Servofocus
 {
@@ -20,9 +21,11 @@ namespace Servofocus
         void Initialize()
         {
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() => UrlField.Text = url));
-            
+
             // more callback setup here.
 
+            ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
+            
             ServoView.Servo.ValidateCallbacks();
         }
 

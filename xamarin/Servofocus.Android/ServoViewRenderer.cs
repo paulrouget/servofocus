@@ -1,4 +1,6 @@
-﻿using Android.Opengl;
+﻿using Android.Content;
+using Android.Opengl;
+using Android.Util;
 using Javax.Microedition.Khronos.Opengles;
 using Servofocus;
 using Servofocus.Android;
@@ -17,6 +19,7 @@ namespace Servofocus.Android
         int _lastY;
         long _touchDownTime;
         bool _isScrolling;
+        const int MoveDelay = 1000000;
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
@@ -53,46 +56,63 @@ namespace Servofocus.Android
                 }
                 Control.RenderMode = Rendermode.WhenDirty;
             }
+
+            
         }
         
         void OnTouch(object sender, TouchEventArgs touchEventArgs)
         {
-            int x = (int)(touchEventArgs.Event.RawX);
-            int y = (int)(touchEventArgs.Event.RawY);
+            var x = (int)touchEventArgs.Event.RawX;
+            var y = (int)touchEventArgs.Event.RawY;
             var currentTime = System.DateTime.Now.Ticks;
 
             // https://developer.android.com/reference/android/view/MotionEvent.html
             // System.Diagnostics.Debug.WriteLine(touchEventArgs.Event);
 
             if (!_isScrolling) {
-                if (touchEventArgs.Event.Action == MotionEventActions.Down) {
-                    _touchDownTime = currentTime;
-                    _lastY = y;
+                switch (touchEventArgs.Event.Action)
+                {
+                    case MotionEventActions.Down:
+                        _touchDownTime = currentTime;
+                        _lastY = y;
+                        break;
+                    case MotionEventActions.Up:
+                        // click
+                        //var dm = new DisplayMetrics();
+                        var dp = Context.Resources.DisplayMetrics;
+                        WriteLine($"Click: {x}x{y}");
+                        // FIXME: magic value. that's the height of the urlbar.
+                        Control.QueueEvent(() => Element.Servo.Click((uint)x, (uint)y - Element.Servo.MeasureUrlHeight() * 4));
+                        break;
+                    case MotionEventActions.Move:
+                        if (currentTime - _touchDownTime > MoveDelay)
+                        { // 100ms
+                            _isScrolling = true;
+                            var delta = y - _lastY;
+                            _lastY = (int)touchEventArgs.Event.RawY;
+                            Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Start));
+                        }
+                        break;
                 }
-                if (touchEventArgs.Event.Action == MotionEventActions.Up) {
-                    // click
-                    System.Diagnostics.Debug.WriteLine($"Click: {x}x{y}");
-                    // FIXME: magic value. that's the height of the urlbar.
-                    Control.QueueEvent(() => Element.Servo.Click((uint) x, (uint) y - 300));
-                }
-                if (touchEventArgs.Event.Action == MotionEventActions.Move) {
-                    if (currentTime - _touchDownTime > 1000000) { // 100ms
-                        _isScrolling = true;
-                        int delta = y - _lastY;
+            }
+            else
+            {
+                switch (touchEventArgs.Event.Action)
+                {
+                    case MotionEventActions.Move:
+                    {
+                        var delta = y - _lastY;
                         _lastY = (int)touchEventArgs.Event.RawY;
-                        Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Start));
+                        Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move));
+                        break;
                     }
-                }
-            } else {
-                if (touchEventArgs.Event.Action == MotionEventActions.Move) {
-                    int delta = y - _lastY;
-                    _lastY = (int)touchEventArgs.Event.RawY;
-                    Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move));
-                }
-                if (touchEventArgs.Event.Action == MotionEventActions.Up) {
-                    _isScrolling = false;
-                    int delta = y - _lastY;
-                    Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End));
+                    case MotionEventActions.Up:
+                    {
+                        _isScrolling = false;
+                        var delta = y - _lastY;
+                        Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End));
+                        break;
+                    }
                 }
             }
         }
