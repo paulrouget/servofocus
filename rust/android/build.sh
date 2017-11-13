@@ -68,4 +68,4 @@ $NDK_BIN_PATH/$TOOLCHAIN_PATH-strip $TARGET
 mkdir -p ../xamarin/Servofocus.Android/lib/$ABI
 cp $TARGET ../xamarin/Servofocus.Android/lib/$ABI/
 cp $ANDROID_NDK/sources/cxx-stl/llvm-libc++/libs/$ABI/libc++_shared.so ../xamarin/Servofocus.Android/lib/$ABI/
-cp ./target/$HEADER_NAME ../xamarin/ServoSharp/
+cp ./target/$HEADER_NAME ../xamarin/ServoSharp.AutoGen/
