@@ -7,7 +7,6 @@ using Xamarin.Forms.Platform.Android;
 using Android.Views;
 using ServoSharp;
 using static System.Diagnostics.Debug;
-using System;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Android
@@ -16,8 +15,8 @@ namespace Servofocus.Android
     {
         bool _disposed;
         int _lastY;
-        Int64 _touchDownTime;
-        bool _isScrolling = false;
+        long _touchDownTime;
+        bool _isScrolling;
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
@@ -39,7 +38,6 @@ namespace Servofocus.Android
                         loadStarted: () => WriteLine("Load started"),
                         loadEnded: () => WriteLine("Load ended"),
                         titleChanged: title => WriteLine($"new title {title}"),
-                        urlChanged: url => WriteLine($"new url {url}"),
                         historyChanged: (back, forward) =>
                         {
                             WriteLine($"Can go back: {back}");

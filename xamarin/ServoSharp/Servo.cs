@@ -21,6 +21,15 @@ namespace ServoSharp
         public HostCallbacks HostCallbacks { get; private set; }
         public ViewLayout ViewLayout { get; private set; }
 
+        SimpleCallbackDelegate _wakeUp;
+        SimpleCallbackDelegate _flush;
+        LogCallbackDelegate _log;
+        SimpleCallbackDelegate _loadStarted;
+        SimpleCallbackDelegate _loadEnded;
+        TitleChangedCallbackDelegate _titleChanged;
+        UrlChangedCallbackDelegate _urlChanged;
+        HistoryChangedCallbackDelegate _historyChanged;
+
         public unsafe string ServoVersion => Marshal.PtrToStringAnsi((IntPtr) _servoSharp.ServoVersion());
 
         public void InitWithEgl()
@@ -70,28 +79,44 @@ namespace ServoSharp
             _hidpiFactor = hidpiFactor;
         }
 
-        public void SetHostCallbacks(Action<Action> wakeUp, Action flush, Action<string> log, Action loadStarted, Action loadEnded, 
-            Action<string> titleChanged, Action<string> urlChanged, Action<bool, bool> historyChanged)
+        public void SetUrlCallback(Action<string> urlChangedCallback)
         {
-            var wakeUpCb = new SimpleCallbackDelegate(() => wakeUp(PerformUpdates));
-            var flushCb = new SimpleCallbackDelegate(flush);
-            var logCb = new LogCallbackDelegate(log);
-            var loadStartedCb = new SimpleCallbackDelegate(loadStarted);
-            var loadEndedCb = new SimpleCallbackDelegate(loadEnded);
-            var titleChangedCb = new TitleChangedCallbackDelegate(titleChanged);
-            var urlChangedCb = new UrlChangedCallbackDelegate(urlChanged);
-            var historyChangedCb = new HistoryChangedCallbackDelegate(historyChanged);
+            _urlChanged = new UrlChangedCallbackDelegate(urlChangedCallback);
+        }
+
+        public void SetHostCallbacks(Action<Action> wakeUp, Action flush, Action<string> log, Action loadStarted, Action loadEnded, 
+            Action<string> titleChanged, Action<bool, bool> historyChanged)
+        {
+            _wakeUp = () => wakeUp(PerformUpdates);
+            _flush = new SimpleCallbackDelegate(flush);
+            _log = new LogCallbackDelegate(log);
+            _loadStarted = new SimpleCallbackDelegate(loadStarted);
+            _loadEnded = new SimpleCallbackDelegate(loadEnded);
+            _titleChanged = new TitleChangedCallbackDelegate(titleChanged);
+            _historyChanged = new HistoryChangedCallbackDelegate(historyChanged);
+        }
+
+        public void ValidateCallbacks()
+        {
+            if(_wakeUp == null) throw new ArgumentNullException(nameof(_wakeUp));
+            if(_flush == null) throw new ArgumentNullException(nameof(_flush));
+            if(_log == null) throw new ArgumentNullException(nameof(_log));
+            if(_loadStarted == null) throw new ArgumentNullException(nameof(_loadStarted));
+            if(_loadEnded == null) throw new ArgumentNullException(nameof(_loadEnded));
+            if(_titleChanged == null) throw new ArgumentNullException(nameof(_titleChanged));
+            if(_historyChanged == null) throw new ArgumentNullException(nameof(_historyChanged));
+            if(_urlChanged == null) throw new ArgumentNullException(nameof(_urlChanged));
 
             HostCallbacks = new HostCallbacks
             {
-                wakeup = Marshal.GetFunctionPointerForDelegate(wakeUpCb),
-                flush = Marshal.GetFunctionPointerForDelegate(flushCb),
-                log = Marshal.GetFunctionPointerForDelegate(logCb),
-                on_load_started = Marshal.GetFunctionPointerForDelegate(loadStartedCb),
-                on_load_ended = Marshal.GetFunctionPointerForDelegate(loadEndedCb),
-                on_title_changed = Marshal.GetFunctionPointerForDelegate(titleChangedCb),
-                on_url_changed = Marshal.GetFunctionPointerForDelegate(urlChangedCb),
-                on_history_changed = Marshal.GetFunctionPointerForDelegate(historyChangedCb)
+                wakeup = Marshal.GetFunctionPointerForDelegate(_wakeUp),
+                flush = Marshal.GetFunctionPointerForDelegate(_flush),
+                log = Marshal.GetFunctionPointerForDelegate(_log),
+                on_load_started = Marshal.GetFunctionPointerForDelegate(_loadStarted),
+                on_load_ended = Marshal.GetFunctionPointerForDelegate(_loadEnded),
+                on_title_changed = Marshal.GetFunctionPointerForDelegate(_titleChanged),
+                on_url_changed = Marshal.GetFunctionPointerForDelegate(_urlChanged),
+                on_history_changed = Marshal.GetFunctionPointerForDelegate(_historyChanged)
             };
         }
 

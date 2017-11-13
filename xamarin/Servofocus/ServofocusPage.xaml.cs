@@ -13,14 +13,20 @@ namespace Servofocus
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            UrlField.Text = ServoView.Servo.ServoVersion;
-         
+            Initialize();
             Debug.WriteLine("OnAppearing");
         }
 
+        void Initialize()
+        {
+            ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() => UrlField.Text = url));
+            
+            // more callback setup here.
 
-		protected override void OnDisappearing()
+            ServoView.Servo.ValidateCallbacks();
+        }
+
+        protected override void OnDisappearing()
         {
             base.OnDisappearing();
             Debug.WriteLine("OnDisappearing");
