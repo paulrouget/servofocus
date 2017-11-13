@@ -12,7 +12,7 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "file:///sdcard/servo/newpage.html";
+        const string Url = "https://servo.org";
         const string ResourcePath = "/sdcard/servo/resources";
         Size _viewSize;
         float _hidpiFactor = 2f;
@@ -42,6 +42,11 @@ namespace ServoSharp
         public void Scroll(int dx, int dy, uint x, uint y, ScrollState state)
         {
             CheckServoResult(() => _servoSharp.Scroll(dx, dy, x, y, state));
+        }
+
+        public void Click(uint x, uint y)
+        {
+            CheckServoResult(() => _servoSharp.Click(x, y));
         }
 
         ViewLayout CreateLayout()

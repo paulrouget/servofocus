@@ -153,9 +153,14 @@ pub extern "C" fn scroll(dx: i32, dy: i32, x: u32, y: u32, state: ScrollState) -
 }
 
 #[no_mangle]
-pub extern "C" fn touch(_x: u32, _y: u32, _state: TouchState) -> ServoResult {
-    // FIXME
-    ServoResult::NotImplemented
+pub extern "C" fn click(x: u32, y: u32) -> ServoResult {
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.click(x, y)
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
 }
 
 /// Load an URL. This needs to be a valid url.

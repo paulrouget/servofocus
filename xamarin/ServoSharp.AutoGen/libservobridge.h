@@ -108,7 +108,7 @@ ServoResult perform_updates(void);
 
 ServoResult scroll(int32_t dx, int32_t dy, uint32_t x, uint32_t y, ScrollState state);
 
-ServoResult touch(uint32_t _x, uint32_t _y, TouchState _state);
+ServoResult click(uint32_t x, uint32_t y);
 
 /// Load an URL. This needs to be a valid url.
 ServoResult load_url(uint8_t const* url);

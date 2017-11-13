@@ -438,6 +438,10 @@ namespace ServoSharp
                 EntryPoint = "resize")]
             internal static extern ServoResult Resize(ViewLayout.__Internal layout);
 
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+                       EntryPoint="click")]
+            internal static extern ServoResult Click(uint x, uint y);
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
@@ -547,17 +551,18 @@ namespace ServoSharp
             var __ret = __Internal.Resize(layout.__Instance);
             return __ret;
         }
+
+        public ServoResult Click(uint x, uint y)
+        {
+            var __ret = __Internal.Click(x, y);
+            return __ret;
+        }
     }
 
     internal unsafe partial class libservobridge
     {
         public partial struct __Internal
         {
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                EntryPoint="touch")]
-            internal static extern global::ServoSharp.ServoResult Touch(uint _x, uint _y, global::ServoSharp.TouchState _state);
-
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="reload")]
@@ -582,12 +587,6 @@ namespace ServoSharp
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="go_forward")]
             internal static extern global::ServoSharp.ServoResult GoForward();
-        }
-
-        public static global::ServoSharp.ServoResult Touch(uint _x, uint _y, global::ServoSharp.TouchState _state)
-        {
-            var __ret = __Internal.Touch(_x, _y, _state);
-            return __ret;
         }
 
         /// <summary>Reload page.</summary>

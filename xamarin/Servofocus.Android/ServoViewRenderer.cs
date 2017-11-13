@@ -7,6 +7,7 @@ using Xamarin.Forms.Platform.Android;
 using Android.Views;
 using ServoSharp;
 using static System.Diagnostics.Debug;
+using System;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Android
@@ -15,6 +16,8 @@ namespace Servofocus.Android
     {
         bool _disposed;
         int _lastY;
+        Int64 _touchDownTime;
+        bool _isScrolling = false;
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
@@ -31,11 +34,8 @@ namespace Servofocus.Android
 
                     Element.Servo.SetHostCallbacks(
                         wakeUp: action => Control.QueueEvent(action),
-                        flush: () =>
-                        {
-                            Control.RequestRender();
-                        },
-                        log: msg => WriteLine(msg),
+                        flush: () => Control.RequestRender(),
+                        log: msg => {/*WriteLine(msg);*/},
                         loadStarted: () => WriteLine("Load started"),
                         loadEnded: () => WriteLine("Load ended"),
                         titleChanged: title => WriteLine($"new title {title}"),
@@ -59,24 +59,44 @@ namespace Servofocus.Android
         
         void OnTouch(object sender, TouchEventArgs touchEventArgs)
         {
-            int x = (int)touchEventArgs.Event.RawX;
-            int y = (int)touchEventArgs.Event.RawY;
-            int delta = y - _lastY;
-            _lastY = (int)touchEventArgs.Event.RawY;
+            int x = (int)(touchEventArgs.Event.RawX);
+            int y = (int)(touchEventArgs.Event.RawY);
+            var currentTime = System.DateTime.Now.Ticks;
 
             // https://developer.android.com/reference/android/view/MotionEvent.html
-            System.Diagnostics.Debug.WriteLine(touchEventArgs.Event);
+            // System.Diagnostics.Debug.WriteLine(touchEventArgs.Event);
 
-            Control.QueueEvent(() =>
-            {
-                if(touchEventArgs.Event.Action == MotionEventActions.Down)
-                    Element.Servo.Scroll(0, 0, 0, 0, ScrollState.Start);
-                if(touchEventArgs.Event.Action == MotionEventActions.Move)
-                    Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move);
-                if(touchEventArgs.Event.Action == MotionEventActions.Up)
-                    Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End);
-            });
-
+            if (!_isScrolling) {
+                if (touchEventArgs.Event.Action == MotionEventActions.Down) {
+                    _touchDownTime = currentTime;
+                    _lastY = y;
+                }
+                if (touchEventArgs.Event.Action == MotionEventActions.Up) {
+                    // click
+                    System.Diagnostics.Debug.WriteLine($"Click: {x}x{y}");
+                    // FIXME: magic value. that's the height of the urlbar.
+                    Control.QueueEvent(() => Element.Servo.Click((uint) x, (uint) y - 300));
+                }
+                if (touchEventArgs.Event.Action == MotionEventActions.Move) {
+                    if (currentTime - _touchDownTime > 1000000) { // 100ms
+                        _isScrolling = true;
+                        int delta = y - _lastY;
+                        _lastY = (int)touchEventArgs.Event.RawY;
+                        Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Start));
+                    }
+                }
+            } else {
+                if (touchEventArgs.Event.Action == MotionEventActions.Move) {
+                    int delta = y - _lastY;
+                    _lastY = (int)touchEventArgs.Event.RawY;
+                    Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move));
+                }
+                if (touchEventArgs.Event.Action == MotionEventActions.Up) {
+                    _isScrolling = false;
+                    int delta = y - _lastY;
+                    Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End));
+                }
+            }
         }
         
         protected override void Dispose(bool disposing)

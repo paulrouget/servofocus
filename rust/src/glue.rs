@@ -6,13 +6,13 @@ use api::*;
 use servo::BrowserId;
 use servo::Servo;
 use servo::compositing::compositor_thread::EventLoopWaker;
-use servo::compositing::windowing::{WindowEvent, WindowMethods};
+use servo::compositing::windowing::{MouseWindowEvent, WindowEvent, WindowMethods};
 use servo::euclid::{Point2D, ScaleFactor, Size2D, TypedPoint2D, TypedRect, TypedSize2D, TypedVector2D};
 use servo::gl;
 use servo::ipc_channel::ipc;
 use servo::msg::constellation_msg::{Key, KeyModifiers};
 use servo::net_traits::net_error_list::NetError;
-use servo::script_traits::{LoadData, TouchEventType};
+use servo::script_traits::{LoadData, MouseButton, TouchEventType};
 use servo::servo_config::opts;
 use servo::servo_config::resource_files::set_resources_path;
 use servo::servo_geometry::DeviceIndependentPixel;
@@ -140,11 +140,6 @@ impl ServoGlue {
     }
 
     pub fn scroll(&mut self, dx: i32, dy: i32, x: u32, y: u32, state: ScrollState) -> ServoResult {
-        let factor = self.callbacks.hidpi_factor().get();
-        let dx = dx as f32 * factor;
-        let dy = dy as f32 * factor;
-        let x = x as f32 * factor;
-        let y = y as f32 * factor;
         let delta = TypedVector2D::new(dx as f32, dy as f32);
         let scroll_location = webrender_api::ScrollLocation::Delta(delta);
         let phase = match state {
@@ -154,6 +149,13 @@ impl ServoGlue {
             ScrollState::Canceled => TouchEventType::Cancel,
         };
         let event = WindowEvent::Scroll(scroll_location, TypedPoint2D::new(x as i32, y as i32), phase);
+        self.servo.handle_events(vec![event]);
+        ServoResult::Ok
+    }
+
+    pub fn click(&mut self, x: u32, y: u32) -> ServoResult {
+        let mouse_event= MouseWindowEvent::Click(MouseButton::Left, TypedPoint2D::new(x as f32, y as f32));
+        let event = WindowEvent::MouseWindowEventClass(mouse_event);
         self.servo.handle_events(vec![event]);
         ServoResult::Ok
     }
