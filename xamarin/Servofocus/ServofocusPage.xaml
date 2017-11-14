@@ -4,10 +4,9 @@
     xmlns:local="clr-namespace:Servofocus" 
     x:Class="Servofocus.ServofocusPage">
     <StackLayout Orientation="Vertical" x:Name="MainStackLayout">
-        <StackLayout Orientation="Horizontal" Padding="15">
+        <StackLayout x:Name="UrlView" Orientation="Horizontal" Padding="15">
             <Entry Placeholder="Enter URL" Keyboard="Url" WidthRequest="450" x:Name="UrlField"/>
         </StackLayout>
-        <!--<OpenGLView x:Name="OpenGlView" VerticalOptions="FillAndExpand"></OpenGLView>-->
         <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
     </StackLayout>
 </ContentPage>

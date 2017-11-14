@@ -39,6 +39,8 @@ namespace Servofocus
                 // FIXME
             }));
 
+            ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
+            
             ServoView.Servo.ValidateCallbacks();
         }
 
