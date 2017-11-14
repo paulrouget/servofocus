@@ -34,15 +34,8 @@ namespace Servofocus.Android
                     Element.Servo.SetHostCallbacks(
                         wakeUp: action => Control.QueueEvent(action),
                         flush: () => Control.RequestRender(),
-                        log: msg => {/*WriteLine(msg);*/},
-                        loadStarted: () => WriteLine("Load started"),
-                        loadEnded: () => WriteLine("Load ended"),
-                        titleChanged: title => WriteLine($"new title {title}"),
-                        historyChanged: (back, forward) =>
-                        {
-                            WriteLine($"Can go back: {back}");
-                            WriteLine($"Can go forward: {forward}");
-                        });
+                        log: msg => {/*WriteLine(msg);*/}
+                    );
                     
                     var renderer = new Renderer(Element);
 

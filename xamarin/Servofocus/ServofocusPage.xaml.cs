@@ -19,9 +19,25 @@ namespace Servofocus
 
         void Initialize()
         {
-            ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() => UrlField.Text = url));
-            
-            // more callback setup here.
+            ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() => {
+                UrlField.Text = url;
+            }));
+
+            ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() => {
+                // FIXME
+            }));
+
+            ServoView.Servo.SetHistoryCallback((back, fwd) => Device.BeginInvokeOnMainThread(() => {
+                // FIXME
+            }));
+
+            ServoView.Servo.SetLoadStartedCallback(() => Device.BeginInvokeOnMainThread(() => {
+                // FIXME
+            }));
+
+            ServoView.Servo.SetLoadEndedCallback(() => Device.BeginInvokeOnMainThread(() => {
+                // FIXME
+            }));
 
             ServoView.Servo.ValidateCallbacks();
         }

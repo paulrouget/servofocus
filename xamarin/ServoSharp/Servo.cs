@@ -79,21 +79,36 @@ namespace ServoSharp
             _hidpiFactor = hidpiFactor;
         }
 
-        public void SetUrlCallback(Action<string> urlChangedCallback)
+        public void SetUrlCallback(Action<string> callback)
         {
-            _urlChanged = new UrlChangedCallbackDelegate(urlChangedCallback);
+            _urlChanged = new UrlChangedCallbackDelegate(callback);
         }
 
-        public void SetHostCallbacks(Action<Action> wakeUp, Action flush, Action<string> log, Action loadStarted, Action loadEnded, 
-            Action<string> titleChanged, Action<bool, bool> historyChanged)
+        public void SetTitleCallback(Action<string> callback)
+        {
+            _titleChanged = new TitleChangedCallbackDelegate(callback);
+        }
+
+        public void SetHistoryCallback(Action<bool,bool> callback)
+        {
+            _historyChanged = new HistoryChangedCallbackDelegate(callback);
+        }
+
+        public void SetLoadStartedCallback(Action callback)
+        {
+            _loadStarted = new SimpleCallbackDelegate(callback);
+        }
+
+        public void SetLoadEndedCallback(Action callback)
+        {
+            _loadEnded = new SimpleCallbackDelegate(callback);
+        }
+
+        public void SetHostCallbacks(Action<Action> wakeUp, Action flush, Action<string> log)
         {
             _wakeUp = () => wakeUp(PerformUpdates);
             _flush = new SimpleCallbackDelegate(flush);
             _log = new LogCallbackDelegate(log);
-            _loadStarted = new SimpleCallbackDelegate(loadStarted);
-            _loadEnded = new SimpleCallbackDelegate(loadEnded);
-            _titleChanged = new TitleChangedCallbackDelegate(titleChanged);
-            _historyChanged = new HistoryChangedCallbackDelegate(historyChanged);
         }
 
         public void ValidateCallbacks()
