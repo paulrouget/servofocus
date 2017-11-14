@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
 using Java.Lang;
 
 namespace Servofocus.Android
@@ -14,6 +15,10 @@ namespace Servofocus.Android
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
+            Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
+            Window.SetBackgroundDrawableResource(Resource.Drawable.background_gradient);
+            SetStatusBarColor(global::Android.Graphics.Color.Transparent);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 

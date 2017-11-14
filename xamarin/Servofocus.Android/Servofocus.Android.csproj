@@ -139,6 +139,9 @@
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable\background_gradient.xml" />
+    <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\values\photon_colors.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ServoSharp\ServoSharp.csproj">
