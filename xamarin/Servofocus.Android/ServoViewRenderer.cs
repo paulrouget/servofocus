@@ -9,6 +9,7 @@ using Xamarin.Forms.Platform.Android;
 using Android.Views;
 using ServoSharp;
 using static System.Diagnostics.Debug;
+using System;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Android
@@ -39,8 +40,8 @@ namespace Servofocus.Android
                         flush: () => Control.RequestRender(),
                         log: msg => {/*WriteLine(msg);*/}
                     );
-                    
-                    var renderer = new Renderer(Element);
+
+                    var renderer = new Renderer(Element, f => Control.QueueEvent(() => f()));
 
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
@@ -75,7 +76,7 @@ namespace Servofocus.Android
                         var dp = Context.Resources.DisplayMetrics;
                         WriteLine($"Click: {x}x{y}");
                         // FIXME: magic value. that's the height of the urlbar.
-                        Control.QueueEvent(() => Element.Servo.Click((uint)x, (uint)y - Element.Servo.MeasureUrlHeight() * 4));
+                        Element.Servo.Click((uint)x, (uint)y - Element.Servo.MeasureUrlHeight() * 4);
                         break;
                     case MotionEventActions.Move:
                         if (currentTime - _touchDownTime > MoveDelay)
@@ -83,7 +84,7 @@ namespace Servofocus.Android
                             _isScrolling = true;
                             var delta = y - _lastY;
                             _lastY = (int)touchEventArgs.Event.RawY;
-                            Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Start));
+                            Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Start);
                         }
                         break;
                 }
@@ -96,14 +97,14 @@ namespace Servofocus.Android
                     {
                         var delta = y - _lastY;
                         _lastY = (int)touchEventArgs.Event.RawY;
-                        Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move));
+                        Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move);
                         break;
                     }
                     case MotionEventActions.Up:
                     {
                         _isScrolling = false;
                         var delta = y - _lastY;
-                        Control.QueueEvent(() => Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End));
+                        Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End);
                         break;
                     }
                 }
@@ -122,10 +123,12 @@ namespace Servofocus.Android
         class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
         {
             readonly ServoView _servoView;
+            readonly Action<Action> _executeServoCode;
 
-            public Renderer(ServoView servoView)
+            public Renderer(ServoView servoView, Action<Action> executeServoCode)
 			{
 			    _servoView = servoView;
+                _executeServoCode = executeServoCode;
 			}
 
 			public void OnDrawFrame(IGL10 gl)
@@ -139,7 +142,7 @@ namespace Servofocus.Android
 
 			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
-                _servoView.Servo.InitWithEgl();
+                _servoView.Servo.InitWithEgl(_executeServoCode);
             }
         }
     }

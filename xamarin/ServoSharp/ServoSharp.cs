@@ -528,9 +528,10 @@ namespace ServoSharp
         }
 
         /// <summary>Load an URL. This needs to be a valid url.</summary>
-        public ServoResult LoadUrl(byte* url)
+        public ServoResult LoadUrl(string url)
         {
-            var __ret = __Internal.LoadUrl(url);
+            var urlb = (byte*) Marshal.StringToCoTaskMemAnsi(url);
+            var __ret = __Internal.LoadUrl(urlb);
             return __ret;
         }
 

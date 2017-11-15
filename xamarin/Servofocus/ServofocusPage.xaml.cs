@@ -20,7 +20,8 @@ namespace Servofocus
 
         void Initialize()
         {
-            this.HideServo();
+            UrlView.TranslateTo(0, 200, 0);
+            ServoView.ScaleTo(0, 0);
  
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
@@ -52,8 +53,6 @@ namespace Servofocus
             ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
 
             ServoView.Servo.ValidateCallbacks();
-
-
         }
 
         void ShowServo()
@@ -75,6 +74,7 @@ namespace Servofocus
 
         void UrlChanged(object sender, EventArgs args)
         {
+            ServoView.Servo.LoadUrl(UrlField.Text);
         }
 
         void UrlFocused(object sender, EventArgs args)

@@ -12,7 +12,7 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "https://servo.org";
+        const string Url = "http://paulrouget.com";
         const string ResourcePath = "/sdcard/servo/resources";
         Size _viewSize;
         float _hidpiFactor = 2f;
@@ -21,6 +21,7 @@ namespace ServoSharp
         public HostCallbacks HostCallbacks { get; private set; }
         public ViewLayout ViewLayout { get; private set; }
 
+        Action<Action> _executeInServoThread;
         SimpleCallbackDelegate _wakeUp;
         SimpleCallbackDelegate _flush;
         LogCallbackDelegate _log;
@@ -33,30 +34,37 @@ namespace ServoSharp
         public unsafe string ServoVersion => Marshal.PtrToStringAnsi((IntPtr) _servoSharp.ServoVersion());
         public Func<uint> MeasureUrlHeight { get; set; }
 
-        public void InitWithEgl()
+        public void InitWithEgl(Action<Action> executeInServoThread)
         {
-            CheckServoResult(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, ViewLayout));
+            _executeInServoThread = executeInServoThread;
+
+            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, ViewLayout));
         }
         
         public void Resize(uint height, uint width)
         {
             _viewSize = new Size { Height = height, Width = width };
-            CheckServoResult(() => _servoSharp.Resize(CreateLayout()));
+            ExecuteServoCode(() => _servoSharp.Resize(CreateLayout()));
         }
 
         public void PerformUpdates()
         {
-            CheckServoResult(() => _servoSharp.PerformUpdates());
+            ExecuteServoCode(() => _servoSharp.PerformUpdates());
         }
 
         public void Scroll(int dx, int dy, uint x, uint y, ScrollState state)
         {
-            CheckServoResult(() => _servoSharp.Scroll(dx, dy, x, y, state));
+            ExecuteServoCode(() => _servoSharp.Scroll(dx, dy, x, y, state));
         }
 
         public void Click(uint x, uint y)
         {
-            CheckServoResult(() => _servoSharp.Click(x, y));
+            ExecuteServoCode(() => _servoSharp.Click(x, y));
+        }
+
+        public void LoadUrl(string url)
+        {
+            ExecuteServoCode(() => _servoSharp.LoadUrl(url));
         }
 
         ViewLayout CreateLayout()
@@ -136,11 +144,13 @@ namespace ServoSharp
             };
         }
 
-        void CheckServoResult(Func<ServoResult> action)
+        void ExecuteServoCode(Func<ServoResult> code)
         {
-            var result = action();
-            if (result != ServoResult.Ok)
-                throw new ServoException(result);
+            _executeInServoThread(() => {
+                var result = code();
+                if (result != ServoResult.Ok)
+                  throw new ServoException(result);
+            });
         }
     }
 }
