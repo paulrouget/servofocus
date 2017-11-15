@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Servofocus" x:Class="Servofocus.ServofocusPage">
-    <StackLayout Orientation="Vertical" x:Name="MainStackLayout">
-        <StackLayout Orientation="Horizontal" Padding="5" x:Name="UrlView">
-            <Label VerticalOptions="Center" Text="SSL" />
-            <Entry HorizontalOptions="FillAndExpand" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" />
-            <!-- FIXME: This color should be in styles.xml  -->
-            <Button Text="Erase" BackgroundColor="#30FFFFFF" />
+    <AbsoluteLayout>
+        <Image Source="title.png" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
+        <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout Orientation="Horizontal" Padding="5" x:Name="UrlView">
+                <Label VerticalOptions="Center" Text="SSL" />
+                <Entry HorizontalOptions="FillAndExpand" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
+                <!-- FIXME: This color should be in styles.xml  -->
+                <Button Text="Erase" BackgroundColor="#30FFFFFF" Clicked="EraseButtonClicked" />
+            </StackLayout>
+            <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
         </StackLayout>
-        <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
-    </StackLayout>
+    </AbsoluteLayout>
 </ContentPage>
