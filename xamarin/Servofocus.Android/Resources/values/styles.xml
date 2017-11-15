@@ -1,27 +1,42 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
-	<style name="MyTheme" parent="MyTheme.Base">
-	</style>
-	<!-- Base theme applied no matter what API -->
-	<style name="MyTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-		<!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
-		<item name="windowNoTitle">true</item>
-		<!--We will be using the toolbar so no need to show ActionBar-->
-		<item name="windowActionBar">false</item>
-		<!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette-->
-		<!-- colorPrimary is used for the default action bar background -->
-		<item name="colorPrimary">#2196F3</item>
-		<!-- colorPrimaryDark is used for the status bar -->
-		<item name="colorPrimaryDark">#1976D2</item>
-		<!-- colorAccent is used as the default value for colorControlActivated
-         which is used to tint widgets -->
-		<item name="colorAccent">#FF4081</item>
-		<!-- You can also set colorControlNormal, colorControlActivated
-         colorControlHighlight and colorSwitchThumbNormal. -->
-		<item name="windowActionModeOverlay">true</item>
-		<item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
-	</style>
-	<style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-		<item name="colorAccent">#FF4081</item>
-	</style>
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowContentTransitions">true</item>
+
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="DialogTitleStyle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!-- Setting this via alertDialogStyle in AppTheme results in crashes. You need to
+         explicitly select this via "new AlertDialog.Builder(activity, R.style.DialogStyle)"
+         We need this style because the accent colour for the MainActivity is purple,
+         but we want different accents in the dialog. -->
+    <style name="DialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">#FF00A4DC</item>
+        <item name="android:windowTitleStyle">@style/DialogTitleStyle</item>
+    </style>
+
+    <style name="SettingsTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorAccent">@color/colorAccentSettings</item>
+    </style>
+
+    <style name="InfoTheme" parent="SettingsTheme">
+        <item name="android:colorBackground">?attr/colorPrimary</item>
+    </style>
+
+    <style name="PopupMenu" parent="@style/Widget.AppCompat.Light.PopupMenu">
+        <item name="overlapAnchor">true</item>
+    </style>
 </resources>
