@@ -53,3 +53,4 @@ Thumbs.db
 **/*.rs.bk
 /rust/Cargo.lock
 /rust/target/
+xamarin/servofocus.userprefs
