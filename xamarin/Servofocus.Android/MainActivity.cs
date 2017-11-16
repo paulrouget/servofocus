@@ -31,7 +31,6 @@ namespace Servofocus.Android
 
             base.OnCreate(bundle);
 
-            Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
             Window.SetBackgroundDrawableResource(Resource.Drawable.background_gradient);
             SetStatusBarColor(global::Android.Graphics.Color.Transparent);
 
