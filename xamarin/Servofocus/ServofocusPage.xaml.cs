@@ -6,6 +6,9 @@ namespace Servofocus
 {
     public partial class ServofocusPage : ContentPage
     {
+        private string _url;
+        private bool _loading;
+
         public ServofocusPage()
         {
             InitializeComponent();
@@ -20,17 +23,19 @@ namespace Servofocus
 
         void Initialize()
         {
-            UrlView.TranslateTo(0, 200, 0);
-            ServoView.ScaleTo(0, 0);
- 
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
-                UrlField.Text = url;
+                if (url == "about:blank") {
+                    UrlField.Text = "";
+                } else {
+                    UrlField.Text = url;
+                }
+                _url = url;
+                UpdateStatus();
             }));
 
             ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
             {
-                // FIXME
             }));
 
             ServoView.Servo.SetHistoryCallback((back, fwd) => Device.BeginInvokeOnMainThread(() =>
@@ -40,14 +45,14 @@ namespace Servofocus
 
             ServoView.Servo.SetLoadStartedCallback(() => Device.BeginInvokeOnMainThread(() =>
             {
-                // FIXME
-
+                _loading = true;
+                UpdateStatus();
             }));
 
             ServoView.Servo.SetLoadEndedCallback(() => Device.BeginInvokeOnMainThread(() =>
             {
-                // FIXME
-                ShowServo();
+                _loading = false;
+                UpdateStatus();
             }));
 
             ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
@@ -55,21 +60,41 @@ namespace Servofocus
             ServoView.Servo.ValidateCallbacks();
         }
 
-        void ShowServo()
+        void ShowServo(bool immediate=false)
         {
-            UrlView.TranslateTo(0, 0, 500, Easing.SpringOut);
-            ServoView.ScaleTo(1, 500, Easing.SpringOut);
+            uint delay = 500;
+            if (immediate) {
+                delay = 0;
+            }
+            UrlView.TranslateTo(0, 0, delay, Easing.SpringOut);
+            ServoView.ScaleTo(1, delay, Easing.SpringOut);
+            StatusView.ScaleTo(1, delay, Easing.SpringOut);
+            EraseButton.TranslateTo(0, 0, delay, Easing.Linear);
+            UrlField.TranslateTo(0, 0, delay, Easing.Linear);
         }
 
-        void HideServo()
+        void HideServo(bool immediate=false)
         {
-            UrlView.TranslateTo(0, 200, 500, Easing.SpringIn);
-            ServoView.ScaleTo(0, 500, Easing.SpringIn);
+            uint delay = 500;
+            if (immediate) {
+                delay = 0;
+            }
+            UrlView.TranslateTo(0, 200, delay, Easing.SpringIn);
+            ServoView.ScaleTo(0, delay, Easing.SpringIn);
+            StatusView.ScaleTo(0, delay, Easing.SpringIn);
+            EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
+            UrlField.TranslateTo(30, 0, delay, Easing.Linear);
         }
 
         void EraseButtonClicked(object sender, EventArgs args)
         {
             HideServo();
+        }
+
+        void UpdateStatus()
+        {
+            SslIcon.IsVisible = !_loading && _url.StartsWith("https://");
+            Throbber.IsVisible = _loading;
         }
 
         void UrlChanged(object sender, EventArgs args)

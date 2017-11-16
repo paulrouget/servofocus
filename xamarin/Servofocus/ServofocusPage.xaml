@@ -4,10 +4,13 @@
         <Image Source="title.png" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
         <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" Padding="5" x:Name="UrlView">
-                <Label VerticalOptions="Center" Text="SSL" />
+                <AbsoluteLayout WidthRequest="40" HeightRequest="40" x:Name="StatusView">
+                    <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
+                    <Label VerticalOptions="Center" Text="SSL" x:Name="SslIcon" TextColor="White" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
+                </AbsoluteLayout>
                 <Entry HorizontalOptions="FillAndExpand" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
                 <!-- FIXME: This color should be in styles.xml  -->
-                <Button Text="Erase" BackgroundColor="#30FFFFFF" Clicked="EraseButtonClicked" />
+                <Button Text="Erase" BackgroundColor="#30FFFFFF" Clicked="EraseButtonClicked" x:Name="EraseButton"/>
             </StackLayout>
             <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
         </StackLayout>
