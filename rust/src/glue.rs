@@ -120,7 +120,7 @@ impl ServoGlue {
         url.to_str()
            .map_err(|_| ServoResult::CantReadStr)
            .and_then(|txt| ServoUrl::parse(txt).map_err(|_| ServoResult::CantParseUrl))
-           .map(|url| self.events.push(WindowEvent::LoadUrl(self.browser_id, url)))
+           .map(|url| self.servo.handle_events(vec![WindowEvent::LoadUrl(self.browser_id, url)]))
            .map(|_| ServoResult::Ok)
            .unwrap_or_else(|err| err)
     }
