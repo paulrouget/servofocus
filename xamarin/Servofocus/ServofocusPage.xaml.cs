@@ -68,10 +68,11 @@ namespace Servofocus
                 delay = 0;
             }
             UrlView.TranslateTo(0, 0, delay, Easing.SpringOut);
-            ServoView.ScaleTo(1, delay, Easing.SpringOut);
-            StatusView.ScaleTo(1, delay, Easing.SpringOut);
+            ServoView.TranslateTo(0, 0, delay, Easing.SpringOut);
             EraseButton.TranslateTo(0, 0, delay, Easing.Linear);
             UrlField.TranslateTo(0, 0, delay, Easing.Linear);
+            StatusView.ScaleTo(1, delay, Easing.Linear);
+
         }
 
         void HideServo(bool immediate=false)
@@ -80,11 +81,14 @@ namespace Servofocus
             if (immediate) {
                 delay = 0;
             }
-            UrlView.TranslateTo(0, 200, delay, Easing.SpringIn);
-            ServoView.ScaleTo(0, delay, Easing.SpringIn);
-            StatusView.ScaleTo(0, delay, Easing.SpringIn);
+            UrlView.TranslateTo(0, 100, delay, Easing.SpringIn);
+            ServoView.TranslateTo(0, 500, delay, Easing.SpringIn);
             EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
             UrlField.TranslateTo(30, 0, delay, Easing.Linear);
+            StatusView.ScaleTo(0, delay, Easing.Linear);
+
+
+            UrlField.Focus();
         }
 
         void EraseButtonClicked(object sender, EventArgs args)
@@ -100,6 +104,7 @@ namespace Servofocus
 
         void UrlChanged(object sender, EventArgs args)
         {
+            ShowServo();
             var url = UrlField.Text;
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
                 if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute)) {

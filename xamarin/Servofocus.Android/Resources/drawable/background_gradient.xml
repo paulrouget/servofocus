@@ -4,7 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
-        android:angle="315"
+        android:angle="0"
         android:startColor="@color/colorGradientStart"
         android:centerColor="@color/colorGradientCenter"
         android:endColor="@color/colorGradientEnd" />

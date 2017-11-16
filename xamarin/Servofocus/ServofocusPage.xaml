@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Servofocus" x:Class="Servofocus.ServofocusPage">
     <AbsoluteLayout>
-        <Image Source="title.png" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
+        <Image Source="title.png" AbsoluteLayout.LayoutBounds=".5,.2,.5,.5" AbsoluteLayout.LayoutFlags="All" />
         <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <AbsoluteLayout WidthRequest="40" HeightRequest="40" x:Name="StatusView">
