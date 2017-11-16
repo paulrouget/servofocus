@@ -74,7 +74,15 @@ namespace Servofocus
 
         void UrlChanged(object sender, EventArgs args)
         {
-            ServoView.Servo.LoadUrl(UrlField.Text);
+            var url = UrlField.Text;
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute)) {
+                    url = "https://" + url;
+                } else {
+                    url = "https://duckduckgo.com/html/?q=" + url;
+                }
+            }
+            ServoView.Servo.LoadUrl(url);
         }
 
         void UrlFocused(object sender, EventArgs args)
