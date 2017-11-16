@@ -208,12 +208,22 @@ pub extern "C" fn stop() -> ServoResult {
 
 #[no_mangle]
 pub extern "C" fn go_back() -> ServoResult {
-    // FIXME
-    ServoResult::NotImplemented
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.go_back()
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
 }
 
 #[no_mangle]
 pub extern "C" fn go_forward() -> ServoResult {
-    // FIXME
-    ServoResult::NotImplemented
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.go_forward()
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
 }

@@ -425,6 +425,11 @@ namespace ServoSharp
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                       EntryPoint="go_back")]
+            internal static extern ServoResult GoBack();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="scroll")]
             internal static extern ServoResult Scroll(int dx, int dy, uint x, uint y, ScrollState state);
 
@@ -532,6 +537,13 @@ namespace ServoSharp
         {
             var urlb = (byte*) Marshal.StringToCoTaskMemAnsi(url);
             var __ret = __Internal.LoadUrl(urlb);
+            return __ret;
+        }
+
+        /// <summary>Go back in history.</summary>
+        public ServoResult GoBack()
+        {
+            var __ret = __Internal.GoBack();
             return __ret;
         }
 

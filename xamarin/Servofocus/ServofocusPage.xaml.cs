@@ -8,6 +8,7 @@ namespace Servofocus
     {
         private string _url;
         private bool _loading;
+        private bool _canGoBack;
 
         public ServofocusPage()
         {
@@ -40,7 +41,7 @@ namespace Servofocus
 
             ServoView.Servo.SetHistoryCallback((back, fwd) => Device.BeginInvokeOnMainThread(() =>
             {
-                // FIXME
+                _canGoBack = back;
             }));
 
             ServoView.Servo.SetLoadStartedCallback(() => Device.BeginInvokeOnMainThread(() =>
@@ -112,6 +113,16 @@ namespace Servofocus
 
         void UrlFocused(object sender, EventArgs args)
         {
+        }
+
+        public bool SystemGoBack()
+        {
+            if (_canGoBack) {
+                ServoView.Servo.GoBack();
+                return true;
+            } else {
+                return false;
+            }
         }
 
         protected override void OnDisappearing()

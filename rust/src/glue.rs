@@ -10,7 +10,7 @@ use servo::compositing::windowing::{MouseWindowEvent, WindowEvent, WindowMethods
 use servo::euclid::{Point2D, ScaleFactor, Size2D, TypedPoint2D, TypedRect, TypedSize2D, TypedVector2D};
 use servo::gl;
 use servo::ipc_channel::ipc;
-use servo::msg::constellation_msg::{Key, KeyModifiers};
+use servo::msg::constellation_msg::{Key, KeyModifiers, TraversalDirection};
 use servo::net_traits::net_error_list::NetError;
 use servo::script_traits::{LoadData, MouseButton, TouchEventType};
 use servo::servo_config::opts;
@@ -128,6 +128,20 @@ impl ServoGlue {
     pub fn reload(&mut self) -> ServoResult {
         info!("reload");
         self.servo.handle_events(vec![WindowEvent::Reload(self.browser_id)]);
+        ServoResult::Ok
+    }
+
+    pub fn go_back(&mut self) -> ServoResult {
+        info!("go_back");
+        let event = WindowEvent::Navigation(self.browser_id, TraversalDirection::Back(1));
+        self.servo.handle_events(vec![event]);
+        ServoResult::Ok
+    }
+
+    pub fn go_forward(&mut self) -> ServoResult {
+        info!("go_forward");
+        let event = WindowEvent::Navigation(self.browser_id, TraversalDirection::Forward(1));
+        self.servo.handle_events(vec![event]);
         ServoResult::Ok
     }
 

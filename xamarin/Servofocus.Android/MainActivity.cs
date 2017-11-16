@@ -40,6 +40,14 @@ namespace Servofocus.Android
 
             Runtime.GetRuntime().LoadLibrary("c++_shared");
         }
+
+        public override void OnBackPressed()
+        {
+            var page = (Servofocus.ServofocusPage)App.Current.MainPage;
+            if (!page.SystemGoBack()) {
+                base.OnBackPressed();
+            }
+        }
     }
 
 }
