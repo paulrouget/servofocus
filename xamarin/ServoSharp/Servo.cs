@@ -72,6 +72,16 @@ namespace ServoSharp
             ExecuteServoCode(() => _servoSharp.GoBack());
         }
 
+        public void Reload()
+        {
+            ExecuteServoCode(() => _servoSharp.Reload());    
+        }
+
+        public void GoForward()
+        {
+            ExecuteServoCode(() => _servoSharp.GoForward());
+        }
+
         ViewLayout CreateLayout()
         {
             return new ViewLayout

@@ -6,9 +6,10 @@ namespace Servofocus
 {
     public partial class ServofocusPage : ContentPage
     {
-        private string _url;
-        private bool _loading;
-        private bool _canGoBack;
+        string _url;
+        bool _loading;
+        bool _canGoBack;
+        const string HttpsScheme = "https://";
 
         public ServofocusPage()
         {
@@ -26,14 +27,13 @@ namespace Servofocus
         {
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
-                if (url == "about:blank") {
-                    UrlField.Text = "";
-                } else {
-                    UrlField.Text = url;
-                }
+                UrlField.Text = url == "about:blank" ? "" : url;
                 _url = url;
                 UpdateStatus();
             }));
+
+            this.MenuButton.Reload = () => ServoView.Servo.Reload();
+            this.MenuButton.GoForward = () => ServoView.Servo.GoForward();
 
             ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
             {
@@ -60,16 +60,17 @@ namespace Servofocus
 
             ServoView.Servo.ValidateCallbacks();
         }
-
+        
         void ShowServo(bool immediate=false)
         {
             uint delay = 500;
-            if (immediate) {
+            if (immediate)
+            {
                 delay = 0;
             }
             UrlView.TranslateTo(0, 0, delay, Easing.SpringOut);
             ServoView.TranslateTo(0, 0, delay, Easing.SpringOut);
-            EraseButton.TranslateTo(0, 0, delay, Easing.Linear);
+            //EraseButton.TranslateTo(0, 0, delay, Easing.Linear);
             UrlField.TranslateTo(0, 0, delay, Easing.Linear);
             StatusView.ScaleTo(1, delay, Easing.Linear);
 
@@ -83,7 +84,7 @@ namespace Servofocus
             }
             UrlView.TranslateTo(0, 100, delay, Easing.SpringIn);
             ServoView.TranslateTo(0, 500, delay, Easing.SpringIn);
-            EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
+            //EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
             UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
 
@@ -98,7 +99,7 @@ namespace Servofocus
 
         void UpdateStatus()
         {
-            SslIcon.IsVisible = !_loading && _url.StartsWith("https://");
+            SslIcon.IsVisible = !_loading && _url.StartsWith(HttpsScheme);
             Throbber.IsVisible = _loading;
         }
 
@@ -106,11 +107,15 @@ namespace Servofocus
         {
             ShowServo();
             var url = UrlField.Text;
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute)) {
-                    url = "https://" + url;
-                } else {
-                    url = "https://duckduckgo.com/html/?q=" + url;
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                if (url.Contains(".") && Uri.IsWellFormedUriString(HttpsScheme + url, UriKind.Absolute))
+                {
+                    url = HttpsScheme + url;
+                }
+                else
+                {
+                    url = $"{HttpsScheme}duckduckgo.com/html/?q=" + url;
                 }
             }
             ServoView.Servo.LoadUrl(url);
@@ -122,12 +127,12 @@ namespace Servofocus
 
         public bool SystemGoBack()
         {
-            if (_canGoBack) {
+            if (_canGoBack)
+            {
                 ServoView.Servo.GoBack();
                 return true;
-            } else {
-                return false;
             }
+            return false;
         }
 
         protected override void OnDisappearing()

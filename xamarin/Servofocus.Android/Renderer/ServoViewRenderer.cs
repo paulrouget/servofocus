@@ -1,18 +1,15 @@
-﻿using Android.Content;
+﻿using System;
 using Android.Opengl;
-using Android.Util;
+using Android.Views;
 using Javax.Microedition.Khronos.Opengles;
 using Servofocus;
-using Servofocus.Android;
+using Servofocus.Android.Renderer;
+using ServoSharp;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Android.Views;
-using ServoSharp;
-using static System.Diagnostics.Debug;
-using System;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
-namespace Servofocus.Android
+namespace Servofocus.Android.Renderer
 {
     public class ServoViewRenderer : ViewRenderer<ServoView, GLSurfaceView>
     {
@@ -74,7 +71,7 @@ namespace Servofocus.Android
                         // click
                         //var dm = new DisplayMetrics();
                         var dp = Context.Resources.DisplayMetrics;
-                        WriteLine($"Click: {x}x{y}");
+                        System.Diagnostics.Debug.WriteLine($"Click: {x}x{y}");
                         // FIXME: magic value. that's the height of the urlbar.
                         Element.Servo.Click((uint)x, (uint)y - Element.Servo.MeasureUrlHeight() * 4);
                         break;

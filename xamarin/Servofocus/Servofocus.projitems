@@ -19,6 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ServofocusPage.xaml.cs">
       <DependentUpon>ServofocusPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ServoView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\MenuButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ServoView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UrlView.cs" />
   </ItemGroup>
 </Project>

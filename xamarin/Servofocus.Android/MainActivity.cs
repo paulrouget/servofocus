@@ -1,23 +1,12 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
 using Java.Lang;
+using Servofocus.Android.Renderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer (typeof (Entry), typeof (MyEntryRenderer))]
-public class MyEntryRenderer : EntryRenderer
-{
-    protected override void OnElementChanged (ElementChangedEventArgs<Entry> e)
-    {
-        base.OnElementChanged (e);
-        if (e.OldElement == null) {
-            var nativeEditText = (Android.Widget.EditText)Control;
-            nativeEditText.SetSelectAllOnFocus (true);
-        }
-    }
-}
+[assembly: ExportRenderer (typeof (Entry), typeof (UrlEntryRenderer))]
 
 namespace Servofocus.Android
 {
@@ -43,11 +32,10 @@ namespace Servofocus.Android
 
         public override void OnBackPressed()
         {
-            var page = (Servofocus.ServofocusPage)App.Current.MainPage;
+            var page = (ServofocusPage)Xamarin.Forms.Application.Current.MainPage;
             if (!page.SystemGoBack()) {
                 base.OnBackPressed();
             }
         }
     }
-
 }

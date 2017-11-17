@@ -444,9 +444,19 @@ namespace ServoSharp
             internal static extern ServoResult Resize(ViewLayout.__Internal layout);
 
             [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                        EntryPoint="click")]
             internal static extern ServoResult Click(uint x, uint y);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                EntryPoint = "reload")]
+            internal static extern ServoResult Reload();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                EntryPoint = "go_forward")]
+            internal static extern ServoResult GoForward();
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
@@ -570,17 +580,25 @@ namespace ServoSharp
             var __ret = __Internal.Click(x, y);
             return __ret;
         }
+
+        public ServoResult Reload()
+        {
+            var __ret = __Internal.Reload();
+            return __ret;
+        }
+
+        public ServoResult GoForward()
+        {
+            var __ret = __Internal.GoForward();
+            return __ret;
+        }
     }
 
     internal unsafe partial class libservobridge
     {
         public partial struct __Internal
         {
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                EntryPoint="reload")]
-            internal static extern global::ServoSharp.ServoResult Reload();
-
+         
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="resize")]
@@ -596,19 +614,9 @@ namespace ServoSharp
                 EntryPoint="go_back")]
             internal static extern global::ServoSharp.ServoResult GoBack();
 
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                EntryPoint="go_forward")]
-            internal static extern global::ServoSharp.ServoResult GoForward();
+            
         }
-
-        /// <summary>Reload page.</summary>
-        public static global::ServoSharp.ServoResult Reload()
-        {
-            var __ret = __Internal.Reload();
-            return __ret;
-        }
-
+        
         /// <summary>Reload page.</summary>
         public static global::ServoSharp.ServoResult Resize(global::ServoSharp.ViewLayout layout)
         {
@@ -630,10 +638,6 @@ namespace ServoSharp
             return __ret;
         }
 
-        public static global::ServoSharp.ServoResult GoForward()
-        {
-            var __ret = __Internal.GoForward();
-            return __ret;
-        }
+       
     }
 }
