@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Opengl;
-using Android.Util;
 using Javax.Microedition.Khronos.Opengles;
 using Servofocus;
 using Servofocus.Android;
@@ -37,8 +36,7 @@ namespace Servofocus.Android
 
                     Element.Servo.SetHostCallbacks(
                         wakeUp: action => Control.QueueEvent(action),
-                        flush: () => Control.RequestRender(),
-                        log: msg => {/*WriteLine(msg);*/}
+                        flush: () => Control.RequestRender()
                     );
 
                     var renderer = new Renderer(Element, f => Control.QueueEvent(() => f()));

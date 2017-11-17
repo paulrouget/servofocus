@@ -22,7 +22,21 @@ fn main() {
     let target = env::var("TARGET").unwrap();
     if target.contains("android") {
         android_main();
+
+        // Generate EGL bindings
+        let dest = env::var("OUT_DIR").unwrap();
+        let mut file = File::create(&Path::new(&dest).join("egl_bindings.rs")).unwrap();
+        Registry::new(Api::Egl, (1, 5), Profile::Core, Fallbacks::All, [])
+            .write_bindings(StaticStructGenerator, &mut file).unwrap();
     }
+
+    if target.contains("darwin") {
+        let dest = env::var("OUT_DIR").unwrap();
+        let mut file = File::create(&Path::new(&dest).join("gl_bindings.rs")).unwrap();
+        Registry::new(Api::Gl, (3, 2), Profile::Core, Fallbacks::All, ["GL_EXT_framebuffer_object"])
+            .write_bindings(gl_generator::GlobalGenerator, &mut file).unwrap();
+    }
+
 
     cheddar::Cheddar::new().expect("could not read manifest")
         .module("api").expect("malformed module path")
@@ -111,10 +125,4 @@ fn android_main() {
     println!("cargo:rustc-link-search=native={}", out_dir);
     println!("cargo:rustc-link-lib=log");
     println!("cargo:rustc-link-lib=android");
-
-    // Generate EGL bindings
-    let dest = env::var("OUT_DIR").unwrap();
-    let mut file = File::create(&Path::new(&dest).join("egl_bindings.rs")).unwrap();
-    Registry::new(Api::Egl, (1, 5), Profile::Core, Fallbacks::All, [])
-        .write_bindings(StaticStructGenerator, &mut file).unwrap();
 }

@@ -24,6 +24,10 @@ namespace Servofocus
 
         void Initialize()
         {
+            ServoView.Servo.SetLogCallback(log => {
+                Debug.WriteLine("SERVO: " + log);
+            });
+
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
                 if (url == "about:blank") {
@@ -104,8 +108,11 @@ namespace Servofocus
 
         void UrlChanged(object sender, EventArgs args)
         {
-            ShowServo();
             var url = UrlField.Text;
+            if (url == null) {
+                return;
+            }
+            ShowServo();
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
                 if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute)) {
                     url = "https://" + url;

@@ -49,7 +49,7 @@ pub struct HostCallbacks {
     /// Will be call from any thread.
     /// Used to report logging.
     /// Warning: this might be called a lot.
-    pub log: extern fn(log: *const u8),
+    pub log: extern fn(log: *const i8),
 
     /// Page starts loading.
     /// "Reload button" becomes "Stop button".
@@ -62,10 +62,10 @@ pub struct HostCallbacks {
     pub on_load_ended: extern fn(),
 
     /// Title changed.
-    pub on_title_changed: extern fn(title: *const u8),
+    pub on_title_changed: extern fn(title: *const i8),
 
     /// URL changed.
-    pub on_url_changed: extern fn(url: *const u8),
+    pub on_url_changed: extern fn(url: *const i8),
 
     /// Back/forward state changed.
     /// Back/forward buttons need to be disabled/enabled.
@@ -112,21 +112,43 @@ pub struct ViewLayout {
 }
 
 #[no_mangle]
-pub extern "C" fn servo_version() -> *const u8 {
+pub extern "C" fn servo_version() -> *const i8 {
     glue::servo_version()
 }
 
 /// Needs to be called from the EGL thread
+#[cfg(target_os = "android")]
 #[no_mangle]
 pub extern "C" fn init_with_egl(
-    url: *const u8,
-    resources_path: *const u8,
+    url: *const i8,
+    resources_path: *const i8,
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
     let _ = Logger::init(callbacks.log);
     let gl = gl_glue::init_egl();
     glue::init(gl, url, resources_path, callbacks, layout)
 }
+
+/// Needs to be called from the main thread
+#[no_mangle]
+pub extern "C" fn init_with_gl(
+    url: *const i8,
+    resources_path: *const i8,
+    callbacks: HostCallbacks,
+    layout: ViewLayout) -> ServoResult {
+
+    use std::ffi::CString;
+    let msg = format!("foobar");
+    let text = CString::new(msg.to_owned()).unwrap();
+    let ptr = text.as_ptr();
+    (callbacks.log)(ptr);
+    ServoResult::Ok
+
+    // let _ = Logger::init(callbacks.log);
+    // let gl = gl_glue::init_mac_gl();
+    // glue::init(gl, url, resources_path, callbacks, layout)
+}
+
 
 /// This is the Servo heartbeat. This needs to be called
 /// everytime wakeup is called.
@@ -165,7 +187,7 @@ pub extern "C" fn click(x: u32, y: u32) -> ServoResult {
 
 /// Load an URL. This needs to be a valid url.
 #[no_mangle]
-pub extern "C" fn load_url(url: *const u8) -> ServoResult {
+pub extern "C" fn load_url(url: *const i8) -> ServoResult {
     let mut res = ServoResult::UnexpectedError;
     SERVO.with(|s| {
         res = s.borrow_mut().as_mut().map(|ref mut s| {

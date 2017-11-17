@@ -12,7 +12,7 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "https://servo.org";
+        const string Url = "about:blank";
         const string ResourcePath = "/sdcard/servo/resources";
         Size _viewSize;
         float _hidpiFactor = 2f;
@@ -40,7 +40,14 @@ namespace ServoSharp
 
             ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, ViewLayout));
         }
-        
+
+        public void InitWithGL(Action<Action> executeInServoThread)
+        {
+            _executeInServoThread = executeInServoThread;
+
+            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, ViewLayout));
+        }
+
         public void Resize(uint height, uint width)
         {
             _viewSize = new Size { Height = height, Width = width };
@@ -93,6 +100,11 @@ namespace ServoSharp
             _hidpiFactor = hidpiFactor;
         }
 
+        public void SetLogCallback(Action<string> callback)
+        {
+            _log = new LogCallbackDelegate(callback);
+        }
+
         public void SetUrlCallback(Action<string> callback)
         {
             _urlChanged = new UrlChangedCallbackDelegate(callback);
@@ -118,11 +130,10 @@ namespace ServoSharp
             _loadEnded = new SimpleCallbackDelegate(callback);
         }
 
-        public void SetHostCallbacks(Action<Action> wakeUp, Action flush, Action<string> log)
+        public void SetHostCallbacks(Action<Action> wakeUp, Action flush)
         {
             _wakeUp = () => wakeUp(PerformUpdates);
             _flush = new SimpleCallbackDelegate(flush);
-            _log = new LogCallbackDelegate(log);
         }
 
         public void ValidateCallbacks()

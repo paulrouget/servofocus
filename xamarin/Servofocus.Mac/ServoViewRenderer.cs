@@ -30,9 +30,6 @@ namespace Servofocus.Mac
                 var width = (uint)Application.Current.MainPage.Width;
                 var height = (uint)Application.Current.MainPage.Height;
 
-                var result = Marshal.PtrToStringAuto(Interop.ServoVersion());
-                Debug.WriteLine(result);
-
                 Object[] attributes =
                 {
                     NSOpenGLPixelFormatAttribute.DoubleBuffer,
@@ -71,9 +68,13 @@ namespace Servofocus.Mac
                 SetNativeControl(openGlView);
                 Subscribe();
 
-                //Interop.Init(_ctx.FlushBuffer, () => Device.BeginInvokeOnMainThread(Interop.Ping), width, height);
-            }
+                Element.Servo.SetHostCallbacks(
+                    wakeUp: action => Device.BeginInvokeOnMainThread(action),
+                    flush: () => _ctx.FlushBuffer()
+                );
 
+                Element.Servo.InitWithGL(f => Device.BeginInvokeOnMainThread((() => f())));
+             }
             if (e.OldElement != null)
             {
                 Unsubscribe();

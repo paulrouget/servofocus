@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Servofocus\Servofocus.projitems" Label="Shared" Condition="Exists('..\Servofocus\Servofocus.projitems')" />
   <Import Project="..\packages\Xamarin.Forms.2.4.0.269-pre2\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.269-pre2\build\netstandard1.0\Xamarin.Forms.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -148,7 +149,13 @@
     <BundleResource Include="resources\user-agent-js\00.example.js" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\libservobridge.dylib">
+    <ProjectReference Include="..\ServoSharp\ServoSharp.csproj">
+      <Project>{0F8DDB1F-74B5-4FDE-9B53-51F98544A350}</Project>
+      <Name>ServoSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <NativeReference Include="lib\libservobridge.dylib">
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>
