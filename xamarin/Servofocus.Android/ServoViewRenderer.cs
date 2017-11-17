@@ -33,13 +33,13 @@ namespace Servofocus.Android
                     surfaceView = new GLSurfaceView(Context);
                     surfaceView.SetEGLContextClientVersion(3);
                     surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
-
+                    
                     Element.Servo.SetHostCallbacks(
                         wakeUp: action => Control.QueueEvent(action),
                         flush: () => Control.RequestRender()
                     );
-
-                    var renderer = new Renderer(Element, f => Control.QueueEvent(() => f()));
+                    
+                    var renderer = new Renderer(Element);
 
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
@@ -48,8 +48,6 @@ namespace Servofocus.Android
                 }
                 Control.RenderMode = Rendermode.WhenDirty;
             }
-
-            
         }
         
         void OnTouch(object sender, TouchEventArgs touchEventArgs)
@@ -121,12 +119,10 @@ namespace Servofocus.Android
         class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
         {
             readonly ServoView _servoView;
-            readonly Action<Action> _executeServoCode;
 
-            public Renderer(ServoView servoView, Action<Action> executeServoCode)
+            public Renderer(ServoView servoView)
 			{
 			    _servoView = servoView;
-                _executeServoCode = executeServoCode;
 			}
 
 			public void OnDrawFrame(IGL10 gl)
@@ -140,7 +136,7 @@ namespace Servofocus.Android
 
 			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
-                _servoView.Servo.InitWithEgl(_executeServoCode);
+                _servoView.Servo.InitWithEgl();
             }
         }
     }

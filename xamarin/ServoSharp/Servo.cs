@@ -33,18 +33,14 @@ namespace ServoSharp
 
         public unsafe string ServoVersion => Marshal.PtrToStringAnsi((IntPtr) _servoSharp.ServoVersion());
         public Func<uint> MeasureUrlHeight { get; set; }
-
-        public void InitWithEgl(Action<Action> executeInServoThread)
+       
+        public void InitWithEgl()
         {
-            _executeInServoThread = executeInServoThread;
-
             ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, ViewLayout));
         }
 
-        public void InitWithGL(Action<Action> executeInServoThread)
+        public void InitWithGL()
         {
-            _executeInServoThread = executeInServoThread;
-
             ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, ViewLayout));
         }
 
@@ -133,6 +129,7 @@ namespace ServoSharp
         public void SetHostCallbacks(Action<Action> wakeUp, Action flush)
         {
             _wakeUp = () => wakeUp(PerformUpdates);
+            _executeInServoThread = wakeUp;
             _flush = new SimpleCallbackDelegate(flush);
         }
 
@@ -146,6 +143,7 @@ namespace ServoSharp
             if(_titleChanged == null) throw new ArgumentNullException(nameof(_titleChanged));
             if(_historyChanged == null) throw new ArgumentNullException(nameof(_historyChanged));
             if(_urlChanged == null) throw new ArgumentNullException(nameof(_urlChanged));
+            if(_executeInServoThread == null) throw new ArgumentNullException(nameof(_executeInServoThread));
 
             HostCallbacks = new HostCallbacks
             {
