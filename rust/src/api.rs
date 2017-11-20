@@ -137,16 +137,18 @@ pub extern "C" fn init_with_gl(
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
 
-    use std::ffi::CString;
-    let msg = format!("foobar");
-    let text = CString::new(msg.to_owned()).unwrap();
-    let ptr = text.as_ptr();
-    (callbacks.log)(ptr);
-    ServoResult::Ok
+    info!("INIT: {:?}", layout);
 
-    // let _ = Logger::init(callbacks.log);
-    // let gl = gl_glue::init_mac_gl();
-    // glue::init(gl, url, resources_path, callbacks, layout)
+    // use std::ffi::CString;
+    // let msg = format!("foobar");
+    // let text = CString::new(msg.to_owned()).unwrap();
+    // let ptr = text.as_ptr();
+    // (callbacks.log)(ptr);
+    // ServoResult::Ok
+
+    let _ = Logger::init(callbacks.log);
+    let gl = gl_glue::init_mac_gl();
+    glue::init(gl, url, resources_path, callbacks, layout)
 }
 
 

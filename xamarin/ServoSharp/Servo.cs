@@ -12,14 +12,13 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "about:blank";
-        const string ResourcePath = "/sdcard/servo/resources";
+        const string Url = "file:///tmp/a.html";
+        const string ResourcePath = "/tmp/servo/resources";
         Size _viewSize;
         float _hidpiFactor = 2f;
         public Margins Margins { get; } = new Margins(); 
         public Position Position { get; } = new Position();
         public HostCallbacks HostCallbacks { get; private set; }
-        public ViewLayout ViewLayout { get; private set; }
 
         Action<Action> _executeInServoThread;
         SimpleCallbackDelegate _wakeUp;
@@ -32,16 +31,15 @@ namespace ServoSharp
         HistoryChangedCallbackDelegate _historyChanged;
 
         public unsafe string ServoVersion => Marshal.PtrToStringAnsi((IntPtr) _servoSharp.ServoVersion());
-        public Func<uint> MeasureUrlHeight { get; set; }
        
         public void InitWithEgl()
         {
-            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, ViewLayout));
+            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, CreateLayout()));
         }
 
         public void InitWithGL()
         {
-            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, ViewLayout));
+            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, CreateLayout()));
         }
 
         public void Resize(uint height, uint width)
@@ -86,7 +84,7 @@ namespace ServoSharp
             };
         }
 
-        public void SetSize(uint height, uint width)
+        public void SetSize(uint width, uint height)
         {
             _viewSize = new Size {Height = height, Width = width};
         }

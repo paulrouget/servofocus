@@ -24,15 +24,19 @@ namespace Servofocus
 
         void Initialize()
         {
-            ServoView.Servo.SetLogCallback(log => {
-                Debug.WriteLine("SERVO: " + log);
+            ServoView.Servo.SetLogCallback(log =>
+            {
+                //Debug.WriteLine("SERVO: " + log);
             });
 
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
-                if (url == "about:blank") {
+                if (url == "about:blank")
+                {
                     UrlField.Text = "";
-                } else {
+                }
+                else
+                {
                     UrlField.Text = url;
                 }
                 _url = url;
@@ -60,15 +64,17 @@ namespace Servofocus
                 UpdateStatus();
             }));
 
-            ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
+            ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
 
             ServoView.Servo.ValidateCallbacks();
+            ServoView.Servo.InitWithGL();
         }
 
-        void ShowServo(bool immediate=false)
+        void ShowServo(bool immediate = false)
         {
             uint delay = 500;
-            if (immediate) {
+            if (immediate)
+            {
                 delay = 0;
             }
             UrlView.TranslateTo(0, 0, delay, Easing.SpringOut);
@@ -79,10 +85,11 @@ namespace Servofocus
 
         }
 
-        void HideServo(bool immediate=false)
+        void HideServo(bool immediate = false)
         {
             uint delay = 500;
-            if (immediate) {
+            if (immediate)
+            {
                 delay = 0;
             }
             UrlView.TranslateTo(0, 100, delay, Easing.SpringIn);
@@ -109,14 +116,19 @@ namespace Servofocus
         void UrlChanged(object sender, EventArgs args)
         {
             var url = UrlField.Text;
-            if (url == null) {
+            if (url == null)
+            {
                 return;
             }
             ShowServo();
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute)) {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute))
+                {
                     url = "https://" + url;
-                } else {
+                }
+                else
+                {
                     url = "https://duckduckgo.com/html/?q=" + url;
                 }
             }
@@ -129,10 +141,13 @@ namespace Servofocus
 
         public bool SystemGoBack()
         {
-            if (_canGoBack) {
+            if (_canGoBack)
+            {
                 ServoView.Servo.GoBack();
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
