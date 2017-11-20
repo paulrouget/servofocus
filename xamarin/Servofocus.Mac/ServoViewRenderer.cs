@@ -76,7 +76,6 @@ namespace Servofocus.Mac
                     flush: () => view.Flush()
                 );
                 SetNativeControl(view);
-                view.Display();
              }
         }
 
@@ -96,7 +95,6 @@ namespace Servofocus.Mac
 
         public override void MouseUp(NSEvent e)
         {
-
             var nswindow = e.Window;
             var window_point = e.LocationInWindow;
             var view_point = Control.ConvertPointFromView(window_point, Control);
@@ -108,11 +106,6 @@ namespace Servofocus.Mac
             // Element.Servo.Click((uint)x, (uint)y);
 
             base.MouseUp(e);
-        }
-
-        public override void TouchesBeganWithEvent(NSEvent theEvent)
-        {
-            base.TouchesBeganWithEvent(theEvent);
         }
     }
 }

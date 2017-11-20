@@ -12,7 +12,7 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "file:///tmp/a.html";
+        const string Url = "https://servo.org";
         const string ResourcePath = "/tmp/servo/resources";
         Size _viewSize;
         float _hidpiFactor = 2f;
