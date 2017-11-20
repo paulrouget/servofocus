@@ -92,12 +92,12 @@ namespace Servofocus
             {
                 delay = 0;
             }
-            UrlView.TranslateTo(0, 100, delay, Easing.SpringIn);
-            ServoView.TranslateTo(0, 500, delay, Easing.SpringIn);
+
+            UrlView.TranslateTo(0, -0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
+            ServoView.TranslateTo(0, -1 * ServoView.Bounds.Height, delay, Easing.SpringIn);
             EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
             UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
-
 
             UrlField.Focus();
         }
@@ -116,11 +116,10 @@ namespace Servofocus
         void UrlChanged(object sender, EventArgs args)
         {
             var url = UrlField.Text;
-            if (url == null)
+            if (url == null || url == _url)
             {
                 return;
             }
-            ShowServo();
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute))
@@ -132,7 +131,10 @@ namespace Servofocus
                     url = "https://duckduckgo.com/html/?q=" + url;
                 }
             }
+            _url = url;
+            UrlField.Text = url;
             ServoView.Servo.LoadUrl(url);
+            ShowServo();
         }
 
         void UrlFocused(object sender, EventArgs args)

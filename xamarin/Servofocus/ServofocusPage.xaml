@@ -5,8 +5,8 @@
         <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <AbsoluteLayout WidthRequest="40" HeightRequest="40" x:Name="StatusView">
-                    <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
-                    <Label VerticalOptions="Center" Text="SSL" x:Name="SslIcon" TextColor="White" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
+                    <ActivityIndicator x:Name="Throbber" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
+                    <Label VerticalOptions="Center" Text="SSL" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
                 </AbsoluteLayout>
                 <Entry HorizontalOptions="FillAndExpand" FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
                 <!-- FIXME: This color should be in styles.xml  -->
