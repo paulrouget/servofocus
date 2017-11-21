@@ -6,7 +6,6 @@ using AppKit;
 using CoreGraphics;
 using CoreVideo;
 using Foundation;
-using OpenTK.Graphics.OpenGL;
 using Servofocus;
 using Servofocus.Mac;
 using ServoSharp;
