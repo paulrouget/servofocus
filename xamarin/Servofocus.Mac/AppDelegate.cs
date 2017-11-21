@@ -12,15 +12,24 @@ namespace Servofocus.Mac
         public AppDelegate()
         {
             var style = NSWindowStyle.Closable |
-                        NSWindowStyle.Resizable |
-                        NSWindowStyle.Titled |
-                        NSWindowStyle.FullSizeContentView;
+                                     NSWindowStyle.Resizable |
+                                     NSWindowStyle.Titled |
+                                     NSWindowStyle.FullSizeContentView |
+                                     NSWindowStyle.Miniaturizable;
 
-            var rect = new CoreGraphics.CGRect(200, 1000, 1024, 768);
+            var rect = new CoreGraphics.CGRect(200, 200, 800, 800);
             _window = new NSWindow(rect, style, NSBackingStore.Buffered, false);
-            _window.Title = "Servo.Xamarin on Mac!";
+            _window.Title = "Servo Focus";
             _window.TitleVisibility = NSWindowTitleVisibility.Hidden;
             _window.TitlebarAppearsTransparent = true;
+            _window.MovableByWindowBackground = true;
+
+            var button = _window.StandardWindowButton(NSWindowButton.CloseButton);
+            NSView parent = button.Superview.Superview;
+            var l = parent.Frame.Location;
+            l.Y -= 18;
+            l.X += 12;
+            parent.SetFrameOrigin(l);
         }
 
         public override NSWindow MainWindow

@@ -99,7 +99,7 @@ namespace Servofocus
             UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
 
-            UrlField.Focus();
+            // UrlField.Focus();
         }
 
         void EraseButtonClicked(object sender, EventArgs args)
