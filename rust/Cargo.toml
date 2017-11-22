@@ -9,7 +9,7 @@ name = "servobridge"
 crate-type = ["cdylib"]
 
 [dependencies]
-libservo = { git = "https://github.com/servo/servo", rev = "63bd783c55" }
+libservo = { git = "https://github.com/servo/servo", rev = "a6ce817045" }
 libc = "0.2.23"
 log = "0.3.8"
 core-foundation = "0.3"

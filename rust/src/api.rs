@@ -117,7 +117,7 @@ pub extern "C" fn servo_version() -> *const i8 {
 }
 
 /// Needs to be called from the EGL thread
-#[cfg(target_os = "android")]
+#[cfg(not(target_os = "macos"))]
 #[no_mangle]
 pub extern "C" fn init_with_egl(
     url: *const i8,
@@ -125,7 +125,7 @@ pub extern "C" fn init_with_egl(
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
     let _ = Logger::init(callbacks.log);
-    let gl = gl_glue::init_egl();
+    let gl = gl_glue::egl::init();
     glue::init(gl, url, resources_path, callbacks, layout)
 }
 
@@ -136,18 +136,8 @@ pub extern "C" fn init_with_gl(
     resources_path: *const i8,
     callbacks: HostCallbacks,
     layout: ViewLayout) -> ServoResult {
-
-    info!("INIT: {:?}", layout);
-
-    // use std::ffi::CString;
-    // let msg = format!("foobar");
-    // let text = CString::new(msg.to_owned()).unwrap();
-    // let ptr = text.as_ptr();
-    // (callbacks.log)(ptr);
-    // ServoResult::Ok
-
     let _ = Logger::init(callbacks.log);
-    let gl = gl_glue::init_mac_gl();
+    let gl = gl_glue::gl::init();
     glue::init(gl, url, resources_path, callbacks, layout)
 }
 
