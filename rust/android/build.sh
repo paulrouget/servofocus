@@ -11,7 +11,7 @@ cd $BASEDIR/..
 ## armv7
 ABI="armeabi-v7a"
 TOOLCHAIN_PATH="arm-linux-androideabi"
-RUST_TARGET="armv7-linux-androideabi"
+export RUST_TARGET="armv7-linux-androideabi"
 export ANDROID_ARCH="arch-arm"
 export ANDROID_PLATFORM="android-18"
 export NDK_ANDROID_VERSION="18"
