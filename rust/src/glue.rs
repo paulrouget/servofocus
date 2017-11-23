@@ -148,8 +148,7 @@ impl ServoGlue {
     pub fn resize(&mut self, layout: ViewLayout) -> ServoResult {
         info!("resize");
         *self.callbacks.layout.borrow_mut() = layout;
-        let size = self.callbacks.framebuffer_size();
-        self.servo.handle_events(vec![WindowEvent::Resize(size)]);
+        self.servo.handle_events(vec![WindowEvent::Resize]);
         ServoResult::Ok
     }
 
@@ -275,6 +274,17 @@ impl WindowMethods for ServoCallbacks {
         // FIXME: when to free url_ptr?
         (self.host_callbacks.on_url_changed)(url_ptr);
     }
+
+    fn screen_size(&self, id: BrowserId) -> Size2D<u32> {
+        info!("WindowMethods::screen_size");
+        self.client_window(id).0
+    }
+
+    fn screen_avail_size(&self, id: BrowserId) -> Size2D<u32> {
+        info!("WindowMethods::screen_avail_size");
+        self.screen_size(id)
+    }
+
 
     fn allow_navigation(&self, _id: BrowserId, _url: ServoUrl, chan: ipc::IpcSender<bool>) { chan.send(true).ok(); }
     fn set_inner_size(&self, _id: BrowserId, _size: Size2D<u32>) {}
