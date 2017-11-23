@@ -24,11 +24,19 @@ namespace Servofocus
 
         void Initialize()
         {
+            ServoView.Servo.SetLogCallback(log =>
+            {
+                //Debug.WriteLine("SERVO: " + log);
+            });
+
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
-                if (url == "about:blank") {
+                if (url == "about:blank")
+                {
                     UrlField.Text = "";
-                } else {
+                }
+                else
+                {
                     UrlField.Text = url;
                 }
                 _url = url;
@@ -56,15 +64,17 @@ namespace Servofocus
                 UpdateStatus();
             }));
 
-            ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
+            ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
 
             ServoView.Servo.ValidateCallbacks();
+            ServoView.Servo.InitWithGL();
         }
 
-        void ShowServo(bool immediate=false)
+        void ShowServo(bool immediate = false)
         {
             uint delay = 500;
-            if (immediate) {
+            if (immediate)
+            {
                 delay = 0;
             }
             UrlView.TranslateTo(0, 0, delay, Easing.SpringOut);
@@ -75,20 +85,21 @@ namespace Servofocus
 
         }
 
-        void HideServo(bool immediate=false)
+        void HideServo(bool immediate = false)
         {
             uint delay = 500;
-            if (immediate) {
+            if (immediate)
+            {
                 delay = 0;
             }
-            UrlView.TranslateTo(0, 100, delay, Easing.SpringIn);
-            ServoView.TranslateTo(0, 500, delay, Easing.SpringIn);
+
+            UrlView.TranslateTo(0, -0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
+            ServoView.TranslateTo(0, -1 * ServoView.Bounds.Height, delay, Easing.SpringIn);
             EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
             UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
 
-
-            UrlField.Focus();
+            // UrlField.Focus();
         }
 
         void EraseButtonClicked(object sender, EventArgs args)
@@ -104,16 +115,26 @@ namespace Servofocus
 
         void UrlChanged(object sender, EventArgs args)
         {
-            ShowServo();
             var url = UrlField.Text;
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute)) {
+            if (url == null || url == _url)
+            {
+                return;
+            }
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                if (url.Contains(".") && Uri.IsWellFormedUriString("https://" + url, UriKind.Absolute))
+                {
                     url = "https://" + url;
-                } else {
+                }
+                else
+                {
                     url = "https://duckduckgo.com/html/?q=" + url;
                 }
             }
+            _url = url;
+            UrlField.Text = url;
             ServoView.Servo.LoadUrl(url);
+            ShowServo();
         }
 
         void UrlFocused(object sender, EventArgs args)
@@ -122,10 +143,13 @@ namespace Servofocus
 
         public bool SystemGoBack()
         {
-            if (_canGoBack) {
+            if (_canGoBack)
+            {
                 ServoView.Servo.GoBack();
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }

@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Servofocus" x:Class="Servofocus.ServofocusPage">
     <AbsoluteLayout>
-        <Image Source="title.png" AbsoluteLayout.LayoutBounds=".5,.2,.5,.5" AbsoluteLayout.LayoutFlags="All" />
-        <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+        <Image Source="background.png" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />
+        <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds=".5,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
+                <StackLayout.Padding>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="macOS" Value="80,10,20,5"/>
+                    </OnPlatform>
+                </StackLayout.Padding>
                 <AbsoluteLayout WidthRequest="40" HeightRequest="40" x:Name="StatusView">
-                    <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
-                    <Label VerticalOptions="Center" Text="SSL" x:Name="SslIcon" TextColor="White" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All"/>
+                    <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
+                    <Label VerticalOptions="Center" Text="SSL" TextColor="White" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
                 </AbsoluteLayout>
-                <Entry HorizontalOptions="FillAndExpand" FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
-                <!-- FIXME: This color should be in styles.xml  -->
-                <Button Text="Erase" BackgroundColor="#30FFFFFF" FontSize="Micro" Clicked="EraseButtonClicked" x:Name="EraseButton"/>
+                <Entry HorizontalOptions="FillAndExpand" FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused" />
+                <Button Text="Erase" BackgroundColor="#30FFFFFF" FontSize="Micro" Clicked="EraseButtonClicked" x:Name="EraseButton" />
             </StackLayout>
-            <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
+            <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
         </StackLayout>
     </AbsoluteLayout>
 </ContentPage>
