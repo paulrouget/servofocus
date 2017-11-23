@@ -110,42 +110,6 @@
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="resources\Credits.rtf.mako" />
-    <BundleResource Include="resources\Servo.ico" />
-    <BundleResource Include="resources\ahem.css" />
-    <BundleResource Include="resources\android_params" />
-    <BundleResource Include="resources\badcert.html" />
-    <BundleResource Include="resources\badcert.jpg" />
-    <BundleResource Include="resources\cert-google-only" />
-    <BundleResource Include="resources\certs" />
-    <BundleResource Include="resources\failure.html" />
-    <BundleResource Include="resources\gatt_blocklist.txt" />
-    <BundleResource Include="resources\hsts_preload.json" />
-    <BundleResource Include="resources\iso-8859-8.css" />
-    <BundleResource Include="resources\itried.jpg" />
-    <BundleResource Include="resources\neterror.html" />
-    <BundleResource Include="resources\not-found.html" />
-    <BundleResource Include="resources\package-prefs.json" />
-    <BundleResource Include="resources\prefs.json" />
-    <BundleResource Include="resources\presentational-hints.css" />
-    <BundleResource Include="resources\privatekey_for_testing.key" />
-    <BundleResource Include="resources\public_domains.txt" />
-    <BundleResource Include="resources\quirks-mode.css" />
-    <BundleResource Include="resources\quotes.css" />
-    <BundleResource Include="resources\rippy.png" />
-    <BundleResource Include="resources\self_signed_certificate_for_testing.crt" />
-    <BundleResource Include="resources\servo.css" />
-    <BundleResource Include="resources\servo.icns" />
-    <BundleResource Include="resources\servo.png" />
-    <BundleResource Include="resources\tumbeast.png" />
-    <BundleResource Include="resources\user-agent.css" />
-    <BundleResource Include="resources\ahem\AHEM____.TTF" />
-    <BundleResource Include="resources\ahem\Ahem.ps" />
-    <BundleResource Include="resources\ahem\Ahem.sit" />
-    <BundleResource Include="resources\ahem\COPIED-FROM" />
-    <BundleResource Include="resources\ahem\COPYING" />
-    <BundleResource Include="resources\ahem\README" />
-    <BundleResource Include="resources\user-agent-js\00.example.js" />
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="..\libservobridge.dylib">
