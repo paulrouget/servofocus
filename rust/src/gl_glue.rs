@@ -34,7 +34,6 @@ pub mod egl {
     pub type EGLint = libc::int32_t;
     pub type EGLNativeDisplayType = *const libc::c_void;
     pub type EGLNativePixmapType = *const libc::c_void;     // FIXME: egl_native_pixmap_t instead
-    pub type EGLNativeWindowType = EGLNativeWindowType;
     pub type NativeDisplayType = EGLNativeDisplayType;
     pub type NativePixmapType = EGLNativePixmapType;
     pub type NativeWindowType = EGLNativeWindowType;
@@ -54,6 +53,7 @@ pub mod egl {
     }
 }
 
+#[cfg(target_os = "macos")]
 pub mod gl {
     use servo::gl;
     use std::os::raw::c_void;
