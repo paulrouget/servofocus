@@ -72,7 +72,7 @@ namespace Servofocus.Android
                         var dp = Context.Resources.DisplayMetrics;
                         WriteLine($"Click: {x}x{y}");
                         // FIXME: magic value. that's the height of the urlbar.
-                        Element.Servo.Click((uint)x, (uint)y - Element.Servo.MeasureUrlHeight() * 4);
+                        Element.Servo.Click((uint)x, (uint)(y - Element.Bounds.Top * 4));
                         break;
                     case MotionEventActions.Move:
                         if (currentTime - _touchDownTime > MoveDelay)
