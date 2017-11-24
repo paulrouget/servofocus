@@ -10,7 +10,7 @@ use std::path::Path;
 use std::process;
 use std::process::{Command, Stdio};
 
-use gl_generator::{Registry, Api, Profile, Fallbacks, StaticStructGenerator};
+use gl_generator::{Registry, Api, Profile, Fallbacks, StaticStructGenerator, GlobalGenerator};
 use std::fs::File;
 
 
@@ -23,6 +23,8 @@ fn main() {
     if target.contains("android") {
         android_main();
     }
+
+    generate_egl_bindings();
 
     cheddar::Cheddar::new().expect("could not read manifest")
         .module("api").expect("malformed module path")
@@ -111,10 +113,29 @@ fn android_main() {
     println!("cargo:rustc-link-search=native={}", out_dir);
     println!("cargo:rustc-link-lib=log");
     println!("cargo:rustc-link-lib=android");
+}
 
-    // Generate EGL bindings
+fn generate_egl_bindings() {
     let dest = env::var("OUT_DIR").unwrap();
     let mut file = File::create(&Path::new(&dest).join("egl_bindings.rs")).unwrap();
     Registry::new(Api::Egl, (1, 5), Profile::Core, Fallbacks::All, [])
-        .write_bindings(StaticStructGenerator, &mut file).unwrap();
+        .write_bindings(gl_generator::GlobalGenerator, &mut file).unwrap();
 }
+
+// fn generate_egl_bindings() {
+//     let dest = env::var("OUT_DIR").unwrap();
+//     let mut file = File::create(&Path::new(&dest).join("egl_bindings.rs")).unwrap();
+//     Registry::new(Api::Egl, (1, 5), Profile::Core, Fallbacks::All, [
+//                   "EGL_KHR_create_context",
+//                   "EGL_EXT_create_context_robustness",
+//                   "EGL_KHR_create_context_no_error",
+//                   "EGL_KHR_platform_x11",
+//                   "EGL_KHR_platform_android",
+//                   "EGL_KHR_platform_gbm",
+//                   "EGL_EXT_platform_base",
+//                   "EGL_EXT_platform_x11",
+//                   "EGL_MESA_platform_gbm",
+//                   "EGL_EXT_platform_device",
+//     ])
+//         .write_bindings(gl_generator::StructGenerator, &mut file).unwrap();
+// }

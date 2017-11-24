@@ -18,9 +18,7 @@ mod egl {
     pub type EGLint = libc::int32_t;
     pub type NativeDisplayType = *const libc::c_void;
     pub type NativePixmapType = *const libc::c_void;
-    #[cfg(target_os = "android")]
     pub type NativeWindowType = *const libc::c_void;
-    #[cfg(target_os = "android")]
     pub type EGLNativeWindowType = *const libc::c_void;
     include!(concat!(env!("OUT_DIR"), "/egl_bindings.rs"));
 }
@@ -31,10 +29,7 @@ pub fn init_egl() -> Rc<gl::Gl> {
         gl::GlesFns::load_with(|addr| {
             let addr = CString::new(addr.as_bytes()).unwrap();
             let addr = addr.as_ptr();
-            let egl = egl::Egl;
-            egl.GetProcAddress(addr) as *const c_void
+            egl::GetProcAddress(addr) as *const c_void
         })
     }
 }
-
-

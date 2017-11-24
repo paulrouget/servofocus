@@ -21,3 +21,4 @@ moz-cheddar = "0.4.0"
 # "openssl:0.9.12" = { path = "../../rust-openssl/openssl/" }
 # "https://github.com/servo/webrender#0.52.0" = { path = '../../webrender/webrender/' }
 # "https://github.com/servo/webrender#webrender_api:0.52.0" = { path = '../../webrender/webrender_api/' }
+# "https://github.com/servo/servo#libservo:0.0.1" = { path = "../../servo/components/servo" }
