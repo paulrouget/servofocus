@@ -26,7 +26,7 @@ namespace Servofocus
         {
             ServoView.Servo.SetLogCallback(log =>
             {
-                //Debug.WriteLine("SERVO: " + log);
+                // Debug.WriteLine("SERVO: " + log);
             });
 
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
@@ -65,9 +65,20 @@ namespace Servofocus
             }));
 
             // FIXME: hidpi
-            ServoView.Servo.SetSize(600, 1000);
+            if (Device.RuntimePlatform == "macOS")
+            {
+                ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
+                ServoView.Servo.ValidateCallbacks();
+                ServoView.Servo.InitWithGL();
+            }
 
-            ServoView.Servo.ValidateCallbacks();
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                ServoView.Servo.SetSize(600, 1000);
+                ServoView.Servo.ValidateCallbacks();
+                // InitWithEGL called in renderer
+            }
+
         }
 
         void ShowServo(bool immediate = false)
