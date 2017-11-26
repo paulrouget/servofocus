@@ -64,10 +64,17 @@ namespace Servofocus
                 UpdateStatus();
             }));
 
-            ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
+            // FIXME: hidpi
+            ServoView.Servo.SetSize(600, 1000);
 
             ServoView.Servo.ValidateCallbacks();
-            ServoView.Servo.InitWithGL();
+
+            if (Device.RuntimePlatform == Device.macOS) {
+                // ServoView.Servo.InitWithGL();
+            }
+            if (Device.RuntimePlatform == Device.Android) {
+                ServoView.Servo.InitWithEgl();
+            }
         }
 
         void ShowServo(bool immediate = false)
