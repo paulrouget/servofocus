@@ -129,7 +129,7 @@ namespace Servofocus
 
         void UpdateStatus()
         {
-            SslIcon.IsVisible = !_loading && _url.StartsWith("https://");
+            SslIcon.IsVisible = !_loading && _url.StartsWith("https://", StringComparison.Ordinal);
             Throbber.IsVisible = _loading;
         }
 
