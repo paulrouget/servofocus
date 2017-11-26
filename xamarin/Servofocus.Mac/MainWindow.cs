@@ -2,8 +2,6 @@
 using System.Drawing;
 using AppKit;
 using Foundation;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Platform.MacOS;
 
 namespace Servofocus.Mac
 {

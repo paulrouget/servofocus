@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using AppKit;
-using OpenTK.Graphics.OpenGL;
+using CoreGraphics;
+using CoreVideo;
+using Foundation;
 using Servofocus;
 using Servofocus.Mac;
 using Xamarin.Forms;
