@@ -415,6 +415,11 @@ namespace ServoSharp
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                       EntryPoint="init_with_gl")]
+            internal static extern ServoResult InitWithGL(byte* url, byte* resources_path, HostCallbacks callbacks, ViewLayout.__Internal layout);
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint="perform_updates")]
             internal static extern ServoResult PerformUpdates();
 
@@ -529,6 +534,17 @@ namespace ServoSharp
             var urlPtr = (byte*) Marshal.StringToCoTaskMemAnsi(url);
             var resourcesPathPtr = (byte*) Marshal.StringToCoTaskMemAnsi(resourcesPath);
             var __ret = __Internal.InitWithEgl(urlPtr, resourcesPathPtr, __arg2, __arg3);
+            return __ret;
+        }
+
+        /// <summary>Needs to be called from the main thread</summary>
+        public ServoResult InitWithGL(string url, string resourcesPath, global::ServoSharp.HostCallbacks callbacks, global::ServoSharp.ViewLayout layout)
+        {
+            var __arg2 = callbacks;
+            var __arg3 = layout.__Instance;
+            var urlPtr = (byte*) Marshal.StringToCoTaskMemAnsi(url);
+            var resourcesPathPtr = (byte*) Marshal.StringToCoTaskMemAnsi(resourcesPath);
+            var __ret = __Internal.InitWithGL(urlPtr, resourcesPathPtr, __arg2, __arg3);
             return __ret;
         }
 

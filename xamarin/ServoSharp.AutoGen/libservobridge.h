@@ -48,7 +48,7 @@ typedef struct HostCallbacks {
 	/// Will be call from any thread.
 	/// Used to report logging.
 	/// Warning: this might be called a lot.
-	void (*log)(uint8_t const* log);
+	void (*log)(c_char const* log);
 	/// Page starts loading.
 	/// "Reload button" becomes "Stop button".
 	/// Throbber starts spinning.
@@ -58,9 +58,9 @@ typedef struct HostCallbacks {
 	/// Throbber stops spinning.
 	void (*on_load_ended)(void);
 	/// Title changed.
-	void (*on_title_changed)(uint8_t const* title);
+	void (*on_title_changed)(c_char const* title);
 	/// URL changed.
-	void (*on_url_changed)(uint8_t const* url);
+	void (*on_url_changed)(c_char const* url);
 	/// Back/forward state changed.
 	/// Back/forward buttons need to be disabled/enabled.
 	void (*on_history_changed)(bool can_go_back, bool can_go_forward);
@@ -97,10 +97,13 @@ typedef struct ViewLayout {
 	float hidpi_factor;
 } ViewLayout;
 
-uint8_t const* servo_version(void);
+c_char const* servo_version(void);
 
 /// Needs to be called from the EGL thread
-ServoResult init_with_egl(uint8_t const* url, uint8_t const* resources_path, HostCallbacks callbacks, ViewLayout layout);
+ServoResult init_with_egl(c_char const* url, c_char const* resources_path, HostCallbacks callbacks, ViewLayout layout);
+
+/// Needs to be called from the main thread
+ServoResult init_with_gl(c_char const* url, c_char const* resources_path, HostCallbacks callbacks, ViewLayout layout);
 
 /// This is the Servo heartbeat. This needs to be called
 /// everytime wakeup is called.
@@ -111,7 +114,7 @@ ServoResult scroll(int32_t dx, int32_t dy, uint32_t x, uint32_t y, ScrollState s
 ServoResult click(uint32_t x, uint32_t y);
 
 /// Load an URL. This needs to be a valid url.
-ServoResult load_url(uint8_t const* url);
+ServoResult load_url(c_char const* url);
 
 /// Reload page.
 ServoResult reload(void);

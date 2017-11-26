@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.Opengl;
 using Android.Views;
+using Android.Util;
 using Javax.Microedition.Khronos.Opengles;
 using Servofocus;
 using Servofocus.Android.Renderer;
@@ -31,14 +32,13 @@ namespace Servofocus.Android.Renderer
                     surfaceView = new GLSurfaceView(Context);
                     surfaceView.SetEGLContextClientVersion(3);
                     surfaceView.SetEGLConfigChooser(8, 8, 8, 8, 24, 0);
-
+                    
                     Element.Servo.SetHostCallbacks(
                         wakeUp: action => Control.QueueEvent(action),
-                        flush: () => Control.RequestRender(),
-                        log: msg => {/*WriteLine(msg);*/}
+                        flush: () => Control.RequestRender()
                     );
-
-                    var renderer = new Renderer(Element, f => Control.QueueEvent(() => f()));
+                    
+                    var renderer = new Renderer(Element);
 
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
@@ -47,8 +47,6 @@ namespace Servofocus.Android.Renderer
                 }
                 Control.RenderMode = Rendermode.WhenDirty;
             }
-
-            
         }
         
         void OnTouch(object sender, TouchEventArgs touchEventArgs)
@@ -73,7 +71,7 @@ namespace Servofocus.Android.Renderer
                         var dp = Context.Resources.DisplayMetrics;
                         System.Diagnostics.Debug.WriteLine($"Click: {x}x{y}");
                         // FIXME: magic value. that's the height of the urlbar.
-                        Element.Servo.Click((uint)x, (uint)y - Element.Servo.MeasureUrlHeight() * 4);
+                        Element.Servo.Click((uint)x, (uint)(y - Element.Bounds.Top * 4));
                         break;
                     case MotionEventActions.Move:
                         if (currentTime - _touchDownTime > MoveDelay)
@@ -120,12 +118,10 @@ namespace Servofocus.Android.Renderer
         class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
         {
             readonly ServoView _servoView;
-            readonly Action<Action> _executeServoCode;
 
-            public Renderer(ServoView servoView, Action<Action> executeServoCode)
+            public Renderer(ServoView servoView)
 			{
 			    _servoView = servoView;
-                _executeServoCode = executeServoCode;
 			}
 
 			public void OnDrawFrame(IGL10 gl)
@@ -139,7 +135,7 @@ namespace Servofocus.Android.Renderer
 
 			public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
             {
-                _servoView.Servo.InitWithEgl(_executeServoCode);
+                _servoView.Servo.InitWithEgl();
             }
         }
     }

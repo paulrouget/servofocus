@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace ServoSharp
@@ -12,14 +13,13 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "https://servo.org";
-        const string ResourcePath = "/sdcard/servo/resources";
+        const string Url = "about:blank";
+        string _resourcePath;
         Size _viewSize;
         float _hidpiFactor = 2f;
         public Margins Margins { get; } = new Margins(); 
         public Position Position { get; } = new Position();
         public HostCallbacks HostCallbacks { get; private set; }
-        public ViewLayout ViewLayout { get; private set; }
 
         Action<Action> _executeInServoThread;
         SimpleCallbackDelegate _wakeUp;
@@ -32,15 +32,17 @@ namespace ServoSharp
         HistoryChangedCallbackDelegate _historyChanged;
 
         public unsafe string ServoVersion => Marshal.PtrToStringAnsi((IntPtr) _servoSharp.ServoVersion());
-        public Func<uint> MeasureUrlHeight { get; set; }
-
-        public void InitWithEgl(Action<Action> executeInServoThread)
+       
+        public void InitWithEgl()
         {
-            _executeInServoThread = executeInServoThread;
-
-            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, ViewLayout));
+            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, _resourcePath, HostCallbacks, CreateLayout()));
         }
-        
+
+        public void InitWithGL()
+        {
+            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, _resourcePath, HostCallbacks, CreateLayout()));
+        }
+
         public void Resize(uint height, uint width)
         {
             _viewSize = new Size { Height = height, Width = width };
@@ -60,6 +62,11 @@ namespace ServoSharp
         public void Click(uint x, uint y)
         {
             ExecuteServoCode(() => _servoSharp.Click(x, y));
+        }
+
+        public void SetResourcePath(string path)
+        {
+            _resourcePath = path;
         }
 
         public void LoadUrl(string url)
@@ -93,7 +100,7 @@ namespace ServoSharp
             };
         }
 
-        public void SetSize(uint height, uint width)
+        public void SetSize(uint width, uint height)
         {
             _viewSize = new Size {Height = height, Width = width};
         }
@@ -101,6 +108,11 @@ namespace ServoSharp
         public void SetHidpiFactor(float hidpiFactor)
         {
             _hidpiFactor = hidpiFactor;
+        }
+
+        public void SetLogCallback(Action<string> callback)
+        {
+            _log = new LogCallbackDelegate(callback);
         }
 
         public void SetUrlCallback(Action<string> callback)
@@ -128,11 +140,11 @@ namespace ServoSharp
             _loadEnded = new SimpleCallbackDelegate(callback);
         }
 
-        public void SetHostCallbacks(Action<Action> wakeUp, Action flush, Action<string> log)
+        public void SetHostCallbacks(Action<Action> wakeUp, Action flush)
         {
             _wakeUp = () => wakeUp(PerformUpdates);
+            _executeInServoThread = wakeUp;
             _flush = new SimpleCallbackDelegate(flush);
-            _log = new LogCallbackDelegate(log);
         }
 
         public void ValidateCallbacks()
@@ -145,6 +157,8 @@ namespace ServoSharp
             if(_titleChanged == null) throw new ArgumentNullException(nameof(_titleChanged));
             if(_historyChanged == null) throw new ArgumentNullException(nameof(_historyChanged));
             if(_urlChanged == null) throw new ArgumentNullException(nameof(_urlChanged));
+            if(_executeInServoThread == null) throw new ArgumentNullException(nameof(_executeInServoThread));
+            if(string.IsNullOrEmpty(_resourcePath)) throw new ArgumentNullException(nameof(_resourcePath));
 
             HostCallbacks = new HostCallbacks
             {

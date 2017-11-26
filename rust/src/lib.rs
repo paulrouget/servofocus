@@ -7,6 +7,9 @@ extern crate log;
 extern crate libc;
 extern crate servo;
 
+#[cfg(target_os = "macos")]
+extern crate core_foundation;
+
 mod api;
 mod gl_glue;
 mod glue;

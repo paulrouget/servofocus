@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Xamarin.Forms.2.4.0.269-pre2\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.269-pre2\build\netstandard1.0\Xamarin.Forms.props')" />
+  <Import Project="..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.props" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.props')" />
+  <Import Project="..\Servofocus\Servofocus.projitems" Label="Shared" Condition="Exists('..\Servofocus\Servofocus.projitems')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
@@ -62,18 +63,17 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
     <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\packages\Xamarin.Forms.2.4.0.269-pre2\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.4.0.91020\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\packages\Xamarin.Forms.2.4.0.269-pre2\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.4.0.91020\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.macOS">
-      <HintPath>..\packages\Xamarin.Forms.2.4.0.269-pre2\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.4.0.91020\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\packages\Xamarin.Forms.2.4.0.269-pre2\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.2.4.0.91020\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -88,71 +88,42 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Image.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Image.imageset\background.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="OpenTK.dll.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindow.cs" />
     <Compile Include="ServoViewRenderer.cs" />
+    <Compile Include="MainWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="resources\Credits.rtf.mako" />
-    <BundleResource Include="resources\Servo.ico" />
-    <BundleResource Include="resources\ahem.css" />
-    <BundleResource Include="resources\android_params" />
-    <BundleResource Include="resources\badcert.html" />
-    <BundleResource Include="resources\badcert.jpg" />
-    <BundleResource Include="resources\cert-google-only" />
-    <BundleResource Include="resources\certs" />
-    <BundleResource Include="resources\failure.html" />
-    <BundleResource Include="resources\gatt_blocklist.txt" />
-    <BundleResource Include="resources\hsts_preload.json" />
-    <BundleResource Include="resources\iso-8859-8.css" />
-    <BundleResource Include="resources\itried.jpg" />
-    <BundleResource Include="resources\neterror.html" />
-    <BundleResource Include="resources\not-found.html" />
-    <BundleResource Include="resources\package-prefs.json" />
-    <BundleResource Include="resources\prefs.json" />
-    <BundleResource Include="resources\presentational-hints.css" />
-    <BundleResource Include="resources\privatekey_for_testing.key" />
-    <BundleResource Include="resources\public_domains.txt" />
-    <BundleResource Include="resources\quirks-mode.css" />
-    <BundleResource Include="resources\quotes.css" />
-    <BundleResource Include="resources\rippy.png" />
-    <BundleResource Include="resources\self_signed_certificate_for_testing.crt" />
-    <BundleResource Include="resources\servo.css" />
-    <BundleResource Include="resources\servo.icns" />
-    <BundleResource Include="resources\servo.png" />
-    <BundleResource Include="resources\tumbeast.png" />
-    <BundleResource Include="resources\user-agent.css" />
-    <BundleResource Include="resources\ahem\AHEM____.TTF" />
-    <BundleResource Include="resources\ahem\Ahem.ps" />
-    <BundleResource Include="resources\ahem\Ahem.sit" />
-    <BundleResource Include="resources\ahem\COPIED-FROM" />
-    <BundleResource Include="resources\ahem\COPYING" />
-    <BundleResource Include="resources\ahem\README" />
-    <BundleResource Include="resources\user-agent-js\00.example.js" />
+    <ProjectReference Include="..\ServoSharp\ServoSharp.csproj">
+      <Project>{0F8DDB1F-74B5-4FDE-9B53-51F98544A350}</Project>
+      <Name>ServoSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\libservobridge.dylib">
+    <NativeReference Include="lib\libservobridge.dylib">
       <Kind>Dynamic</Kind>
       <SmartLink>False</SmartLink>
     </NativeReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\background.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
-  <Import Project="..\packages\Xamarin.Forms.2.4.0.269-pre2\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.269-pre2\build\netstandard1.0\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.targets')" />
 </Project>

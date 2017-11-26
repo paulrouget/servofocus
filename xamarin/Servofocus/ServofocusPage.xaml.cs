@@ -25,9 +25,14 @@ namespace Servofocus
 
         void Initialize()
         {
+            ServoView.Servo.SetLogCallback(log =>
+            {
+                // Debug.WriteLine("SERVO: " + log);
+            });
+
             ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
-                UrlField.Text = url == "about:blank" ? "" : url;
+                UrlField.Text = url;
                 _url = url;
                 UpdateStatus();
             }));
@@ -35,7 +40,7 @@ namespace Servofocus
             this.MenuButton.Reload = () => ServoView.Servo.Reload();
             this.MenuButton.GoForward = () => ServoView.Servo.GoForward();
 
-            ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
+            this.ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
             {
             }));
 
@@ -56,12 +61,26 @@ namespace Servofocus
                 UpdateStatus();
             }));
 
-            ServoView.Servo.MeasureUrlHeight = () => (uint)UrlView.Height;
+            // FIXME: hidpi
+            if (Device.RuntimePlatform == Device.macOS)
+            {
+                ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
+                ServoView.Servo.SetResourcePath("/tmp/servo/resources/");
+                ServoView.Servo.ValidateCallbacks();
+                ServoView.Servo.InitWithGL();
+            }
 
-            ServoView.Servo.ValidateCallbacks();
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                ServoView.Servo.SetSize(600, 1000);
+                ServoView.Servo.SetResourcePath("/sdcard/servo/resources/");
+                ServoView.Servo.ValidateCallbacks();
+                // InitWithEGL called in renderer
+            }
+
         }
         
-        void ShowServo(bool immediate=false)
+        void ShowServo(bool immediate = false)
         {
             uint delay = 500;
             if (immediate)
@@ -76,20 +95,27 @@ namespace Servofocus
 
         }
 
-        void HideServo(bool immediate=false)
+        void HideServo(bool immediate = false)
         {
             uint delay = 500;
-            if (immediate) {
+            var deviceFactor = 1;
+
+            if (immediate)
+            {
                 delay = 0;
             }
-            UrlView.TranslateTo(0, 100, delay, Easing.SpringIn);
-            ServoView.TranslateTo(0, 500, delay, Easing.SpringIn);
-            //EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
-            UrlField.TranslateTo(30, 0, delay, Easing.Linear);
+
+            if (Device.RuntimePlatform == Device.macOS)
+            {
+                deviceFactor = -1;
+            }
+
+            UrlView.TranslateTo(0, deviceFactor * 0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
+            ServoView.TranslateTo(0, deviceFactor * ServoView.Bounds.Height, delay, Easing.SpringIn);
+            //UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
 
-
-            UrlField.Focus();
+            // UrlField.Focus();
         }
 
         void EraseButtonClicked(object sender, EventArgs args)
@@ -105,7 +131,6 @@ namespace Servofocus
 
         void UrlChanged(object sender, EventArgs args)
         {
-            ShowServo();
             var url = UrlField.Text;
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
@@ -116,9 +141,13 @@ namespace Servofocus
                 else
                 {
                     url = $"{HttpsScheme}duckduckgo.com/html/?q=" + url;
-                }
+                } 
+               
             }
+            _url = url;
+            UrlField.Text = url;
             ServoView.Servo.LoadUrl(url);
+            ShowServo();
         }
 
         void UrlFocused(object sender, EventArgs args)
@@ -131,6 +160,7 @@ namespace Servofocus
             {
                 ServoView.Servo.GoBack();
                 return true;
+            
             }
             return false;
         }

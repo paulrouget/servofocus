@@ -15,6 +15,7 @@ export RUST_TARGET="armv7-linux-androideabi"
 export ANDROID_ARCH="arch-arm"
 export ANDROID_PLATFORM="android-18"
 export NDK_ANDROID_VERSION="18"
+export RUSTFLAGS=" -C target-feature=+neon -W unused-extern-crates"
 
 ## aarch64
 # export RUST_TARGET="aarch64-linux-android"
