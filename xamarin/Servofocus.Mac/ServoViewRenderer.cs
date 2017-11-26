@@ -57,7 +57,6 @@ namespace Servofocus.Mac
             if (openGLContext.View != this)
             {
                 openGLContext.View = this;
-                _servoView.Servo.InitWithGL();
             }
         }
     }
