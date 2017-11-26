@@ -132,6 +132,10 @@ namespace Servofocus
         void UrlChanged(object sender, EventArgs args)
         {
             var url = UrlField.Text;
+            if (string.IsNullOrEmpty(url) || url == _url)
+            {
+                return;
+            }
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 if (url.Contains(".") && Uri.IsWellFormedUriString(HttpsScheme + url, UriKind.Absolute))
