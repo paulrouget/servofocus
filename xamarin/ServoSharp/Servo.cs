@@ -13,8 +13,8 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "file:///sdcard/servo/a.html";
-        const string ResourcePath = "/sdcard/servo/resources";
+        const string Url = "about:blank";
+        const string ResourcePath = "/tmp/servo/resources"; // FIXME
         Size _viewSize;
         float _hidpiFactor = 2f;
         public Margins Margins { get; } = new Margins(); 
@@ -40,8 +40,7 @@ namespace ServoSharp
 
         public void InitWithGL()
         {
-            // FIXME: To re-enable
-            // `ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, CreateLayout()));
+            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, CreateLayout()));
         }
 
         public void Resize(uint height, uint width)
