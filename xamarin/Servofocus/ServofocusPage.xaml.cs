@@ -88,13 +88,20 @@ namespace Servofocus
         void HideServo(bool immediate = false)
         {
             uint delay = 500;
+            var deviceFactor = 1;
+
             if (immediate)
             {
                 delay = 0;
             }
 
-            UrlView.TranslateTo(0, -0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
-            ServoView.TranslateTo(0, -1 * ServoView.Bounds.Height, delay, Easing.SpringIn);
+            if (Device.RuntimePlatform == Device.macOS)
+            {
+                deviceFactor = -1;
+            }
+
+            UrlView.TranslateTo(0, deviceFactor * 0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
+            ServoView.TranslateTo(0, deviceFactor * ServoView.Bounds.Height, delay, Easing.SpringIn);
             EraseButton.TranslateTo(400, 0, delay, Easing.Linear);
             UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
