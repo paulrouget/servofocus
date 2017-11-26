@@ -69,9 +69,9 @@ namespace Servofocus
 
             ServoView.Servo.ValidateCallbacks();
 
-            if (Device.RuntimePlatform == Device.macOS) {
-                // ServoView.Servo.InitWithGL();
-            }
+            //if (Device.RuntimePlatform == Device.macOS) {
+            //    // ServoView.Servo.InitWithGL();
+            //}
             if (Device.RuntimePlatform == Device.Android) {
                 ServoView.Servo.InitWithEgl();
             }
@@ -102,10 +102,10 @@ namespace Servofocus
                 delay = 0;
             }
 
-            if (Device.RuntimePlatform == Device.macOS)
-            {
-                deviceFactor = -1;
-            }
+            //if (Device.RuntimePlatform == Device.macOS)
+            //{
+            //    deviceFactor = -1;
+            //}
 
             UrlView.TranslateTo(0, deviceFactor * 0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
             ServoView.TranslateTo(0, deviceFactor * ServoView.Bounds.Height, delay, Easing.SpringIn);
