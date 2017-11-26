@@ -65,7 +65,7 @@ namespace Servofocus
             }));
 
             // FIXME: hidpi
-            if (Device.RuntimePlatform == "macOS")
+            if (Device.RuntimePlatform == Device.macOS)
             {
                 ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
                 ServoView.Servo.ValidateCallbacks();
