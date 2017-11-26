@@ -101,8 +101,7 @@ namespace Servofocus.Mac
             var hidpi_factor = nswindow.BackingScaleFactor;
             var x = hidpi_factor * view_point.X;
             var y = hidpi_factor * (frame.Size.Height - view_point.Y);
-            Debug.WriteLine(y);
-            // Element.Servo.Click((uint)x, (uint)y);
+            Element.Servo.Click((uint)x, (uint)y);
 
             base.MouseUp(e);
         }
