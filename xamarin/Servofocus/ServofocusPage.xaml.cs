@@ -68,13 +68,6 @@ namespace Servofocus
             ServoView.Servo.SetSize(600, 1000);
 
             ServoView.Servo.ValidateCallbacks();
-
-            //if (Device.RuntimePlatform == Device.macOS) {
-            //    // ServoView.Servo.InitWithGL();
-            //}
-            if (Device.RuntimePlatform == Device.Android) {
-                ServoView.Servo.InitWithEgl();
-            }
         }
 
         void ShowServo(bool immediate = false)

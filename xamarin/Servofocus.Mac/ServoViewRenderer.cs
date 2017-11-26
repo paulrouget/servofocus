@@ -21,9 +21,11 @@ namespace Servofocus.Mac
     {
         NSOpenGLContext openGLContext;
         NSOpenGLPixelFormat pixelFormat;
+        ServoView _servoView;
 
-        public NSServoView()
+        public NSServoView(ServoView control)
         {
+            _servoView = control;
             Object[] attributes =
             {
                 NSOpenGLPixelFormatAttribute.DoubleBuffer,
@@ -53,7 +55,10 @@ namespace Servofocus.Mac
         public override void DrawRect (CGRect dirtyRect)
         {
             if (openGLContext.View != this)
+            {
                 openGLContext.View = this;
+                _servoView.Servo.InitWithGL();
+            }
         }
     }
 
@@ -65,7 +70,7 @@ namespace Servofocus.Mac
 
             if (Control == null)
             {
-                var view = new NSServoView()
+                var view = new NSServoView(Element)
                 {
                     WantsBestResolutionOpenGLSurface = true,
                     WantsLayer = true
