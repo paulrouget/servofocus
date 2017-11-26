@@ -100,8 +100,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ServoViewRenderer.cs" />
     <Compile Include="MainWindow.cs" />
+    <Compile Include="Renderer\ServoViewRenderer.cs" />
+    <Compile Include="Renderer\EraseButtonRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -120,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Renderer\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\background.png" />

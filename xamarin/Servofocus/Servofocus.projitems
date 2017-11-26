@@ -22,5 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\MenuButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\ServoView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\UrlView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\EraseButton.cs" />
   </ItemGroup>
 </Project>

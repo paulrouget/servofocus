@@ -27,7 +27,7 @@ namespace Servofocus.Mac
             var button = _window.StandardWindowButton(NSWindowButton.CloseButton);
             NSView parent = button.Superview.Superview;
             var l = parent.Frame.Location;
-            l.Y -= 18;
+            l.Y -= 12;
             l.X += 12;
             parent.SetFrameOrigin(l);
         }

@@ -6,15 +6,24 @@
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <StackLayout.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="macOS" Value="80,10,20,5"/>
+                        <On Platform="macOS" Value="80,10,20,3"/>
                     </OnPlatform>
                 </StackLayout.Padding>
-                <AbsoluteLayout WidthRequest="40" HeightRequest="40" x:Name="StatusView">
+                <AbsoluteLayout WidthRequest="26" HeightRequest="26" x:Name="StatusView">
                     <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
                     <Label VerticalOptions="Center" Text="SSL" TextColor="White" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
                 </AbsoluteLayout>
                 <local:UrlView HorizontalOptions="FillAndExpand" FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
-                <Button Text="Erase" BackgroundColor="#30FFFFFF" FontSize="Micro" Clicked="EraseButtonClicked" x:Name="EraseButton" />
+                <local:EraseButton
+                    Text="ERASE"
+                    TextColor="White"
+                    FontSize="Micro"
+                    WidthRequest="60"
+                    BorderColor="#A0FFFFFF"
+                    BorderWidth="1"
+                    BorderRadius="2"
+                    BackgroundColor="#10FFFFFF"
+                    Clicked="EraseButtonClicked" x:Name="EraseButton" />
                 <local:MenuButton x:Name="MenuButton"/>
             </StackLayout>
             <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
