@@ -68,6 +68,7 @@ namespace Servofocus
             if (Device.RuntimePlatform == Device.macOS)
             {
                 ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
+                ServoView.Servo.SetResourcePath("/tmp/servo/resources/");
                 ServoView.Servo.ValidateCallbacks();
                 ServoView.Servo.InitWithGL();
             }
@@ -75,6 +76,7 @@ namespace Servofocus
             if (Device.RuntimePlatform == Device.Android)
             {
                 ServoView.Servo.SetSize(600, 1000);
+                ServoView.Servo.SetResourcePath("/sdcard/servo/resources/");
                 ServoView.Servo.ValidateCallbacks();
                 // InitWithEGL called in renderer
             }
@@ -106,10 +108,10 @@ namespace Servofocus
                 delay = 0;
             }
 
-            //if (Device.RuntimePlatform == Device.macOS)
-            //{
-            //    deviceFactor = -1;
-            //}
+            if (Device.RuntimePlatform == Device.macOS)
+            {
+                deviceFactor = -1;
+            }
 
             UrlView.TranslateTo(0, deviceFactor * 0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
             ServoView.TranslateTo(0, deviceFactor * ServoView.Bounds.Height, delay, Easing.SpringIn);

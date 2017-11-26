@@ -14,7 +14,7 @@ namespace ServoSharp
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
         const string Url = "about:blank";
-        const string ResourcePath = "/tmp/servo/resources"; // FIXME
+        string _resourcePath;
         Size _viewSize;
         float _hidpiFactor = 2f;
         public Margins Margins { get; } = new Margins(); 
@@ -35,12 +35,12 @@ namespace ServoSharp
        
         public void InitWithEgl()
         {
-            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, ResourcePath, HostCallbacks, CreateLayout()));
+            ExecuteServoCode(() => _servoSharp.InitWithEgl(Url, _resourcePath, HostCallbacks, CreateLayout()));
         }
 
         public void InitWithGL()
         {
-            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, ResourcePath, HostCallbacks, CreateLayout()));
+            ExecuteServoCode(() => _servoSharp.InitWithGL(Url, _resourcePath, HostCallbacks, CreateLayout()));
         }
 
         public void Resize(uint height, uint width)
@@ -62,6 +62,11 @@ namespace ServoSharp
         public void Click(uint x, uint y)
         {
             ExecuteServoCode(() => _servoSharp.Click(x, y));
+        }
+
+        public void SetResourcePath(string path)
+        {
+            _resourcePath = path;
         }
 
         public void LoadUrl(string url)
@@ -143,6 +148,7 @@ namespace ServoSharp
             if(_historyChanged == null) throw new ArgumentNullException(nameof(_historyChanged));
             if(_urlChanged == null) throw new ArgumentNullException(nameof(_urlChanged));
             if(_executeInServoThread == null) throw new ArgumentNullException(nameof(_executeInServoThread));
+            if(string.IsNullOrEmpty(_resourcePath)) throw new ArgumentNullException(nameof(_resourcePath));
 
             HostCallbacks = new HostCallbacks
             {
