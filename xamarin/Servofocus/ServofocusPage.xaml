@@ -3,7 +3,7 @@
              xmlns:views="clr-namespace:Servofocus.Views;"
              x:Class="Servofocus.ServofocusPage">
     <AbsoluteLayout>
-        <!--<Image Source="background.png" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />-->
+        <Image Source="background.png" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />
         <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds=".5,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <StackLayout.Padding>
