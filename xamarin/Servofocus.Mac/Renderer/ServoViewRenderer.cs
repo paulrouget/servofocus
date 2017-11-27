@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using AppKit;
 using CoreGraphics;
-using CoreVideo;
-using Foundation;
-using Servofocus;
 using Servofocus.Mac;
+using Servofocus.Views;
 using ServoSharp;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.MacOS;
@@ -16,7 +11,6 @@ using Xamarin.Forms.Platform.MacOS;
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Mac
 {
-
     public partial class NSServoView : NSView
     {
         NSOpenGLContext openGLContext;
@@ -92,7 +86,7 @@ namespace Servofocus.Mac
                 phase = ScrollState.End;
             }
             // FIXME: pixel density
-            Element.Servo.Scroll(0, 2 * (int)e.ScrollingDeltaY, 0, 0, phase);
+            MessagingCenter.Send(new ScrollMessage(0, 2 * (int)e.ScrollingDeltaY, 0, 0, phase), "scroll");
             base.ScrollWheel(e);
         }
 
@@ -105,8 +99,7 @@ namespace Servofocus.Mac
             var hidpi_factor = nswindow.BackingScaleFactor;
             var x = hidpi_factor * view_point.X;
             var y = hidpi_factor * (frame.Size.Height - view_point.Y);
-            Element.Servo.Click((uint)x, (uint)y);
-
+            MessagingCenter.Send(new ClickMessage((uint)x, (uint)y), "click");
             base.MouseUp(e);
         }
     }

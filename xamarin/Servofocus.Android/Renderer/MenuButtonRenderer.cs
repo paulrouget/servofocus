@@ -2,6 +2,7 @@ using Android.Support.V4.Content;
 using Android.Widget;
 using Servofocus;
 using Servofocus.Android.Renderer;
+using Servofocus.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 

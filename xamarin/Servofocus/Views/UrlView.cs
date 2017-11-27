@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Servofocus
+namespace Servofocus.Views
 {
     public class UrlView : Entry
     {

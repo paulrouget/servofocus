@@ -1,6 +1,7 @@
 ﻿using Xamarin.Forms;
 using System.Diagnostics;
 using System;
+using ServoSharp;
 
 namespace Servofocus
 {
@@ -10,6 +11,8 @@ namespace Servofocus
         bool _loading;
         bool _canGoBack;
         const string HttpsScheme = "https://";
+        int _cumulativeDy;
+        bool _floatingEraseButtonVisiblity;
 
         public ServofocusPage()
         {
@@ -19,8 +22,29 @@ namespace Servofocus
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
             Initialize();
+            
+            StartListening();
+
             Debug.WriteLine("OnAppearing");
+        }
+
+        void StartListening()
+        {
+            MessagingCenter.Subscribe<ScrollMessage>(this, "scroll", msg =>
+            {
+                Scroll(msg.Dx, msg.Dy, msg.X, msg.Y, msg.State);
+            });
+            MessagingCenter.Subscribe<ClickMessage>(this, "click", msg =>
+            {
+                Click(msg.X, msg.Y);
+            });
+        }
+
+        void Click(uint x, uint y)
+        {
+            ServoView.Servo.Click(x, y);
         }
 
         void Initialize()
@@ -39,6 +63,7 @@ namespace Servofocus
 
             this.MenuButton.Reload = () => ServoView.Servo.Reload();
             this.MenuButton.GoForward = () => ServoView.Servo.GoForward();
+            this.EraseFloatingButton.Erase = () => HideServo();
 
             this.ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
             {
@@ -61,25 +86,41 @@ namespace Servofocus
                 UpdateStatus();
             }));
 
-            // FIXME: hidpi
-            if (Device.RuntimePlatform == Device.macOS)
-            {
-                ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
-                ServoView.Servo.SetResourcePath("/tmp/servo/resources/");
-                ServoView.Servo.ValidateCallbacks();
-                ServoView.Servo.InitWithGL();
-            }
-
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                ServoView.Servo.SetSize(600, 1000);
-                ServoView.Servo.SetResourcePath("/sdcard/servo/resources/");
-                ServoView.Servo.ValidateCallbacks();
-                // InitWithEGL called in renderer
-            }
-
+            InitializePlatformSpecific();
         }
-        
+
+        void InitializePlatformSpecific()
+        {
+            switch (Device.RuntimePlatform)
+            {
+                case Device.macOS:
+                    InitializeMacOS();
+                    break;
+                case Device.Android:
+                    InitializeAndroid();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void InitializeAndroid()
+        {
+            ServoView.Servo.SetSize(600, 1000);
+            ServoView.Servo.SetResourcePath("/sdcard/servo/resources/");
+            ServoView.Servo.ValidateCallbacks();
+            EraseButton.IsVisible = false;
+            // InitWithEGL called in renderer
+        }
+
+        void InitializeMacOS()
+        {
+            ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
+            ServoView.Servo.SetResourcePath("/tmp/servo/resources/");
+            ServoView.Servo.ValidateCallbacks();
+            ServoView.Servo.InitWithGL();
+        }
+
         void ShowServo(bool immediate = false)
         {
             uint delay = 500;
@@ -92,7 +133,6 @@ namespace Servofocus
             //EraseButton.TranslateTo(0, 0, delay, Easing.Linear);
             UrlField.TranslateTo(0, 0, delay, Easing.Linear);
             StatusView.ScaleTo(1, delay, Easing.Linear);
-
         }
 
         void HideServo(bool immediate = false)
@@ -121,6 +161,47 @@ namespace Servofocus
         void EraseButtonClicked(object sender, EventArgs args)
         {
             HideServo();
+        }
+
+        public void HideFloatingButton()
+        {
+            if(!_floatingEraseButtonVisiblity) return;
+            
+            EraseFloatingButton.ScaleTo(0, easing: Easing.Linear);
+            _floatingEraseButtonVisiblity = false;
+            _cumulativeDy = 0;
+        }
+
+        public void ShowFloatingButton()
+        {
+            if (_floatingEraseButtonVisiblity) return;
+
+            EraseFloatingButton.ScaleTo(1, easing: Easing.Linear);
+            _floatingEraseButtonVisiblity = true;
+            _cumulativeDy = 0;
+        }
+
+
+        public void Scroll(int dx, int dy, uint x, uint y, ScrollState state)
+        {
+            _cumulativeDy += dy;
+
+            if (_cumulativeDy > 0)
+            {
+                // scroll up
+                ShowFloatingButton();
+            }
+            else if(_cumulativeDy < 0)
+            {
+                // scroll down
+                HideFloatingButton();
+            }
+
+            if (state == ScrollState.End)
+                _cumulativeDy = 0;
+
+            //Debug.WriteLine($"cumulative DY: {_cumulativeDy}");
+            ServoView.Servo.Scroll(dx, dy, x, y, state);
         }
 
         void UpdateStatus()
@@ -160,13 +241,9 @@ namespace Servofocus
 
         public bool SystemGoBack()
         {
-            if (_canGoBack)
-            {
-                ServoView.Servo.GoBack();
-                return true;
-            
-            }
-            return false;
+            if (!_canGoBack) return false;
+            ServoView.Servo.GoBack();
+            return true;
         }
 
         protected override void OnDisappearing()

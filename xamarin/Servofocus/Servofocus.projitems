@@ -16,11 +16,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Message\ClickMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Message\ScrollMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServofocusPage.xaml.cs">
       <DependentUpon>ServofocusPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\EraseFloatingButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\MenuButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\ServoView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\UrlView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\EraseButton.cs" />
   </ItemGroup>
 </Project>

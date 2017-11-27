@@ -1,7 +1,7 @@
 ﻿using ServoSharp;
 using Xamarin.Forms;
 
-namespace Servofocus
+namespace Servofocus.Views
 {
     public class ServoView : View
     {
