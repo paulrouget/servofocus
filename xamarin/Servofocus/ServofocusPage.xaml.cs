@@ -167,7 +167,7 @@ namespace Servofocus
         {
             if(!_floatingEraseButtonVisiblity) return;
             
-            EraseButton.ScaleTo(0, easing: Easing.Linear);
+            EraseFloatingButton.ScaleTo(0, easing: Easing.Linear);
             _floatingEraseButtonVisiblity = false;
             _cumulativeDy = 0;
         }
@@ -176,7 +176,7 @@ namespace Servofocus
         {
             if (_floatingEraseButtonVisiblity) return;
 
-            EraseButton.ScaleTo(1, easing: Easing.Linear);
+            EraseFloatingButton.ScaleTo(1, easing: Easing.Linear);
             _floatingEraseButtonVisiblity = true;
             _cumulativeDy = 0;
         }
