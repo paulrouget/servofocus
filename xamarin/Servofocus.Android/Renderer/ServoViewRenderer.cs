@@ -5,6 +5,7 @@ using Android.Util;
 using Javax.Microedition.Khronos.Opengles;
 using Servofocus;
 using Servofocus.Android.Renderer;
+using Servofocus.Views;
 using ServoSharp;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -68,10 +69,10 @@ namespace Servofocus.Android.Renderer
                     case MotionEventActions.Up:
                         // click
                         //var dm = new DisplayMetrics();
-                        var dp = Context.Resources.DisplayMetrics;
                         System.Diagnostics.Debug.WriteLine($"Click: {x}x{y}");
                         // FIXME: magic value. that's the height of the urlbar.
-                        Element.Servo.Click((uint)x, (uint)(y - Element.Bounds.Top * 4));
+                        MessagingCenter.Send(new ClickMessage((uint)x, (uint)(y - Element.Bounds.Top * 4)), "click");
+                        //Element.Servo.Click((uint)x, (uint)(y - Element.Bounds.Top * 4));
                         break;
                     case MotionEventActions.Move:
                         if (currentTime - _touchDownTime > MoveDelay)
@@ -79,7 +80,8 @@ namespace Servofocus.Android.Renderer
                             _isScrolling = true;
                             var delta = y - _lastY;
                             _lastY = (int)touchEventArgs.Event.RawY;
-                            Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Start);
+                            //System.Diagnostics.Debug.WriteLine(delta);             
+                            MessagingCenter.Send(new ScrollMessage(0, delta, 0, 0, ScrollState.Start), "scroll");
                         }
                         break;
                 }
@@ -92,14 +94,15 @@ namespace Servofocus.Android.Renderer
                     {
                         var delta = y - _lastY;
                         _lastY = (int)touchEventArgs.Event.RawY;
-                        Element.Servo.Scroll(0, delta, 0, 0, ScrollState.Move);
+                            //System.Diagnostics.Debug.WriteLine(delta);
+                        MessagingCenter.Send(new ScrollMessage(0, delta, 0, 0, ScrollState.Move), "scroll");
                         break;
                     }
                     case MotionEventActions.Up:
                     {
                         _isScrolling = false;
                         var delta = y - _lastY;
-                        Element.Servo.Scroll(0, delta, 0, 0, ScrollState.End);
+                        MessagingCenter.Send(new ScrollMessage(0, delta, 0, 0, ScrollState.End), "scroll");
                         break;
                     }
                 }

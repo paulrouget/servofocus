@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace Servofocus
+namespace Servofocus.Views
 {
     public class MenuButton : Button
     {

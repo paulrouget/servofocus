@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderer\EraseButtonRenderer.cs" />
     <Compile Include="Renderer\MenuButtonRenderer.cs" />
     <Compile Include="Renderer\UrlEntryRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -159,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_action_refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_action_erase.png" />
   </ItemGroup>
   <Import Project="..\Servofocus\Servofocus.projitems" Label="Shared" Condition="Exists('..\Servofocus\Servofocus.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

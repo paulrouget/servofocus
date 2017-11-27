@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Servofocus" x:Class="Servofocus.ServofocusPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Servofocus.Views;"
+             x:Class="Servofocus.ServofocusPage">
     <AbsoluteLayout>
-        <Image Source="background.png" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />
+        <!--<Image Source="background.png" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />-->
         <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds=".5,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <StackLayout.Padding>
@@ -13,11 +15,13 @@
                     <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="true" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
                     <Label VerticalOptions="Center" Text="SSL" TextColor="White" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" />
                 </AbsoluteLayout>
-                <local:UrlView HorizontalOptions="FillAndExpand" FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
-                <Button Text="Erase" BackgroundColor="#30FFFFFF" FontSize="Micro" Clicked="EraseButtonClicked" x:Name="EraseButton" />
-                <local:MenuButton x:Name="MenuButton"/>
+                <views:UrlView HorizontalOptions="FillAndExpand" FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Completed="UrlChanged" Focused="UrlFocused"/>
+                <views:MenuButton x:Name="MenuButton"/>
             </StackLayout>
-            <local:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
+            <views:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
         </StackLayout>
+        <views:EraseFloatingButton        
+                    x:Name="EraseButton"
+                    AbsoluteLayout.LayoutBounds="0.9,0.9,50,50" AbsoluteLayout.LayoutFlags="PositionProportional"/>
     </AbsoluteLayout>
 </ContentPage>
