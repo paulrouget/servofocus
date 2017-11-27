@@ -63,7 +63,7 @@ namespace Servofocus
 
             this.MenuButton.Reload = () => ServoView.Servo.Reload();
             this.MenuButton.GoForward = () => ServoView.Servo.GoForward();
-            this.EraseButton.Erase = () => HideServo();
+            this.EraseFloatingButton.Erase = () => HideServo();
 
             this.ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
             {
@@ -109,6 +109,7 @@ namespace Servofocus
             ServoView.Servo.SetSize(600, 1000);
             ServoView.Servo.SetResourcePath("/sdcard/servo/resources/");
             ServoView.Servo.ValidateCallbacks();
+            EraseButton.IsVisible = false;
             // InitWithEGL called in renderer
         }
 
