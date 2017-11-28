@@ -86,6 +86,7 @@ namespace Servofocus
         public void LoadCurrentUrl()
         {
             if (string.IsNullOrEmpty(_url)) return;
+            if (Url == _lastUrl) return;
 
             if (!Uri.IsWellFormedUriString(_url, UriKind.Absolute))
             {
@@ -223,6 +224,7 @@ namespace Servofocus
 
             _servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
             {
+                _lastUrl = url;
                 Url = url;
                 OnPropertyChanged(string.Empty);
             }));
@@ -259,6 +261,8 @@ namespace Servofocus
         }
 
         bool _servoVisibility;
+        private string _lastUrl;
+
         public bool ServoVisibility
         {
             get => _servoVisibility;
