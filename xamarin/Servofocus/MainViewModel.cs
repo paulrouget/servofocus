@@ -85,6 +85,8 @@ namespace Servofocus
 
         public void LoadCurrentUrl()
         {
+            if (string.IsNullOrEmpty(_url)) return;
+
             if (!Uri.IsWellFormedUriString(_url, UriKind.Absolute))
             {
                 if (_url.Contains(".") && Uri.IsWellFormedUriString(HttpsScheme + _url, UriKind.Absolute))
