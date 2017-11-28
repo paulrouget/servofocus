@@ -176,8 +176,14 @@ namespace Servofocus
             }
         }
 
-        public void Initialize()
+        public void Initialize(uint width, uint height)
         {
+            Width = width;
+            Height = height;
+
+            // FIXME: hidpi
+            _servo.SetSize(2 * Width, 2 * Height);
+
             SetupServoCallbacks();
             
             if (Device.RuntimePlatform == Device.Android)
@@ -224,7 +230,6 @@ namespace Servofocus
 
         void InitializeAndroid()
         {
-            _servo.SetSize(600, 1000);
             _servo.SetResourcePath($"{ResouceAndroidPrefix}{ResourcePathSuffix}");
             _servo.ValidateCallbacks();
             // InitWithEGL called in renderer
@@ -232,7 +237,6 @@ namespace Servofocus
 
         void InitializeMacOS()
         {
-            _servo.SetSize(2 * Width, 2 * Height);
             _servo.SetResourcePath($"{ResouceMacPrefix}{ResourcePathSuffix}");
             _servo.ValidateCallbacks();
             _servo.InitWithGL();

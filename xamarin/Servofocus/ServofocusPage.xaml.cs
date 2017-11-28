@@ -33,7 +33,7 @@ namespace Servofocus
         {
             base.OnAppearing();
 
-            _viewModel.Initialize();
+            _viewModel.Initialize((uint)ServoView.Bounds.Width, (uint)ServoView.Bounds.Height);
             
             Debug.WriteLine("OnAppearing");
         }
