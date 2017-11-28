@@ -57,6 +57,8 @@ namespace Servofocus.Mac
 
     public class ServoViewRenderer : ViewRenderer<ServoView, NSServoView>
     {
+        MainViewModel _viewModel;
+
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
         {
             base.OnElementChanged(e);
@@ -68,10 +70,8 @@ namespace Servofocus.Mac
                     WantsBestResolutionOpenGLSurface = true,
                     WantsLayer = true
                 };
-                Element.Servo.SetHostCallbacks(
-                    wakeUp: action => Device.BeginInvokeOnMainThread(action),
-                    flush: () => view.Flush()
-                );
+                _viewModel = (MainViewModel) e.NewElement.BindingContext;
+                _viewModel.SetHostCallbacks(Device.BeginInvokeOnMainThread, view.Flush);
                 SetNativeControl(view);
              }
         }
@@ -86,7 +86,7 @@ namespace Servofocus.Mac
                 phase = ScrollState.End;
             }
             // FIXME: pixel density
-            MessagingCenter.Send(new ScrollMessage(0, 2 * (int)e.ScrollingDeltaY, 0, 0, phase), "scroll");
+            _viewModel.Scroll(0, 2 * (int)e.ScrollingDeltaY, 0, 0, phase);
             base.ScrollWheel(e);
         }
 
@@ -99,7 +99,7 @@ namespace Servofocus.Mac
             var hidpi_factor = nswindow.BackingScaleFactor;
             var x = hidpi_factor * view_point.X;
             var y = hidpi_factor * (frame.Size.Height - view_point.Y);
-            MessagingCenter.Send(new ClickMessage((uint)x, (uint)y), "click");
+            _viewModel.Click((uint)x, (uint)y);
             base.MouseUp(e);
         }
     }

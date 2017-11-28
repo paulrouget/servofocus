@@ -22,9 +22,11 @@ namespace Servofocus.Android.Renderer
             {
                 if (Control == null)
                 {
+                    var vm = (MainViewModel) e.NewElement.BindingContext;
+                    
                     var eraseButton = new FloatingActionButton(Context);
-                    eraseButton.Click += (sender, args) => Element.Erase?.Invoke();
                     var menuImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_erase);
+                    eraseButton.Click += vm.Erase;
                     eraseButton.SetImageDrawable(menuImage);
                     SetNativeControl(eraseButton);
                 }

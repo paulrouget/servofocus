@@ -1,18 +1,9 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Servofocus.Views
 {
+    // Android only. Button used to dynamically create dropdown menu with more buttons
     public class MenuButton : Button
     {
-        readonly bool IsAndroid = Device.RuntimePlatform == Device.Android;
-
-        public MenuButton()
-        {
-            IsVisible = IsAndroid;
-            IsEnabled = IsAndroid;
-        }
-        public Action Reload { get; set; }
-        public Action GoForward { get; set; }
     }
 }

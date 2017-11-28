@@ -1,126 +1,43 @@
 ﻿using Xamarin.Forms;
 using System.Diagnostics;
 using System;
-using ServoSharp;
+using System.ComponentModel;
 
 namespace Servofocus
 {
     public partial class ServofocusPage : ContentPage
     {
-        string _url;
-        bool _loading;
-        bool _canGoBack;
-        const string HttpsScheme = "https://";
-        int _cumulativeDy;
-        bool _floatingEraseButtonVisiblity;
-
+        readonly MainViewModel _viewModel;
         public ServofocusPage()
         {
             InitializeComponent();
+            _viewModel = (MainViewModel) BindingContext;
+            _viewModel.PropertyChanged += ViewModelOnPropertyChanged;
+        }
+
+        void ViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.FloatingButtonVisibility))
+            {
+                EraseFloatingButton.ScaleTo(_viewModel.FloatingButtonVisibility ? 1 : 0, easing: Easing.Linear);
+            }
+            else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.ServoVisibility))
+            {
+                if(_viewModel.ServoVisibility)
+                    ShowServo();
+                else HideServo();
+            }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            Initialize();
+            _viewModel.Initialize();
             
-            StartListening();
-
             Debug.WriteLine("OnAppearing");
         }
-
-        void StartListening()
-        {
-            MessagingCenter.Subscribe<ScrollMessage>(this, "scroll", msg =>
-            {
-                Scroll(msg.Dx, msg.Dy, msg.X, msg.Y, msg.State);
-            });
-            MessagingCenter.Subscribe<ClickMessage>(this, "click", msg =>
-            {
-                Click(msg.X, msg.Y);
-            });
-        }
-
-        void Click(uint x, uint y)
-        {
-            ServoView.Servo.Click(x, y);
-        }
-
-        void Initialize()
-        {
-            ServoView.Servo.SetLogCallback(log =>
-            {
-                // Debug.WriteLine("SERVO: " + log);
-            });
-
-            ServoView.Servo.SetUrlCallback(url => Device.BeginInvokeOnMainThread(() =>
-            {
-                UrlField.Text = url;
-                _url = url;
-                UpdateStatus();
-            }));
-
-            this.MenuButton.Reload = () => ServoView.Servo.Reload();
-            this.MenuButton.GoForward = () => ServoView.Servo.GoForward();
-            this.EraseFloatingButton.Erase = () => HideServo();
-
-            this.ServoView.Servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
-            {
-            }));
-
-            ServoView.Servo.SetHistoryCallback((back, fwd) => Device.BeginInvokeOnMainThread(() =>
-            {
-                _canGoBack = back;
-            }));
-
-            ServoView.Servo.SetLoadStartedCallback(() => Device.BeginInvokeOnMainThread(() =>
-            {
-                _loading = true;
-                UpdateStatus();
-            }));
-
-            ServoView.Servo.SetLoadEndedCallback(() => Device.BeginInvokeOnMainThread(() =>
-            {
-                _loading = false;
-                UpdateStatus();
-            }));
-
-            InitializePlatformSpecific();
-        }
-
-        void InitializePlatformSpecific()
-        {
-            switch (Device.RuntimePlatform)
-            {
-                case Device.macOS:
-                    InitializeMacOS();
-                    break;
-                case Device.Android:
-                    InitializeAndroid();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        void InitializeAndroid()
-        {
-            ServoView.Servo.SetSize(600, 1000);
-            ServoView.Servo.SetResourcePath("/sdcard/servo/resources/");
-            ServoView.Servo.ValidateCallbacks();
-            EraseButton.IsVisible = false;
-            // InitWithEGL called in renderer
-        }
-
-        void InitializeMacOS()
-        {
-            ServoView.Servo.SetSize(2 * (uint)ServoView.Bounds.Width, 2 * (uint)ServoView.Bounds.Height);
-            ServoView.Servo.SetResourcePath("/tmp/servo/resources/");
-            ServoView.Servo.ValidateCallbacks();
-            ServoView.Servo.InitWithGL();
-        }
-
+        
         void ShowServo(bool immediate = false)
         {
             uint delay = 500;
@@ -158,80 +75,15 @@ namespace Servofocus
             // UrlField.Focus();
         }
 
-        void EraseButtonClicked(object sender, EventArgs args)
+        void OnErase(object sender, EventArgs args)
         {
             HideServo();
         }
-
-        public void HideFloatingButton()
+        
+        void LoadUrl(object sender, EventArgs args)
         {
-            if(!_floatingEraseButtonVisiblity) return;
+            _viewModel.LoadCurrentUrl();
             
-            EraseFloatingButton.ScaleTo(0, easing: Easing.Linear);
-            _floatingEraseButtonVisiblity = false;
-            _cumulativeDy = 0;
-        }
-
-        public void ShowFloatingButton()
-        {
-            if (_floatingEraseButtonVisiblity) return;
-
-            EraseFloatingButton.ScaleTo(1, easing: Easing.Linear);
-            _floatingEraseButtonVisiblity = true;
-            _cumulativeDy = 0;
-        }
-
-
-        public void Scroll(int dx, int dy, uint x, uint y, ScrollState state)
-        {
-            _cumulativeDy += dy;
-
-            if (_cumulativeDy > 0)
-            {
-                // scroll up
-                ShowFloatingButton();
-            }
-            else if(_cumulativeDy < 0)
-            {
-                // scroll down
-                HideFloatingButton();
-            }
-
-            if (state == ScrollState.End)
-                _cumulativeDy = 0;
-
-            //Debug.WriteLine($"cumulative DY: {_cumulativeDy}");
-            ServoView.Servo.Scroll(dx, dy, x, y, state);
-        }
-
-        void UpdateStatus()
-        {
-            SslIcon.IsVisible = !_loading && _url.StartsWith("https://", StringComparison.Ordinal);
-            Throbber.IsVisible = _loading;
-        }
-
-        void UrlChanged(object sender, EventArgs args)
-        {
-            var url = UrlField.Text;
-            if (string.IsNullOrEmpty(url) || url == _url)
-            {
-                return;
-            }
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                if (url.Contains(".") && Uri.IsWellFormedUriString(HttpsScheme + url, UriKind.Absolute))
-                {
-                    url = HttpsScheme + url;
-                }
-                else
-                {
-                    url = $"{HttpsScheme}duckduckgo.com/html/?q=" + url;
-                } 
-               
-            }
-            _url = url;
-            UrlField.Text = url;
-            ServoView.Servo.LoadUrl(url);
             ShowServo();
         }
 
@@ -241,8 +93,8 @@ namespace Servofocus
 
         public bool SystemGoBack()
         {
-            if (!_canGoBack) return false;
-            ServoView.Servo.GoBack();
+            if (!_viewModel.CanGoBack) return false;
+            _viewModel.GoBack();
             return true;
         }
 

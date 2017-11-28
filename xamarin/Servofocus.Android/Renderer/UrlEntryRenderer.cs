@@ -10,6 +10,7 @@ namespace Servofocus.Android.Renderer
             base.OnElementChanged (e);
             if (e.OldElement == null) {
                 var nativeEditText = (global::Android.Widget.EditText)Control;
+                nativeEditText.Background = null;
                 nativeEditText.SetSelectAllOnFocus (true);
             }
         }

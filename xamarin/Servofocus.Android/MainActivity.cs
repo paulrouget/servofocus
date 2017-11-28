@@ -33,7 +33,8 @@ namespace Servofocus.Android
         public override void OnBackPressed()
         {
             var page = (ServofocusPage)Xamarin.Forms.Application.Current.MainPage;
-            if (!page.SystemGoBack()) {
+            if (!page.SystemGoBack())
+            {
                 base.OnBackPressed();
             }
         }

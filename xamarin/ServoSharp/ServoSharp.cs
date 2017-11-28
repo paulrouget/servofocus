@@ -462,6 +462,11 @@ namespace ServoSharp
             [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint = "go_forward")]
             internal static extern ServoResult GoForward();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                EntryPoint = "stop")]
+            internal static extern ServoResult Stop();
         }
 
         public global::System.IntPtr __Instance { get; protected set; }
@@ -608,6 +613,12 @@ namespace ServoSharp
             var __ret = __Internal.GoForward();
             return __ret;
         }
+
+        public ServoResult Stop()
+        {
+            var __ret = __Internal.Stop();
+            return __ret;
+        }
     }
 
     internal unsafe partial class libservobridge
@@ -620,17 +631,12 @@ namespace ServoSharp
                 EntryPoint="resize")]
             internal static extern global::ServoSharp.ServoResult Resize(global::ServoSharp.ViewLayout.__Internal layout);
 
-            [SuppressUnmanagedCodeSecurity]
-            [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
-                EntryPoint="stop")]
-            internal static extern global::ServoSharp.ServoResult Stop();
+            
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = global::System.Runtime.InteropServices.CallingConvention.Cdecl,
                 EntryPoint="go_back")]
             internal static extern global::ServoSharp.ServoResult GoBack();
-
-            
         }
         
         /// <summary>Reload page.</summary>
@@ -641,13 +647,7 @@ namespace ServoSharp
             return __ret;
         }
 
-        /// <summary>Stop page loading.</summary>
-        public static global::ServoSharp.ServoResult Stop()
-        {
-            var __ret = __Internal.Stop();
-            return __ret;
-        }
-
+       
         public static global::ServoSharp.ServoResult GoBack()
         {
             var __ret = __Internal.GoBack();

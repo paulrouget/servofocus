@@ -88,6 +88,11 @@ namespace ServoSharp
         {
             ExecuteServoCode(() => _servoSharp.GoForward());
         }
+        
+        public void Stop()
+        {
+            ExecuteServoCode(() => _servoSharp.Stop());
+        }
 
         ViewLayout CreateLayout()
         {

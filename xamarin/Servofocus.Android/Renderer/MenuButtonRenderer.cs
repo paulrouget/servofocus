@@ -1,4 +1,7 @@
+using System;
+using System.ComponentModel;
 using Android.Support.V4.Content;
+using Android.Views;
 using Android.Widget;
 using Servofocus;
 using Servofocus.Android.Renderer;
@@ -12,16 +15,22 @@ namespace Servofocus.Android.Renderer
     public class MenuButtonRenderer : ViewRenderer<MenuButton, ImageButton>
     {
         PopupWindow _menu;
+        MainViewModel _viewModel;
+        ImageButton _buttonForward;
+        ImageButton _buttonReload;
+        ImageButton _buttonBackward;
+        ImageButton _buttonStop;
+
         protected override void OnElementChanged(ElementChangedEventArgs<MenuButton> e)
         {
             base.OnElementChanged(e);
-
+            
             if (e.NewElement != null)
             {
                 if (Control == null)
                 {
                     var button = new ImageButton(Context) { Background = null };
-
+                    _viewModel = (MainViewModel) Element.BindingContext;
                     var menuImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_more_vert);
                     button.SetImageDrawable(menuImage);
                     SetNativeControl(button);
@@ -36,6 +45,24 @@ namespace Servofocus.Android.Renderer
                 {
                     _menu.ShowAsDropDown(Control);
                 };
+
+                _viewModel.PropertyChanged += ViewModelOnPropertyChanged;
+            }
+        }
+
+        void ViewModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            switch (propertyChangedEventArgs.PropertyName)
+            {
+                case nameof(_viewModel.CanGoForward):
+                    _buttonForward.Visibility = _viewModel.CanGoForward ? ViewStates.Visible : ViewStates.Gone;
+                    break;
+                case nameof(_viewModel.CanStop):
+                    _buttonStop.Visibility = _viewModel.CanStop ? ViewStates.Visible : ViewStates.Gone;
+                    break;
+                case nameof(_viewModel.CanReload):
+                    _buttonReload.Visibility = _viewModel.CanReload ? ViewStates.Visible : ViewStates.Gone;
+                    break;
             }
         }
 
@@ -47,23 +74,29 @@ namespace Servofocus.Android.Renderer
             };
 
             var forwardImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_arrow_forward);
-            var refreshImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_refresh);
-
+            var reloadImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_refresh);
+            var stopImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_stop);
+            
             var navButtonsLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Horizontal,
             };
 
-            var buttonForward = new ImageButton(Context) { Background = null };
-            buttonForward.SetImageDrawable(forwardImage);
-            buttonForward.Click += (sender, args) => Element.GoForward();
+            _buttonForward = new ImageButton(Context) { Background = null };
+            _buttonForward.SetImageDrawable(forwardImage);
+            _buttonForward.Click += (sender, args) => _viewModel.GoForward();
+            
+            _buttonReload = new ImageButton(Context) { Background = null };
+            _buttonReload.SetImageDrawable(reloadImage);
+            _buttonReload.Click += (sender, args) => _viewModel.Reload();
 
-            var buttonReload = new ImageButton(Context) { Background = null };
-            buttonReload.SetImageDrawable(refreshImage);
-            buttonReload.Click += (sender, args) => Element.Reload();
+            _buttonStop = new ImageButton(Context) { Background = null };
+            _buttonStop.SetImageDrawable(stopImage);
+            _buttonStop.Click += (sender, args) => _viewModel.Stop();
 
-            navButtonsLayout.AddView(buttonForward);
-            navButtonsLayout.AddView(buttonReload);
+            navButtonsLayout.AddView(_buttonForward);
+            navButtonsLayout.AddView(_buttonReload);
+            navButtonsLayout.AddView(_buttonStop);
 
             menuLayout.AddView(navButtonsLayout);
 
