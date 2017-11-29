@@ -103,6 +103,7 @@
     <Compile Include="MainWindow.cs" />
     <Compile Include="Renderer\ServoViewRenderer.cs" />
     <Compile Include="Renderer\EraseButtonRenderer.cs" />
+    <Compile Include="Renderer\UrlEntryRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
