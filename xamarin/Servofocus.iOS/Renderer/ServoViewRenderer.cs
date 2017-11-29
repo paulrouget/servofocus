@@ -8,6 +8,7 @@ using GLKit;
 using OpenGLES;
 using Servofocus;
 using Servofocus.iOS;
+using Servofocus.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -47,7 +48,7 @@ namespace Servofocus.iOS
 
             if (e.NewElement != null)
             {
-                var context = new EAGLContext(EAGLRenderingAPI.OpenGLES2);
+                var context = new EAGLContext(EAGLRenderingAPI.OpenGLES3);
                 var glkView = new GLKView(RectangleF.Empty) 
                 { 
                     Context = context, 
@@ -55,8 +56,6 @@ namespace Servofocus.iOS
                     Delegate = new Delegate(e.NewElement) 
                 };
                 SetNativeControl(glkView);
-
-     //           ((IOpenGlViewController)e.NewElement).DisplayRequested += Display;
 
                 SetupRenderLoop(false);
             }

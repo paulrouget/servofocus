@@ -1,66 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:Servofocus.Views;"
-             xmlns:servofocus="clr-namespace:Servofocus;"
-             xmlns:converters="clr-namespace:Servofocus.Converters;"
-             x:Class="Servofocus.ServofocusPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:Servofocus.Views;" xmlns:servofocus="clr-namespace:Servofocus;" xmlns:converters="clr-namespace:Servofocus.Converters;" x:Class="Servofocus.ServofocusPage">
     <ContentPage.BindingContext>
         <servofocus:MainViewModel />
     </ContentPage.BindingContext>
     <AbsoluteLayout>
-        <Image Source="background.png" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" />
+        <Image Source="background.png" AbsoluteLayout.LayoutBounds="0.5,0,200000,1" AbsoluteLayout.LayoutFlags="XProportional,HeightProportional" />
         <StackLayout Orientation="Vertical" x:Name="MainStackLayout" AbsoluteLayout.LayoutBounds=".5,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <StackLayout.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="macOS" Value="80,10,20,3"/>
+                        <On Platform="macOS" Value="80,10,20,3" />
+                        <On Platform="iOS" Value="5,30,5,10" />
                     </OnPlatform>
                 </StackLayout.Padding>
                 <AbsoluteLayout WidthRequest="26" HeightRequest="26" x:Name="StatusView">
-                    <ActivityIndicator x:Name="Throbber"
-                                       Color="White" 
-                                       IsRunning="{Binding IsLoading}" 
-                                       AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" 
-                                       AbsoluteLayout.LayoutFlags="All" 
-                                       IsVisible="{Binding IsLoading}"/>
-                    <Label VerticalOptions="Center" 
-                           Text="SSL" 
-                           TextColor="White" 
-                           x:Name="SslIcon" 
-                           FontSize="Micro" 
-                           AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" 
-                           AbsoluteLayout.LayoutFlags="All" 
-                           IsVisible="{Binding SslIconVisibility}"/>
+                    <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="{Binding IsLoading}" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsLoading}" />
+                    <Label VerticalOptions="Center" Text="SSL" TextColor="White" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding SslIconVisibility}" />
                 </AbsoluteLayout>
-                <views:UrlView HorizontalOptions="FillAndExpand" 
-                               FontSize="Small" 
-                               Placeholder="Enter URL" 
-                               Keyboard="Url" 
-                               x:Name="UrlField"
-                               Text="{Binding Url}"
-                               Focused="UrlFocused"
-                               Completed="LoadUrl"/>
-                <views:EraseButton
-                    Text="ERASE"
+                <views:UrlView
+                    HorizontalOptions="FillAndExpand"
+                    FontSize="Small"
+                    Placeholder="Enter URL"
+                    Keyboard="Url"
+                    x:Name="UrlField"
+                    Text="{Binding Url}"
+                    Focused="UrlFocused"
+                    Completed="LoadUrl"
+                    BackgroundColor="Transparent"
                     TextColor="White"
-                    FontSize="Micro"
-                    WidthRequest="60"
-                    BorderColor="#A0FFFFFF"
-                    BorderWidth="1"
-                    BorderRadius="2"
-                    BackgroundColor="#10FFFFFF"
-                    Clicked="OnErase" 
-                    x:Name="EraseButton" 
-                    IsVisible="{Binding IsAndroid, Converter={converters:InverseBoolConverter}}"/>
-                <views:MenuButton x:Name="MenuButton" IsVisible="{Binding IsAndroid}"/>
+                    PlaceholderColor="White"/>
+                <views:EraseButton Text="ERASE" TextColor="White" FontSize="Micro" WidthRequest="60" BorderColor="#A0FFFFFF" BorderWidth="1" BorderRadius="2" BackgroundColor="#10FFFFFF" Clicked="OnErase" x:Name="EraseButton"
+                    IsVisible="{Binding IsAndroid, Converter={converters:InverseBoolConverter}}" />
+                <views:MenuButton x:Name="MenuButton" IsVisible="{Binding IsAndroid}" />
             </StackLayout>
-            <views:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
+            <views:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
         </StackLayout>
-        <views:EraseFloatingButton 
-            x:Name="EraseFloatingButton"
-            Clicked="OnErase"
-            AbsoluteLayout.LayoutBounds="0.9,0.9,50,50" 
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            IsVisible="{Binding IsAndroid}"/>
+        <views:EraseFloatingButton x:Name="EraseFloatingButton" Clicked="OnErase" AbsoluteLayout.LayoutBounds="0.9,0.9,50,50" AbsoluteLayout.LayoutFlags="PositionProportional" IsVisible="{Binding IsAndroid}" />
     </AbsoluteLayout>
 </ContentPage>

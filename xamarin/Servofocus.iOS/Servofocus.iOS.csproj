@@ -108,9 +108,12 @@
     <ImageAsset Include="Assets.xcassets\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\Image.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Image.imageset\background.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Renderer\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -123,7 +126,17 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ServoViewRenderer.cs" />
+    <Compile Include="Renderer\ServoViewRenderer.cs" />
+    <Compile Include="Renderer\UrlEntryRenderer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ServoSharp\ServoSharp.csproj">
+      <Project>{0F8DDB1F-74B5-4FDE-9B53-51F98544A350}</Project>
+      <Name>ServoSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\background.png" />
   </ItemGroup>
   <Import Project="..\Servofocus\Servofocus.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
