@@ -9,13 +9,14 @@
             <StackLayout Orientation="Horizontal" x:Name="UrlView">
                 <StackLayout.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="macOS" Value="80,10,20,3" />
+                        <On Platform="macOS" Value="90,10,20,3" />
                         <On Platform="iOS" Value="5,30,5,10" />
+                        <On Platform="Android" Value="10,0,0,0" />
                     </OnPlatform>
                 </StackLayout.Padding>
                 <AbsoluteLayout WidthRequest="26" HeightRequest="26" x:Name="StatusView">
-                    <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="{Binding IsLoading}" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsLoading}" />
-                    <Label VerticalOptions="Center" Text="SSL" TextColor="White" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding SslIconVisibility}" />
+                    <ActivityIndicator Color="White" IsRunning="{Binding IsLoading}" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsLoading}" />
+                    <Image WidthRequest="26" HeightRequest="26" VerticalOptions="Center" Source="ssl.png" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding SslIconVisibility}"/>
                 </AbsoluteLayout>
                 <Frame HorizontalOptions="FillAndExpand" CornerRadius="10" OutlineColor="Transparent" Padding="10,4,10,0" HasShadow="false" x:Name="UrlBackground" BackgroundColor="Transparent">
                     <views:UrlView FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Text="{Binding Url}" Focused="OnUrlFocused" Unfocused="OnUrlUnfocused" Completed="LoadUrl" BackgroundColor="Transparent" TextColor="White" PlaceholderColor="#AADDDDDD"/>

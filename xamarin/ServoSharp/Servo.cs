@@ -13,7 +13,7 @@ namespace ServoSharp
     public class Servo
     {
         readonly ServoSharp _servoSharp = new ServoSharp();
-        const string Url = "https://servo.org";
+        const string Url = "about:blank";
         string _resourcePath;
         Size _viewSize;
         float _hidpiFactor = 2f;

@@ -145,6 +145,7 @@
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\photon_colors.xml" />
     <AndroidResource Include="Resources\drawable\title.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ssl.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ServoSharp\ServoSharp.csproj">

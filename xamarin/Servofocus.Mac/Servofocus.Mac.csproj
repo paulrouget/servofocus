@@ -88,8 +88,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\AppIcon-512%402x.png" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Image.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Image.imageset\background.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -126,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\background.png" />
+    <BundleResource Include="Resources\ssl.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.targets')" />
