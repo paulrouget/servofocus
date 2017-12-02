@@ -260,8 +260,20 @@ namespace Servofocus
             }
         }
 
+        public bool UrlFocused
+        {
+            get => _urlFocused;
+            set
+            {
+                if (_urlFocused == value) return;
+                _urlFocused = value;
+                OnPropertyChanged(nameof(UrlFocused));
+            }
+        }
+
         bool _servoVisibility;
         private string _lastUrl;
+        private bool _urlFocused;
 
         public bool ServoVisibility
         {

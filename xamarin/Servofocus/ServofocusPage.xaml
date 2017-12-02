@@ -17,20 +17,12 @@
                     <ActivityIndicator x:Name="Throbber" Color="White" IsRunning="{Binding IsLoading}" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsLoading}" />
                     <Label VerticalOptions="Center" Text="SSL" TextColor="White" x:Name="SslIcon" FontSize="Micro" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding SslIconVisibility}" />
                 </AbsoluteLayout>
-                <views:UrlView
-                    HorizontalOptions="FillAndExpand"
-                    FontSize="Small"
-                    Placeholder="Enter URL"
-                    Keyboard="Url"
-                    x:Name="UrlField"
-                    Text="{Binding Url}"
-                    Focused="UrlFocused"
-                    Completed="LoadUrl"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    PlaceholderColor="White"/>
-                <views:EraseButton Text="ERASE" TextColor="White" FontSize="Micro" WidthRequest="60" BorderColor="#A0FFFFFF" BorderWidth="1" BorderRadius="2" BackgroundColor="#10FFFFFF" Clicked="OnErase" x:Name="EraseButton"
-                    IsVisible="{Binding IsAndroid, Converter={converters:InverseBoolConverter}}" />
+                <Frame HorizontalOptions="FillAndExpand" CornerRadius="10" OutlineColor="Transparent" Padding="10,4,10,0" HasShadow="false" x:Name="UrlBackground" BackgroundColor="Transparent">
+                    <views:UrlView FontSize="Small" Placeholder="Enter URL" Keyboard="Url" x:Name="UrlField" Text="{Binding Url}" Focused="OnUrlFocused" Unfocused="OnUrlUnfocused" Completed="LoadUrl" BackgroundColor="Transparent" TextColor="White" PlaceholderColor="#AADDDDDD"/>
+                </Frame>
+                <Frame BackgroundColor="#30FFFFFF" CornerRadius="0" Padding="0,0,0,0" OutlineColor="#30FFFFFF"  Margin="10,0,0,0" IsVisible="{Binding IsAndroid, Converter={converters:InverseBoolConverter}}">
+                    <views:EraseButton Text="ERASE" TextColor="White" FontSize="Micro" WidthRequest="60" BorderColor="#A0FFFFFF" Clicked="OnErase" x:Name="EraseButton" />
+                </Frame>
                 <views:MenuButton x:Name="MenuButton" IsVisible="{Binding IsAndroid}" />
             </StackLayout>
             <views:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />

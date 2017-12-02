@@ -27,6 +27,11 @@ namespace Servofocus
                     ShowServo();
                 else HideServo();
             }
+            else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.UrlFocused))
+            {
+                var black = Color.FromRgba(0,0,0,100);
+                UrlBackground.BackgroundColor = _viewModel.UrlFocused ? black : Color.Transparent;
+            }
         }
 
         protected override void OnAppearing()
@@ -79,16 +84,32 @@ namespace Servofocus
         {
             HideServo();
         }
-        
-        void LoadUrl(object sender, EventArgs args)
+
+        // The way the focus is bound is messy.
+        // We should be relying on the IsFocused bindable property,
+        // but it's buggy on Mac. And we get Unfocus too often on Mac
+        // too.
+
+        void OnUrlFocused(object sender, EventArgs args)
         {
-            _viewModel.LoadCurrentUrl();
-            
-            ShowServo();
+            _viewModel.UrlFocused = true;
+        }
+        
+        void OnUrlUnfocused(object sender, EventArgs args)
+        {
+            if (_viewModel.IsAndroid)
+            {
+                _viewModel.UrlFocused = false;
+            }
         }
 
-        void UrlFocused(object sender, EventArgs args)
+        void LoadUrl(object sender, EventArgs args)
         {
+            UrlView.Unfocus();
+            _viewModel.UrlFocused = false;
+
+            _viewModel.LoadCurrentUrl();
+            ShowServo();
         }
 
         public bool SystemGoBack()
