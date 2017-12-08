@@ -102,7 +102,6 @@
     <Compile Include="Renderer\ServoViewRenderer.cs" />
     <Compile Include="Renderer\EraseButtonRenderer.cs" />
     <Compile Include="Renderer\UrlEntryRenderer.cs" />
-    <Compile Include="Renderer\ActivityIndicatorRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />

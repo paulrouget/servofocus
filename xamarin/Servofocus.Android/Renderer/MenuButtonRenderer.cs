@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
 using Android.Views;
 using Android.Widget;
@@ -18,7 +19,6 @@ namespace Servofocus.Android.Renderer
         MainViewModel _viewModel;
         ImageButton _buttonForward;
         ImageButton _buttonReload;
-        ImageButton _buttonBackward;
         ImageButton _buttonStop;
 
         protected override void OnElementChanged(ElementChangedEventArgs<MenuButton> e)
@@ -40,6 +40,8 @@ namespace Servofocus.Android.Renderer
                 {
                     ContentView = CreateLayout()
                 };
+
+                _menu.Focusable = true;
 
                 Control.Click += (sender, args) =>
                 {
