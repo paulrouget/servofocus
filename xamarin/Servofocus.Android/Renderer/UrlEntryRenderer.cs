@@ -1,6 +1,8 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
+[assembly: ExportRenderer (typeof (Entry), typeof (UrlEntryRenderer))]
+
 namespace Servofocus.Android.Renderer
 {
     public class UrlEntryRenderer : EntryRenderer

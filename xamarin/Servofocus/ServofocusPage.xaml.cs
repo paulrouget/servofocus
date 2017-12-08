@@ -32,6 +32,10 @@ namespace Servofocus
                 var black = Color.FromRgba(0,0,0,100);
                 UrlBackground.BackgroundColor = _viewModel.UrlFocused ? black : Color.Transparent;
             }
+            else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.CanGoBack))
+            {
+                BackButton.Scale = _viewModel.CanGoBack ? 1 : 0;
+            }
         }
 
         protected override void OnAppearing()

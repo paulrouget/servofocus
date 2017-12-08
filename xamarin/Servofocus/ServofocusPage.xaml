@@ -14,6 +14,7 @@
                         <On Platform="Android" Value="10,0,0,0" />
                     </OnPlatform>
                 </StackLayout.Padding>
+                <Image WidthRequest="20" HeightRequest="20" x:Name="BackButton" Source="back.png" IsVisible="{Binding IsAndroid, Converter={converters:InverseBoolConverter}}"/>
                 <AbsoluteLayout WidthRequest="26" HeightRequest="26" x:Name="StatusView">
                     <ActivityIndicator Color="White" IsRunning="{Binding IsLoading}" AbsoluteLayout.LayoutBounds="0.5,0.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsLoading}" />
                     <Image WidthRequest="26" HeightRequest="26" VerticalOptions="Center" Source="ssl.png" AbsoluteLayout.LayoutBounds=".5,.5,.5,.5" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding SslIconVisibility}"/>

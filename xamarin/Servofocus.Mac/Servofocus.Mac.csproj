@@ -102,6 +102,7 @@
     <Compile Include="Renderer\ServoViewRenderer.cs" />
     <Compile Include="Renderer\EraseButtonRenderer.cs" />
     <Compile Include="Renderer\UrlEntryRenderer.cs" />
+    <Compile Include="Renderer\ActivityIndicatorRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -125,6 +126,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\background.png" />
     <BundleResource Include="Resources\ssl.png" />
+    <BundleResource Include="Resources\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.91020\build\netstandard1.0\Xamarin.Forms.targets')" />

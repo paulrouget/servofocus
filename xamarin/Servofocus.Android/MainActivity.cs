@@ -6,8 +6,6 @@ using Servofocus.Android.Renderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer (typeof (Entry), typeof (UrlEntryRenderer))]
-
 namespace Servofocus.Android
 {
     [Activity(Label = "Servofocus.Droid", Icon = "@drawable/icon", Theme = "@style/AppTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
