@@ -290,5 +290,10 @@ namespace Servofocus
                 _servo.Erase();
             });
         }
+
+        internal void AndroidErase(object sender, EventArgs e)
+        {
+            Erase();
+        }
     }
 }
