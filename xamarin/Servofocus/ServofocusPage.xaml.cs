@@ -11,7 +11,7 @@ namespace Servofocus
         public ServofocusPage()
         {
             InitializeComponent();
-            _viewModel = (MainViewModel) BindingContext;
+            _viewModel = (MainViewModel)BindingContext;
             _viewModel.PropertyChanged += ViewModelOnPropertyChanged;
         }
 
@@ -23,18 +23,29 @@ namespace Servofocus
             }
             else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.ServoVisibility))
             {
-                if(_viewModel.ServoVisibility)
+                if (_viewModel.ServoVisibility)
                     ShowServo();
                 else HideServo();
             }
             else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.UrlFocused))
             {
-                var black = Color.FromRgba(0,0,0,100);
+                var black = Color.FromRgba(0, 0, 0, 100);
                 UrlBackground.BackgroundColor = _viewModel.UrlFocused ? black : Color.Transparent;
             }
             else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.CanGoBack))
             {
                 BackButton.Scale = _viewModel.CanGoBack ? 1 : 0;
+            }
+            else if (propertyChangedEventArgs.PropertyName == nameof(_viewModel.ToolbarOffset))
+            {
+                var deviceFactor = -1;
+                if (Device.RuntimePlatform == Device.macOS)
+                {
+                    deviceFactor = 1;
+                }
+                MainStackLayout.TranslateTo(0, deviceFactor * _viewModel.ToolbarOffset);
+                float factor = (float)_viewModel.ToolbarOffset / (float)_viewModel.ToolbarHeight;
+                UrlView.FadeTo(1 - 3 * factor);
             }
         }
 
@@ -42,11 +53,30 @@ namespace Servofocus
         {
             base.OnAppearing();
 
+            AddScrollableOffset();
+
             _viewModel.Initialize((uint)ServoView.Bounds.Width, (uint)ServoView.Bounds.Height);
-            
-            Debug.WriteLine("OnAppearing");
+            _viewModel.ToolbarHeight = (int)ServoView.Bounds.Top;
+
+            LayoutChanged += OnLayoutChanged;
         }
-        
+
+        void AddScrollableOffset()
+        {
+            if (Device.RuntimePlatform != Device.macOS)
+            {
+                var cr = Content.Bounds;
+                cr.Height += ServoView.Bounds.Top;
+                MainStackLayout.Layout(cr);
+            }
+        }
+
+        private void OnLayoutChanged(object sender, EventArgs e)
+        {
+            _viewModel.ToolbarHeight = (int)ServoView.Bounds.Top;
+            AddScrollableOffset();
+        }
+
         void ShowServo(bool immediate = false)
         {
             uint delay = 500;
@@ -56,15 +86,15 @@ namespace Servofocus
             }
             UrlView.TranslateTo(0, 0, delay, Easing.SpringOut);
             ServoView.TranslateTo(0, 0, delay, Easing.SpringOut);
-            //EraseButton.TranslateTo(0, 0, delay, Easing.Linear);
-            UrlField.TranslateTo(0, 0, delay, Easing.Linear);
             StatusView.ScaleTo(1, delay, Easing.Linear);
+            _viewModel.ToolbarHeight = (int)ServoView.Bounds.Top;
         }
 
         void HideServo(bool immediate = false)
         {
             uint delay = 500;
             var deviceFactor = 1;
+            var offset = 0.25;
 
             if (immediate)
             {
@@ -74,14 +104,12 @@ namespace Servofocus
             if (Device.RuntimePlatform == Device.macOS)
             {
                 deviceFactor = -1;
+                offset = 0.5;
             }
 
-            UrlView.TranslateTo(0, deviceFactor * 0.5 *  ServoView.Bounds.Height, delay, Easing.SpringIn);
+            UrlView.TranslateTo(0, deviceFactor * offset * ServoView.Bounds.Height, delay, Easing.SpringIn);
             ServoView.TranslateTo(0, deviceFactor * ServoView.Bounds.Height, delay, Easing.SpringIn);
-            //UrlField.TranslateTo(30, 0, delay, Easing.Linear);
             StatusView.ScaleTo(0, delay, Easing.Linear);
-
-            // UrlField.Focus();
         }
 
         void OnErase(object sender, EventArgs args)
@@ -98,7 +126,7 @@ namespace Servofocus
         {
             _viewModel.UrlFocused = true;
         }
-        
+
         void OnUrlUnfocused(object sender, EventArgs args)
         {
             if (_viewModel.IsAndroid)

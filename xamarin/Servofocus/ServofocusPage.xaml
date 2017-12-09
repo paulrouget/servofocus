@@ -27,7 +27,7 @@
                 </Frame>
                 <views:MenuButton x:Name="MenuButton" IsVisible="{Binding IsAndroid}" />
             </StackLayout>
-            <views:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand" />
+            <views:ServoView x:Name="ServoView" VerticalOptions="FillAndExpand"/>
         </StackLayout>
         <views:EraseFloatingButton x:Name="EraseFloatingButton" Clicked="OnErase" AbsoluteLayout.LayoutBounds="0.9,0.9,50,50" AbsoluteLayout.LayoutFlags="PositionProportional" IsVisible="{Binding IsAndroid}" />
     </AbsoluteLayout>

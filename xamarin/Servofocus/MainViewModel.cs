@@ -11,6 +11,8 @@ namespace Servofocus
     public class MainViewModel : INotifyPropertyChanged
     {
         int _cumulativeDy;
+        int _toolbarOffset = 0;
+        public int ToolbarHeight = 0;
         const string HttpsScheme = "https://";
         string _url;
         bool _canGoBack;
@@ -46,26 +48,31 @@ namespace Servofocus
 
         public void Scroll(int dx, int dy, uint x, uint y, ScrollState state)
         {
-            if (IsAndroid)
+
+            _cumulativeDy += dy;
+
+            if (_cumulativeDy > 0)
             {
-                _cumulativeDy += dy;
-
-                if (_cumulativeDy > 0)
-                {
-                    // scroll up
-                    FloatingButtonVisibility = true;
-                }
-                else if (_cumulativeDy < 0)
-                {
-                    // scroll down
-                    FloatingButtonVisibility = false;
-                }
-
-                if (state == ScrollState.End)
-                    _cumulativeDy = 0;
+                // scroll up
+                FloatingButtonVisibility = true;
+            }
+            else if (_cumulativeDy < 0)
+            {
+                // scroll down
+                FloatingButtonVisibility = false;
             }
 
-            //Debug.WriteLine($"cumulative DY: {_cumulativeDy}");
+            if (state == ScrollState.End)
+                _cumulativeDy = 0;
+
+            var offset = _toolbarOffset - dy;
+            offset = Math.Max(0, offset);
+            offset = Math.Min(ToolbarHeight, offset);
+
+            dy -= ToolbarOffset - offset;
+
+            ToolbarOffset = offset;
+
             _servo.Scroll(dx, dy, x, y, state);
         }
 
@@ -117,7 +124,7 @@ namespace Servofocus
         }
 
         #endregion
-       
+
         public bool IsAndroid => Device.RuntimePlatform == Device.Android;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -152,7 +159,7 @@ namespace Servofocus
                 _floatingButtonVisibility = value;
                 _cumulativeDy = 0;
                 OnPropertyChanged(nameof(FloatingButtonVisibility));
-            } 
+            }
         }
 
         public bool CanStop => IsLoading;
@@ -187,10 +194,10 @@ namespace Servofocus
             _servo.SetSize(2 * Width, 2 * Height);
 
             SetupServoCallbacks();
-            
+
             if (Device.RuntimePlatform == Device.Android)
                 InitializeAndroid();
-            else if(Device.RuntimePlatform == Device.macOS)
+            else if (Device.RuntimePlatform == Device.macOS)
                 InitializeMacOS();
         }
 
@@ -198,7 +205,7 @@ namespace Servofocus
         {
             _servo.SetLogCallback(log =>
             {
-                // Debug.WriteLine("SERVO: " + log);
+                 //Debug.WriteLine("SERVO: " + log);
             });
 
             _servo.SetTitleCallback(title => Device.BeginInvokeOnMainThread(() =>
@@ -282,10 +289,21 @@ namespace Servofocus
             set { _servoVisibility = value; OnPropertyChanged(nameof(ServoVisibility)); }
         }
 
+        public int ToolbarOffset
+        {
+            get => _toolbarOffset;
+            set {
+                if (_toolbarOffset == value) return;
+                _toolbarOffset = value;
+                OnPropertyChanged(nameof(ToolbarOffset));
+            }
+        }
+
         public void Erase()
         {
             ServoVisibility = false;
-            System.Threading.Tasks.Task.Factory.StartNew(() => {
+            System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
                 Thread.Sleep(500);
                 _servo.Erase();
             });
