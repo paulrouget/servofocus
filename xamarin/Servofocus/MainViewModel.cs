@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using ServoSharp;
 using Xamarin.Forms;
 
@@ -281,9 +282,13 @@ namespace Servofocus
             set { _servoVisibility = value; OnPropertyChanged(nameof(ServoVisibility)); }
         }
 
-        public void Erase(object sender, EventArgs e)
+        public void Erase()
         {
             ServoVisibility = false;
+            System.Threading.Tasks.Task.Factory.StartNew(() => {
+                Thread.Sleep(500);
+                _servo.Erase();
+            });
         }
     }
 }

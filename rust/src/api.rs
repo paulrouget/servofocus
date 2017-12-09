@@ -243,3 +243,14 @@ pub extern "C" fn go_forward() -> ServoResult {
     });
     res
 }
+
+#[no_mangle]
+pub extern "C" fn erase() -> ServoResult {
+    let mut res = ServoResult::UnexpectedError;
+    SERVO.with(|s| {
+        res = s.borrow_mut().as_mut().map(|ref mut s| {
+            s.erase()
+        }).unwrap_or(ServoResult::WrongThread)
+    });
+    res
+}

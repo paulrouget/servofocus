@@ -86,7 +86,7 @@ namespace Servofocus
 
         void OnErase(object sender, EventArgs args)
         {
-            HideServo();
+            _viewModel.Erase();
         }
 
         // The way the focus is bound is messy.

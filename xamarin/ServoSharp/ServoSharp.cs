@@ -460,6 +460,11 @@ namespace ServoSharp
 
             [SuppressUnmanagedCodeSecurity]
             [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
+                       EntryPoint = "erase")]
+            internal static extern ServoResult Erase();
+
+            [SuppressUnmanagedCodeSecurity]
+            [DllImport("libservobridge", CallingConvention = CallingConvention.Cdecl,
                 EntryPoint = "go_forward")]
             internal static extern ServoResult GoForward();
 
@@ -608,6 +613,12 @@ namespace ServoSharp
             return __ret;
         }
 
+        public ServoResult Erase()
+        {
+            var __ret = __Internal.Erase();
+            return __ret;
+        }
+
         public ServoResult GoForward()
         {
             var __ret = __Internal.GoForward();
@@ -639,7 +650,7 @@ namespace ServoSharp
             internal static extern global::ServoSharp.ServoResult GoBack();
         }
         
-        /// <summary>Reload page.</summary>
+        /// <summary>Resize page.</summary>
         public static global::ServoSharp.ServoResult Resize(global::ServoSharp.ViewLayout layout)
         {
             var __arg0 = layout.__Instance;

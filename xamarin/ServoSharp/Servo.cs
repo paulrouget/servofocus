@@ -81,7 +81,12 @@ namespace ServoSharp
 
         public void Reload()
         {
-            ExecuteServoCode(() => _servoSharp.Reload());    
+            ExecuteServoCode(() => _servoSharp.Reload());
+        }
+
+        public void Erase()
+        {
+            ExecuteServoCode(() => _servoSharp.Erase());
         }
 
         public void GoForward()

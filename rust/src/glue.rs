@@ -172,6 +172,22 @@ impl ServoGlue {
         self.servo.handle_events(vec![event]);
         ServoResult::Ok
     }
+
+    pub fn erase(&mut self) -> ServoResult {
+        info!("erase");
+        let url = ServoUrl::parse("about:blank").unwrap();
+        let (sender, receiver) = ipc::channel().unwrap();
+        self.servo.handle_events(vec![WindowEvent::NewBrowser(url, sender)]);
+        let id = receiver.recv().unwrap();
+        let event = WindowEvent::SelectBrowser(id);
+        self.servo.handle_events(vec![event]);
+        let last_id = self.browser_id;
+        self.browser_id = id;
+        let event = WindowEvent::CloseBrowser(last_id);
+        self.servo.handle_events(vec![event]);
+        ServoResult::Ok
+    }
+
 }
 
 

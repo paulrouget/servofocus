@@ -129,6 +129,8 @@ ServoResult go_back(void);
 
 ServoResult go_forward(void);
 
+ServoResult erase(void);
+
 
 
 #ifdef __cplusplus
