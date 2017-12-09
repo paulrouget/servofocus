@@ -9,17 +9,15 @@ using Servofocus.Views;
 using ServoSharp;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using System.Threading;
+using Android.Widget;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
 namespace Servofocus.Android.Renderer
 {
-    public class ServoViewRenderer : ViewRenderer<ServoView, GLSurfaceView>
+    public class ServoViewRenderer : ViewRenderer<ServoView, GLSurfaceView>, GestureDetector.IOnGestureListener
     {
         bool _disposed;
-        int _lastY;
-        long _touchDownTime;
-        bool _isScrolling;
-        const int MoveDelay = 1000000;
         MainViewModel ViewModel;
 
         protected override void OnElementChanged(ElementChangedEventArgs<ServoView> e)
@@ -42,69 +40,14 @@ namespace Servofocus.Android.Renderer
                     surfaceView.SetRenderer(renderer);
                     SetNativeControl(surfaceView);
 
-                    Touch += OnTouch;
+
+                    mGestureDetector = new GestureDetector(this);
+                    mScroller = new OverScroller(Context);
                 }
                 Control.RenderMode = Rendermode.WhenDirty;
             }
         }
-        
-        void OnTouch(object sender, TouchEventArgs touchEventArgs)
-        {
-            var x = (int)touchEventArgs.Event.RawX;
-            var y = (int)touchEventArgs.Event.RawY;
-            var currentTime = System.DateTime.Now.Ticks;
 
-            // https://developer.android.com/reference/android/view/MotionEvent.html
-            // System.Diagnostics.Debug.WriteLine(touchEventArgs.Event);
-
-            if (!_isScrolling) {
-                switch (touchEventArgs.Event.Action)
-                {
-                    case MotionEventActions.Down:
-                        _touchDownTime = currentTime;
-                        _lastY = y;
-                        break;
-                    case MotionEventActions.Up:
-                        // click
-                        System.Diagnostics.Debug.WriteLine($"Click: {x}x{y}");
-                        // FIXME: magic value. that's the height of the urlbar.
-                        ViewModel.Click((uint)x, (uint)(y - Element.Bounds.Top * 4));
-                        break;
-                    case MotionEventActions.Move:
-                        if (currentTime - _touchDownTime > MoveDelay)
-                        { // 100ms
-                            _isScrolling = true;
-                            var delta = y - _lastY;
-                            _lastY = (int)touchEventArgs.Event.RawY;
-                            //System.Diagnostics.Debug.WriteLine(delta);      
-                            ViewModel.Scroll(0, delta, 0, 0, ScrollState.Start);                            
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                switch (touchEventArgs.Event.Action)
-                {
-                    case MotionEventActions.Move:
-                    {
-                        var delta = y - _lastY;
-                        _lastY = (int)touchEventArgs.Event.RawY;
-                            //System.Diagnostics.Debug.WriteLine(delta);
-                            ViewModel.Scroll(0, delta, 0, 0, ScrollState.Move);                        
-                            break;
-                        }
-                    case MotionEventActions.Up:
-                    {
-                        _isScrolling = false;
-                        var delta = y - _lastY;
-                        ViewModel.Scroll(0, delta, 0, 0, ScrollState.End);                        
-                        break;
-                    }
-                }
-            }
-        }
-        
         protected override void Dispose(bool disposing)
         {
             if (!_disposed && disposing)
@@ -138,6 +81,139 @@ namespace Servofocus.Android.Renderer
             {
                _initWithEgl();
             }
+        }
+
+
+        private GestureDetector mGestureDetector;
+        private OverScroller mScroller;
+        private int mTouchStartY;
+        private int mTouchState = TOUCH_FIRST_STATE;
+        private static int TOUCH_STATE_SCROLL = 2;
+        private static int TOUCH_FIRST_STATE = -1;
+        private static int TOUCH_STATE_RESTING = 0;
+        private const int TOUCH_STATE_CLICK = 1;
+
+        private int mLastY = 0;
+        private bool mFlinging;
+
+        public bool OnDown(MotionEvent e)
+        {
+            mScroller.ForceFinished(true);
+            return true;
+        }
+
+        public bool OnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
+            mScroller.Fling(
+                0,
+                (int)mLastY,
+                (int)velocityX,
+                (int)velocityY,
+                int.MinValue,
+                int.MaxValue,
+                int.MinValue,
+                int.MaxValue);
+            mFlinging = true;
+            FlingRun();
+            return true;
+        }
+
+        public void FlingRun()
+        {
+            if (!mScroller.IsFinished)
+            {
+                mScroller.ComputeScrollOffset();
+                var delta = mLastY - mScroller.CurrY;
+                mLastY = mScroller.CurrY;
+                System.Threading.Tasks.Task.Factory.StartNew(() => {
+                    // FIXME: NO!!!
+                    Thread.Sleep(15);
+                    Device.BeginInvokeOnMainThread(() => {
+                        ViewModel.Scroll(0, -delta, 0, 0, ServoSharp.ScrollState.Move);
+                        FlingRun();
+                    });
+                });
+            }
+            else
+            {
+                mFlinging = false;
+                System.Diagnostics.Debug.WriteLine("SCROLL END");
+                ViewModel.Scroll(0, 0, 0, 0, ServoSharp.ScrollState.End);
+            }
+        }
+
+        public void OnLongPress(MotionEvent e)
+        {
+        }
+
+        public bool OnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+        {
+            return true;
+        }
+
+        public void OnShowPress(MotionEvent e)
+        {
+        }
+
+        public bool OnSingleTapUp(MotionEvent e)
+        {
+            ViewModel.Click((uint)e.GetX(), (uint)e.GetY());
+            return false;
+        }
+
+        public override bool OnTouchEvent(MotionEvent e)
+        {
+            mGestureDetector.OnTouchEvent(e);
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.Down:
+                    StartTouch(e);
+                    break;
+                case MotionEventActions.Up:
+                    if (mTouchState == TOUCH_STATE_CLICK)
+                    {
+                        // We rely on OnSingleTapUp
+                    }
+                    EndTouch();
+                    break;
+                case MotionEventActions.Move:
+                    if (mTouchState == TOUCH_STATE_CLICK)
+                    {
+                        StartScrollIfNeeded(e);
+                    }
+                    if (mTouchState == TOUCH_STATE_SCROLL)
+                    {
+                        int delta = (int)(mLastY - e.GetY());
+                        mLastY = (int)e.GetY();
+                        //System.Diagnostics.Debug.WriteLine("SCROLL MOVE: " + -delta);
+                        ViewModel.Scroll(0, -delta, 0, 0, ServoSharp.ScrollState.Move);
+                    }
+                    break;
+                default:
+                    EndTouch();
+                    break;
+            }
+            return true;
+        }
+
+        private bool StartScrollIfNeeded(MotionEvent e)
+        {
+            mLastY = (int)e.GetY();
+            mTouchState = TOUCH_STATE_SCROLL;
+            return true;
+        }
+
+        private void StartTouch(MotionEvent e)
+        {
+            mTouchStartY = (int)e.GetY();
+            mTouchState = TOUCH_STATE_CLICK;
+            System.Diagnostics.Debug.WriteLine("SCROLL START");
+            ViewModel.Scroll(0, 0, 0, 0, ServoSharp.ScrollState.Start);
+        }
+
+        private void EndTouch()
+        {
+            mTouchState = TOUCH_STATE_RESTING;
         }
     }
 }
