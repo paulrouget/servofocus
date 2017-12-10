@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using ServoSharp;
 using Xamarin.Forms;
 
@@ -299,19 +300,11 @@ namespace Servofocus
             }
         }
 
-        public void Erase()
+        public async Task Erase()
         {
             ServoVisibility = false;
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(500);
-                _servo.Erase();
-            });
-        }
-
-        internal void AndroidErase(object sender, EventArgs e)
-        {
-            Erase();
+            await Task.Delay(500);
+            _servo.Erase();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Servofocus.Android.Renderer
                     
                     var eraseButton = new FloatingActionButton(Context);
                     var menuImage = ContextCompat.GetDrawable(Context, Resource.Drawable.ic_action_erase);
-                    eraseButton.Click += vm.AndroidErase;
+                    eraseButton.Click += async (sender, args) => await vm.Erase();
                     eraseButton.SetImageDrawable(menuImage);
                     SetNativeControl(eraseButton);
                 }

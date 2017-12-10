@@ -10,6 +10,7 @@ using ServoSharp;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using System.Threading;
+using System.Threading.Tasks;
 using Android.Widget;
 
 [assembly: ExportRenderer(typeof(ServoView), typeof(ServoViewRenderer))]
@@ -114,24 +115,22 @@ namespace Servofocus.Android.Renderer
                 int.MinValue,
                 int.MaxValue);
             mFlinging = true;
-            FlingRun();
+            Task.Run(FlingRun); 
             return true;
         }
 
-        public void FlingRun()
+        public async Task FlingRun()
         {
             if (!mScroller.IsFinished)
             {
                 mScroller.ComputeScrollOffset();
                 var delta = mLastY - mScroller.CurrY;
                 mLastY = mScroller.CurrY;
-                System.Threading.Tasks.Task.Factory.StartNew(() => {
-                    // FIXME: NO!!!
-                    Thread.Sleep(15);
-                    Device.BeginInvokeOnMainThread(() => {
-                        ViewModel.Scroll(0, -delta, 0, 0, ServoSharp.ScrollState.Move);
-                        FlingRun();
-                    });
+                await Task.Delay(15);
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    ViewModel.Scroll(0, -delta, 0, 0, ServoSharp.ScrollState.Move);
+                    await FlingRun();
                 });
             }
             else

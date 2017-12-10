@@ -112,9 +112,9 @@ namespace Servofocus
             StatusView.ScaleTo(0, delay, Easing.Linear);
         }
 
-        void OnErase(object sender, EventArgs args)
+        async void OnErase(object sender, EventArgs args)
         {
-            _viewModel.Erase();
+            await _viewModel.Erase();
         }
 
         // The way the focus is bound is messy.
